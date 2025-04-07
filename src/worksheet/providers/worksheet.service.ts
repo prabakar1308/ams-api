@@ -64,6 +64,17 @@ export class WorksheetService {
     return await this.worksheetRespository.delete(id);
   }
 
+  public async softDeleteWorksheet(id: number) {
+    const worksheet = await this.worksheetRespository.findOneBy({
+      id,
+    });
+    console.log(worksheet);
+    if (!worksheet) {
+      throw new Error('Worksheet not found');
+    }
+    return await this.worksheetRespository.softDelete(id);
+  }
+
   public async createHarvest(harvest: CreateHarvestDto) {
     let response = {};
     const newHarvest = this.harvestRespository.create(harvest);

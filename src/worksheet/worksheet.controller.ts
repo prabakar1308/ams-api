@@ -49,11 +49,19 @@ export class WorksheetController {
 
   /** Delete Worksheet */
   @ApiOperation({
-    summary: 'Updates a worksheet',
+    summary: 'Delete a worksheet',
   })
   @Delete('delete-worksheet')
   public deleteWorksheet(@Query('id', ParseIntPipe) id: number) {
     return this.worksheetService.deleteWorksheet(id);
+  }
+
+  @ApiOperation({
+    summary: 'Soft-Delete a worksheet',
+  })
+  @Delete('soft-delete-worksheet')
+  public softDeleteWorksheet(@Query('id', ParseIntPipe) id: number) {
+    return this.worksheetService.softDeleteWorksheet(id);
   }
 
   /** Create Harvest */
