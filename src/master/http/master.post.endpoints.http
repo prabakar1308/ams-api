@@ -1,0 +1,7 @@
+POST http://localhost:3000/master/worksheet-status
+Content-Type: application/json
+
+{
+  "description": "Indicates the tank is ready for stocking",
+  "value": "Ready For Stocking"
+}

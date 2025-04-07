@@ -1,0 +1,26 @@
+POST http://localhost:3000/users
+Content-Type: application/json
+
+{
+    "userId": "GMH-AMS-1234",
+    "firstName": "Prabakaran",
+    "lastName": "A",
+    "password": "test_98880",
+    "mobileNumber": "9500010704",
+    "role": "admin",
+    "designation": "technician",
+    "departmentUnit": "Unit-7",
+    "dateOfJoining": "2023-10-01",
+    "dateOfBirth": "2023-10-01",
+    "address": "test address",
+    "remarks": "test remarks"
+}
+
+
+PATCH http://localhost:3000/users
+Content-Type: application/json
+
+{
+    "name": "testcreate",
+    "mobileNumber": "9500010704"
+}

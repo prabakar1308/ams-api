@@ -1,0 +1,28 @@
+POST http://localhost:3000/dashboard/create-worksheet
+Content-Type: application/json
+
+{
+    "worksheetId": 1,
+    "status": 1,
+    "ph": 7,
+    "salnity": 10,
+    "temperature": 34,
+    "tankType": "conventional",
+    "tankNumber": 1,
+    "harvestType": "manual",
+    "harvestTime": "2025-08-17T07:00:00",
+    "inputSource": "bags",
+    "tinsCount": 0,
+    "bagsCount": 5,
+    "sourceUnitName": "kgs"
+
+}
+
+PATCH http://localhost:3000/dashboard/update-worksheet
+Content-Type: application/json
+
+{
+    "worksheetId": 1,
+    "status": 5
+
+}

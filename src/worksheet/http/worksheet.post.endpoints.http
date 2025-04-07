@@ -1,0 +1,30 @@
+POST http://localhost:3000/worksheet/create-worksheet
+Content-Type: application/json
+
+{
+    "statusId": 2,
+    "ph": 1,
+    "salnity": 1,
+    "temperature": 1,
+    "tankNumber": 3,
+    "userId": 1
+}
+
+
+POST http://localhost:3000/worksheet/create-harvest
+Content-Type: application/json
+
+{
+    // "worksheetId": 1,
+    // "tinsCount": 0,
+    // "frozenCupsCount": 12,
+    // "measuredBy": 1,
+    // "restockCount": 10,
+    // "restockUnit": "Millions"
+    "worksheetId": 2,
+    "tinsCount": 20,
+    "frozenCupsCount": 0,
+    "measuredBy": 1,
+    "restockCount": 0,
+    "restockUnit": ""
+}
