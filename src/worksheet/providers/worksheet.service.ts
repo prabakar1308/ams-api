@@ -9,6 +9,7 @@ import { CreateRestockDto } from '../dto/create-restock.dto';
 import { Restock } from '../entities/restock.entity';
 import { UsersService } from 'src/users/providers/users.service';
 import { PatchWorksheetDto } from '../dto/patch-worksheet.dto';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class WorksheetService {
@@ -20,9 +21,12 @@ export class WorksheetService {
     @InjectRepository(Restock)
     private readonly restockRespository: Repository<Restock>,
     private readonly userService: UsersService,
+    private readonly configService: ConfigService,
   ) {}
 
   public async getWorksheets() {
+    const env = this.configService.get<string>('DB_PASSWORD');
+    console.log(env);
     return await this.worksheetRespository.find({
       relations: {
         user: true, //use this or eager inside entity to include user details

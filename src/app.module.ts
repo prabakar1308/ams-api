@@ -7,6 +7,12 @@ import { MasterModule } from './master/master.module';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 import { WorksheetModule } from './worksheet/worksheet.module';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import appConfig from './config/app.config';
+import databaseConfig from './config/database.config';
+import environmentValidation from './config/environment.validation';
+
+const ENV = process.env.NODE_ENV;
 
 @Module({
   imports: [
@@ -14,21 +20,37 @@ import { WorksheetModule } from './worksheet/worksheet.module';
     DashboardModule,
     MasterModule,
     AuthModule,
+    ConfigModule.forRoot({
+      isGlobal: true,
+      // envFilePath: ['.env', '.env.development'],
+      envFilePath: !ENV ? '.env' : `.env.${ENV}`,
+      load: [appConfig, databaseConfig],
+      validationSchema: environmentValidation,
+    }),
     TypeOrmModule.forRootAsync({
-      imports: [],
-      inject: [],
+      imports: [ConfigModule],
+      inject: [ConfigService],
       // useFactory is a function that returns a configuration object for TypeORM
-      useFactory: () => ({
+      useFactory: (configService: ConfigService) => ({
         type: 'postgres',
-        host: process.env.DB_HOST || 'localhost',
-        port: parseInt(process.env.DB_PORT || '5432', 10),
-        username: process.env.DB_USERNAME || 'postgres',
-        password: process.env.DB_PASSWORD || 'pgadmin1234',
-        database: process.env.DB_NAME || 'gms',
+        host: configService.get('database.host'),
+        port: +configService.get('database.port'),
+        username: configService.get('database.userName'),
+        password: configService.get('database.password'),
+        database: configService.get('database.dbName'),
         // entities: [__dirname + '/**/*.entity{.ts,.js}'],
         // entities: [User],
-        autoLoadEntities: true,
-        synchronize: true,
+        autoLoadEntities: configService.get('database.autoLoadEntities'),
+        synchronize: configService.get('database.synchronize'),
+        // host: configService.get('DB_HOST'),
+        // port: +configService.get('DB_PORT'),
+        // username: configService.get('DB_USERNAME'),
+        // password: configService.get('DB_PASSWORD'),
+        // database: configService.get('DB_NAME'),
+        // // entities: [__dirname + '/**/*.entity{.ts,.js}'],
+        // // entities: [User],
+        // autoLoadEntities: true,
+        // synchronize: true,
       }),
     }),
     WorksheetModule,
