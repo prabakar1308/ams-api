@@ -6,10 +6,11 @@ import { Worksheet } from './entities/worksheet.entity';
 import { Harvest } from './entities/harvest.entity';
 import { Restock } from './entities/restock.entity';
 import { UsersModule } from 'src/users/users.module';
+import { WorksheetCreateManyProvider } from './providers/worksheet-create-many-provider';
 
 @Module({
   controllers: [WorksheetController],
-  providers: [WorksheetService],
+  providers: [WorksheetService, WorksheetCreateManyProvider],
   imports: [
     TypeOrmModule.forFeature([Worksheet, Harvest, Restock]),
     UsersModule,

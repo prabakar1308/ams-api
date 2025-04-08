@@ -13,6 +13,7 @@ import { CreateWorksheetDto } from './dto/create-worksheet.dto';
 import { PatchWorksheetDto } from './dto/patch-worksheet.dto';
 import { WorksheetService } from './providers/worksheet.service';
 import { CreateHarvestDto } from './dto/create-harvest.dto';
+import { CreateWorksheetsDto } from './dto/create-worksheets.dto';
 
 @Controller('worksheet')
 export class WorksheetController {
@@ -36,6 +37,15 @@ export class WorksheetController {
     console.log(createWorksheetDto);
 
     return this.worksheetService.createWorksheet(createWorksheetDto);
+  }
+
+  /** Create Worksheets */
+  @ApiOperation({
+    summary: 'Creates the set of worksheets',
+  })
+  @Post('create-worksheets')
+  public createWorksheets(@Body() createWorksheetsDto: CreateWorksheetsDto) {
+    return this.worksheetService.createWorksheets(createWorksheetsDto);
   }
 
   /** Update Worksheet */

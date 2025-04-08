@@ -1,4 +1,10 @@
-import { forwardRef, Inject, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  forwardRef,
+  Inject,
+  Injectable,
+  RequestTimeoutException,
+} from '@nestjs/common';
 import { GetUserParamDto } from '../dto/get-user-param.dto';
 import { AuthService } from 'src/auth/providers/auth.service';
 import { Repository } from 'typeorm';
@@ -17,18 +23,28 @@ export class UsersService {
 
   public async createUser(createUserDto: CreateUserDto) {
     // check if user already exists
-    const user = await this.userRepository.findOneBy({
-      userId: createUserDto.userId,
-    });
-    // another way to check if user already exists
-    // const user = await this.userRepository.findOne({
-    //   where: { userId: createUserDto.userId },
-    // });
-    if (user) {
-      return {
-        statusCode: 409,
-        message: 'User already exists',
-      };
+    try {
+      const user = await this.userRepository.findOneBy({
+        userId: createUserDto.userId,
+      });
+      // another way to check if user already exists
+      // const user = await this.userRepository.findOne({
+      //   where: { userId: createUserDto.userId },
+      // });
+      if (user) {
+        throw new BadRequestException('The user already exists, Please check.');
+        return {
+          statusCode: 409,
+          message: 'User already exists',
+        };
+      }
+    } catch {
+      throw new RequestTimeoutException(
+        'Unable to process the request now. Please try again!',
+        {
+          description: 'Error connecting to the database',
+        },
+      );
     }
     // create user
     const newUser = this.userRepository.create(createUserDto);

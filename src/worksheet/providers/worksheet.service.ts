@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { CreateWorksheetDto } from '../dto/create-worksheet.dto';
-import { Repository } from 'typeorm';
+import { DataSource, Repository } from 'typeorm';
 import { Worksheet } from '../entities/worksheet.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateHarvestDto } from '../dto/create-harvest.dto';
@@ -10,6 +10,8 @@ import { Restock } from '../entities/restock.entity';
 import { UsersService } from 'src/users/providers/users.service';
 import { PatchWorksheetDto } from '../dto/patch-worksheet.dto';
 import { ConfigService } from '@nestjs/config';
+import { WorksheetCreateManyProvider } from './worksheet-create-many-provider';
+import { CreateWorksheetsDto } from '../dto/create-worksheets.dto';
 
 @Injectable()
 export class WorksheetService {
@@ -22,6 +24,9 @@ export class WorksheetService {
     private readonly restockRespository: Repository<Restock>,
     private readonly userService: UsersService,
     private readonly configService: ConfigService,
+    // inject datasource
+    private readonly datasource: DataSource,
+    private readonly worksheetCreatManyProvider: WorksheetCreateManyProvider,
   ) {}
 
   public async getWorksheets() {
@@ -41,6 +46,10 @@ export class WorksheetService {
       user: user,
     });
     return await this.worksheetRespository.save(newWorksheet);
+  }
+
+  public async createWorksheets(worksheets: CreateWorksheetsDto) {
+    return await this.worksheetCreatManyProvider.createWorksheets(worksheets);
   }
 
   public async updateWorksheet(patchWorksheetDto: PatchWorksheetDto) {

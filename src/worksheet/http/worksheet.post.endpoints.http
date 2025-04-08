@@ -10,6 +10,27 @@ Content-Type: application/json
     "userId": 1
 }
 
+POST http://localhost:3000/worksheet/create-worksheets
+Content-Type: application/json
+
+{
+  "worksheets": [{
+    "statusId": 2,
+    "ph": 8,
+    "salnity": 20,
+    "temperature": 29,
+    "tankNumber": 7,
+    "userId": 1
+}, {
+    "statusId": 2,
+    "ph": 8,
+    "salnity": 21,
+    "temperature": 30,
+    "tankNumber": 8,
+    "userId": 1
+}]
+}
+
 
 POST http://localhost:3000/worksheet/create-harvest
 Content-Type: application/json
