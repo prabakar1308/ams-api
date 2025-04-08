@@ -12,6 +12,9 @@ import { PatchWorksheetDto } from '../dto/patch-worksheet.dto';
 import { ConfigService } from '@nestjs/config';
 import { WorksheetCreateManyProvider } from './worksheet-create-many-provider';
 import { CreateWorksheetsDto } from '../dto/create-worksheets.dto';
+import { GetWorksheetsDto } from '../dto/get-worksheets.dto';
+import { PaginationProvider } from 'src/common/pagination/providers/pagination.provider';
+import { Paginated } from 'src/common/pagination/interfaces/paginated.interface';
 
 @Injectable()
 export class WorksheetService {
@@ -27,16 +30,28 @@ export class WorksheetService {
     // inject datasource
     private readonly datasource: DataSource,
     private readonly worksheetCreatManyProvider: WorksheetCreateManyProvider,
+    private readonly paginationProvider: PaginationProvider,
   ) {}
 
-  public async getWorksheets() {
+  public async getWorksheets(
+    query: GetWorksheetsDto,
+  ): Promise<Paginated<Worksheet>> {
     const env = this.configService.get<string>('DB_PASSWORD');
     console.log(env);
-    return await this.worksheetRespository.find({
-      relations: {
-        user: true, //use this or eager inside entity to include user details
+    return await this.paginationProvider.paginateQuery<Worksheet>(
+      {
+        limit: query.limit,
+        page: query.page,
       },
-    });
+      this.worksheetRespository,
+    );
+    // return await this.worksheetRespository.find({
+    //   relations: {
+    //     user: true, //use this or eager inside entity to include user details
+    //   },
+    //   skip: ((query.page ?? 1) - 1) * (query.limit ?? 10),
+    //   take: query.limit,
+    // });
   }
 
   public async createWorksheet(worksheet: CreateWorksheetDto) {

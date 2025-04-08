@@ -1,1 +1,15 @@
+{{
+    // pre request scripts
+    const date = new Date();
+    exports.startDate = date.toString();
+    exports.endDate = date.toString();
+}}
+
+GET http://localhost:3000/worksheet/get-worksheets
+?startDate={{startDate}}
+&endDate={{endDate}}
+&limit=1
+&page=1
+
+
 GET http://localhost:3000/worksheet/get-all-worksheets

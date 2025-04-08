@@ -13,6 +13,10 @@ async function bootstrap() {
       forbidNonWhitelisted: true,
       // transform payload to DTO
       transform: true,
+      // genericway to convert stringfied number
+      transformOptions: {
+        enableImplicitConversion: true,
+      },
     }),
   );
 

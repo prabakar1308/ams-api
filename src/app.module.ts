@@ -8,6 +8,7 @@ import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 import { WorksheetModule } from './worksheet/worksheet.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { PaginationModule } from './common/pagination/pagination.module';
 import appConfig from './config/app.config';
 import databaseConfig from './config/database.config';
 import environmentValidation from './config/environment.validation';
@@ -54,6 +55,7 @@ const ENV = process.env.NODE_ENV;
       }),
     }),
     WorksheetModule,
+    PaginationModule,
   ],
   controllers: [AppController],
   providers: [AppService],

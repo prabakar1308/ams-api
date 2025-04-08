@@ -7,6 +7,7 @@ import { Harvest } from './entities/harvest.entity';
 import { Restock } from './entities/restock.entity';
 import { UsersModule } from 'src/users/users.module';
 import { WorksheetCreateManyProvider } from './providers/worksheet-create-many-provider';
+import { PaginationModule } from 'src/common/pagination/pagination.module';
 
 @Module({
   controllers: [WorksheetController],
@@ -14,6 +15,7 @@ import { WorksheetCreateManyProvider } from './providers/worksheet-create-many-p
   imports: [
     TypeOrmModule.forFeature([Worksheet, Harvest, Restock]),
     UsersModule,
+    PaginationModule,
   ],
 })
 export class WorksheetModule {}

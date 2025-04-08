@@ -14,18 +14,25 @@ import { PatchWorksheetDto } from './dto/patch-worksheet.dto';
 import { WorksheetService } from './providers/worksheet.service';
 import { CreateHarvestDto } from './dto/create-harvest.dto';
 import { CreateWorksheetsDto } from './dto/create-worksheets.dto';
+import { GetWorksheetsDto } from './dto/get-worksheets.dto';
 
 @Controller('worksheet')
 export class WorksheetController {
   constructor(private readonly worksheetService: WorksheetService) {}
 
   /** Get All Worksheets */
-  @ApiOperation({
-    summary: 'Get all worksheets',
-  })
-  @Get('get-all-worksheets')
-  public getWorksheets() {
-    return this.worksheetService.getWorksheets();
+  // @ApiOperation({
+  //   summary: 'Get all worksheets',
+  // })
+  // @Get('get-all-worksheets')
+  // public getWorksheets() {
+  //   return this.worksheetService.getWorksheets();
+  // }
+
+  @Get('get-worksheets')
+  public getWorksheet(@Query() query: GetWorksheetsDto) {
+    console.log(query);
+    return this.worksheetService.getWorksheets(query);
   }
 
   /** Create Worksheet */
