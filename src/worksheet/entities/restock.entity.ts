@@ -10,7 +10,7 @@ import {
 import { Worksheet } from './worksheet.entity';
 import { Harvest } from './harvest.entity';
 
-@Entity()
+@Entity({ schema: 'worksheet' })
 export class Restock {
   @PrimaryGeneratedColumn()
   id: number;

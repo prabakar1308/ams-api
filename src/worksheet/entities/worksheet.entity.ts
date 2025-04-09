@@ -1,4 +1,4 @@
-import { WorksheetStatus } from 'src/master/worksheet-status.entity';
+import { WorksheetStatus } from 'src/master/entities/worksheet-status.entity';
 import { User } from 'src/users/user.entity';
 import {
   Column,
@@ -11,7 +11,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
-@Entity()
+@Entity({ schema: 'worksheet' })
 export class Worksheet {
   @PrimaryGeneratedColumn()
   id: number;

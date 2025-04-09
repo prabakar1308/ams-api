@@ -36,8 +36,6 @@ export class WorksheetService {
   public async getWorksheets(
     query: GetWorksheetsDto,
   ): Promise<Paginated<Worksheet>> {
-    const env = this.configService.get<string>('DB_PASSWORD');
-    console.log(env);
     return await this.paginationProvider.paginateQuery<Worksheet>(
       {
         limit: query.limit,
@@ -119,6 +117,11 @@ export class WorksheetService {
       const restockResponse = await this.createRestock(restock);
       response = { ...response, restock: restockResponse };
     }
+
+    await this.updateWorksheet({
+      id: harvest.worksheetId,
+      statusId: harvest.statusId,
+    });
 
     return response;
   }

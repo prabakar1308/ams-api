@@ -6,8 +6,8 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
-@Entity()
-export class TankType {
+@Entity({ schema: 'master' })
+export class HarvestType {
   @PrimaryGeneratedColumn()
   id: number;
 

@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 import {
-  IsISO8601,
+  IsDate,
   IsMobilePhone,
   IsOptional,
   IsString,
@@ -39,13 +39,13 @@ export class CreateUserDto {
   )
   mobileNumber: string;
 
-  @IsISO8601()
+  @IsDate()
   dateOfBirth: Date;
 
   @IsString({ message: 'Address must be a string' })
   address: string;
 
-  @IsISO8601()
+  @IsDate()
   dateOfJoining: Date;
 
   @IsOptional()

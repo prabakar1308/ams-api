@@ -17,5 +17,6 @@ import { PaginationModule } from 'src/common/pagination/pagination.module';
     UsersModule,
     PaginationModule,
   ],
+  exports: [WorksheetService],
 })
 export class WorksheetModule {}

@@ -11,7 +11,7 @@ import {
 import { Worksheet } from './worksheet.entity';
 import { User } from 'src/users/user.entity';
 
-@Entity()
+@Entity({ schema: 'worksheet' })
 export class Harvest {
   @PrimaryGeneratedColumn()
   id: number;

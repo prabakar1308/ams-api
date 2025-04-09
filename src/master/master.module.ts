@@ -2,14 +2,29 @@ import { Module } from '@nestjs/common';
 import { MasterController } from './master.controller';
 import { MasterService } from './providers/master.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { WorksheetStatus } from './worksheet-status.entity';
-import { HarvestType } from './harvest-type.entity';
-import { TankType } from './tank-type.entity';
+import { WorksheetStatus } from './entities/worksheet-status.entity';
+import { HarvestType } from './entities/harvest-type.entity';
+import { TankType } from './entities/tank-type.entity';
 import { WorksheetStatusService } from './providers/worksheet-status.service';
+import { Tank } from './entities/tank.entity';
+import { Ph } from './entities/ph.entity';
+import { Temperature } from './entities/temperature.entity';
+import { Salnity } from './entities/salnity.entity';
 
 @Module({
   controllers: [MasterController],
   providers: [MasterService, WorksheetStatusService],
-  imports: [TypeOrmModule.forFeature([WorksheetStatus, HarvestType, TankType])], // Add your entities here
+  imports: [
+    TypeOrmModule.forFeature([
+      WorksheetStatus,
+      HarvestType,
+      TankType,
+      Tank,
+      Ph,
+      Temperature,
+      Salnity,
+    ]),
+  ], // Add your entities here
+  exports: [MasterService],
 })
 export class MasterModule {}

@@ -1,13 +1,11 @@
 import {
   Column,
   CreateDateColumn,
-  Entity,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 
-@Entity()
-export class HarvestType {
+export abstract class GenericColumns {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -34,13 +32,13 @@ export class HarvestType {
 
   @Column({
     type: 'int',
-    nullable: false,
+    nullable: true,
   })
   createdBy: number;
 
   @Column({
     type: 'int',
-    nullable: false,
+    nullable: true,
   })
   updatedBy: number;
 }

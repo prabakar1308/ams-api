@@ -1,30 +1,30 @@
 import {
   Column,
   CreateDateColumn,
-  Entity,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 
-@Entity()
-export class WorksheetStatus {
+export abstract class RangeColumns {
   @PrimaryGeneratedColumn()
   id: number;
 
   @Column({
-    type: 'varchar',
-    length: 50,
-    nullable: false,
-    unique: true,
+    type: 'integer',
   })
-  value: string;
+  min: number;
+
+  @Column({
+    type: 'integer',
+  })
+  max: number;
 
   @Column({
     type: 'varchar',
-    length: 256,
+    length: 50,
     nullable: true,
   })
-  description?: string;
+  unit: string;
 
   @CreateDateColumn()
   createdAt: Date;

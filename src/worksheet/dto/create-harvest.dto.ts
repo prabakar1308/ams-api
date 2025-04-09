@@ -35,6 +35,14 @@ export class CreateHarvestDto {
   measuredBy: number;
 
   @ApiProperty({
+    description: 'The status id of completed stage',
+    example: 4,
+  })
+  @IsNumber()
+  @IsNotEmpty()
+  statusId: number;
+
+  @ApiProperty({
     description:
       'The number of restock count in millions pending in this harvest',
     example: 80,

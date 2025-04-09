@@ -9,6 +9,7 @@ import {
 import { MasterService } from './providers/master.service';
 import { WorksheetStatusService } from './providers/worksheet-status.service';
 import { CreateWorksheetStatusDto } from './dto/create-worksheet-status.dto';
+import { CreateTankDto } from './dto/create-tank.dto';
 
 @Controller('master')
 export class MasterController {
@@ -31,5 +32,10 @@ export class MasterController {
     return this.worksheetStatusService.createWorksheetStatus(
       createWorksheetStatusDto,
     );
+  }
+
+  @Post('tanks')
+  public createTank(@Body() createTankDto: CreateTankDto) {
+    return this.masterService.createTanks(createTankDto);
   }
 }

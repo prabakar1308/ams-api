@@ -2,6 +2,14 @@ POST http://localhost:3000/master/worksheet-status
 Content-Type: application/json
 
 {
-  "description": "Indicates the tank is ready for stocking",
-  "value": "Ready For Stocking"
+  "description": "Indicates the tank harvest is completed",
+  "value": "Completed"
+}
+
+POST http://localhost:3000/master/tanks
+Content-Type: application/json
+
+{
+  "min": 1,
+  "max": 25
 }

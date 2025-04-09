@@ -1,15 +1,19 @@
 import { IntersectionType } from '@nestjs/swagger';
-import { IsDate, IsOptional } from 'class-validator';
+import { IsInt, IsOptional } from 'class-validator';
 import { PaginationQueryDto } from 'src/common/pagination/dtos/pagination-query.dto';
 
 class GetWorksheetsBaseDto {
-  @IsDate()
+  @IsInt()
   @IsOptional()
-  startDate?: Date;
+  tankTypeId?: number;
 
-  @IsDate()
+  @IsInt()
   @IsOptional()
-  endDate?: Date;
+  statusId?: number;
+
+  @IsInt()
+  @IsOptional()
+  userId?: number;
 }
 
 export class GetWorksheetsDto extends IntersectionType(

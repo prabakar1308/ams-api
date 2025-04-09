@@ -1,7 +1,7 @@
 import { Worksheet } from 'src/worksheet/entities/worksheet.entity';
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
-@Entity()
+@Entity({ schema: 'master' })
 export class User {
   @PrimaryGeneratedColumn()
   id: number;

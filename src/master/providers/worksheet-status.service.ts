@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { WorksheetStatus } from '../worksheet-status.entity';
+import { WorksheetStatus } from '../entities/worksheet-status.entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateWorksheetStatusDto } from '../dto/create-worksheet-status.dto';

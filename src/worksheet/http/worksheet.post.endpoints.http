@@ -47,5 +47,6 @@ Content-Type: application/json
     "frozenCupsCount": 0,
     "measuredBy": 1,
     "restockCount": 0,
-    "restockUnit": ""
+    "restockUnit": "",
+    "statusId": 4
 }
