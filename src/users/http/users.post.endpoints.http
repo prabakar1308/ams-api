@@ -16,6 +16,24 @@ Content-Type: application/json
     "remarks": "test remarks"
 }
 
+POST http://localhost:3000/users
+Content-Type: application/json
+
+{
+    "userId": "GMH-AMS-1112",
+    "firstName": "Devi",
+    "lastName": "B",
+    "password": "test_98880",
+    "mobileNumber": "9500010704",
+    "role": "admin",
+    "designation": "technician",
+    "departmentUnit": "Unit-7",
+    "dateOfJoining": "2016-09-18T17:34:02.666Z",
+    "dateOfBirth": "2000-09-18T17:34:02.666Z",
+    "address": "test address",
+    "remarks": "test remarks"
+}
+
 
 PATCH http://localhost:3000/users
 Content-Type: application/json
