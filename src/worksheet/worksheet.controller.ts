@@ -15,6 +15,8 @@ import { WorksheetService } from './providers/worksheet.service';
 import { CreateHarvestDto } from './dto/create-harvest.dto';
 import { CreateWorksheetsDto } from './dto/create-worksheets.dto';
 import { GetWorksheetsDto } from './dto/get-worksheets.dto';
+import { ActiveUser } from 'src/auth/decorator/active-user.decorator';
+import { ActiveUserData } from 'src/auth/interfaces/active-user-data.interface';
 
 @Controller('worksheet')
 export class WorksheetController {
@@ -40,10 +42,11 @@ export class WorksheetController {
     summary: 'Creates a new worksheet and assigned to user',
   })
   @Post('create-worksheet')
-  public createWorksheet(@Body() createWorksheetDto: CreateWorksheetDto) {
-    console.log(createWorksheetDto);
-
-    return this.worksheetService.createWorksheet(createWorksheetDto);
+  public createWorksheet(
+    @Body() createWorksheetDto: CreateWorksheetDto,
+    @ActiveUser() user: ActiveUserData,
+  ) {
+    return this.worksheetService.createWorksheet(createWorksheetDto, user);
   }
 
   /** Create Worksheets */

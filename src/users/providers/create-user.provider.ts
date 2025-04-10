@@ -22,28 +22,27 @@ export class CreateUserProvider {
 
   public async createUser(createUserDto: CreateUserDto) {
     // check if user already exists
+    let existingUser: User | null;
     try {
-      const user = await this.userRepository.findOneBy({
+      existingUser = await this.userRepository.findOneBy({
         userId: createUserDto.userId,
       });
       // another way to check if user already exists
       // const user = await this.userRepository.findOne({
       //   where: { userId: createUserDto.userId },
       // });
-      if (user) {
-        throw new BadRequestException('The user already exists, Please check.');
-        return {
-          statusCode: 409,
-          message: 'User already exists',
-        };
-      }
-    } catch {
+    } catch (error) {
+      console.log(error);
       throw new RequestTimeoutException(
         'Unable to process the request now. Please try again!',
         {
           description: 'Error connecting to the database',
         },
       );
+    }
+
+    if (existingUser) {
+      throw new BadRequestException('The user already exists, Please check.');
     }
     // create user
     const newUser = this.userRepository.create({

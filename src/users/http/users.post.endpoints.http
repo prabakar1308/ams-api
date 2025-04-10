@@ -18,6 +18,7 @@ Content-Type: application/json
 
 POST http://localhost:3000/users
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjMsInVzZXJJZCI6IkdNSC1BTVMtMTExMiIsImlhdCI6MTc0NDI1ODQzMiwiZXhwIjoxNzQ0MjYyMDMyLCJhdWQiOiJsb2NhbGhvc3Q6MzAwMCIsImlzcyI6ImxvY2FsaG9zdDozMDAwIn0.0hwyA718A-SYC7vHO5gNxqrEJS4O7LjC-zEChtw892U
 
 {
     "userId": "GMH-AMS-1112",
