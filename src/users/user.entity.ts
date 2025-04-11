@@ -1,3 +1,5 @@
+import { Exclude } from 'class-transformer';
+import { IsEmail } from 'class-validator';
 import { Worksheet } from 'src/worksheet/entities/worksheet.entity';
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
@@ -28,8 +30,21 @@ export class User {
   })
   lastName: string;
 
-  @Column()
+  @Column({
+    type: 'varchar',
+    length: 96,
+    nullable: false,
+  })
+  @Exclude()
   password: string;
+
+  @Column({
+    type: 'varchar',
+    length: 96,
+    nullable: true,
+  })
+  @IsEmail()
+  email: string;
 
   @Column()
   mobileNumber: string;

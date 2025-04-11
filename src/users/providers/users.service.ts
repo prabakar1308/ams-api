@@ -1,58 +1,44 @@
-import { forwardRef, Inject, Injectable } from '@nestjs/common';
-import { GetUserParamDto } from '../dto/get-user-param.dto';
-import { AuthService } from 'src/auth/providers/auth.service';
+import { Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { User } from '../user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateUserDto } from '../dto/create-user.dto';
 import { CreateUserProvider } from './create-user.provider';
 import { FindUserByIdProvider } from './find-user-by-id.provider';
+import { PaginationProvider } from 'src/common/pagination/providers/pagination.provider';
+import { GetUsersDto } from '../dto/get-users.dto';
+import { Paginated } from 'src/common/pagination/interfaces/paginated.interface';
 
 @Injectable()
 export class UsersService {
   constructor(
-    @Inject(forwardRef(() => AuthService))
-    private readonly authService: AuthService,
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
+    private readonly paginationProvider: PaginationProvider,
     private readonly createUserProvider: CreateUserProvider,
     private readonly findUserById: FindUserByIdProvider,
   ) {}
 
   public async createUser(createUserDto: CreateUserDto) {
-    return this.createUserProvider.createUser(createUserDto);
+    return await this.createUserProvider.createUser(createUserDto);
   }
 
   public async findOneByUserId(userId: string) {
-    return this.findUserById.findOneByUserId(userId);
+    console.log(this.findUserById);
+    return await this.findUserById.findOneByUserId(userId);
   }
 
-  public findAll(
-    getUserParamDto: GetUserParamDto,
-    limit: number,
-    page: number,
-  ) {
-    const isAuth = this.authService.isAuth();
-    console.log(isAuth);
-    console.log(getUserParamDto, limit, page);
-    return [
+  public async findAll(getUsersDto: GetUsersDto): Promise<Paginated<User>> {
+    return await this.paginationProvider.paginateQuery<User>(
       {
-        userId: 'GHM-A-123',
-        firstName: 'Praba',
-        lastName: 'G',
-        mobileNumber: '93434343434',
+        limit: getUsersDto.limit,
+        page: getUsersDto.page,
       },
-      {
-        userId: 'GHM-A-1234',
-        firstName: 'Praba1',
-        lastName: 'A',
-        mobileNumber: '93434343434',
-      },
-    ];
+      this.userRepository,
+    );
   }
 
   public async findOneById(id: number) {
-    // const isAuth = this.authService.isAuth();
     return await this.userRepository.findOneBy({ id });
   }
 }

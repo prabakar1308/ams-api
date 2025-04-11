@@ -1,11 +1,13 @@
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 import {
   IsDate,
+  IsEnum,
   IsMobilePhone,
   IsOptional,
   IsString,
   MaxLength,
 } from 'class-validator';
+import { UserRole } from '../enums/user-role.enum';
 
 export class CreateUserDto {
   @IsString({ message: 'User ID must be a string' })
@@ -24,6 +26,7 @@ export class CreateUserDto {
   password: string;
 
   @IsString({ message: 'Role must be a string' })
+  @IsEnum(UserRole)
   role: string;
 
   @IsString({ message: 'Designation must be a string' })

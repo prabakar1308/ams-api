@@ -18,13 +18,13 @@ Content-Type: application/json
 
 POST http://localhost:3000/users
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjMsInVzZXJJZCI6IkdNSC1BTVMtMTExMiIsImlhdCI6MTc0NDI1ODQzMiwiZXhwIjoxNzQ0MjYyMDMyLCJhdWQiOiJsb2NhbGhvc3Q6MzAwMCIsImlzcyI6ImxvY2FsaG9zdDozMDAwIn0.0hwyA718A-SYC7vHO5gNxqrEJS4O7LjC-zEChtw892U
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjMsInVzZXJJZCI6IkdNSC1BTVMtMTExMiIsImlhdCI6MTc0NDM1MTY1NCwiZXhwIjoxNzQ0MzU1MjU0LCJhdWQiOiJsb2NhbGhvc3Q6MzAwMCIsImlzcyI6ImxvY2FsaG9zdDozMDAwIn0.hFYHeJ-9G9er3JvWPMPfvTuoKX-THpzvBuVS14z-iU4
 
 {
-    "userId": "GMH-AMS-1112",
-    "firstName": "Devi",
-    "lastName": "B",
-    "password": "test_98880",
+    "userId": "GMH-AMS-1711",
+    "firstName": "Vineethra1",
+    "lastName": "PD",
+    "password": "test_1711",
     "mobileNumber": "9500010704",
     "role": "admin",
     "designation": "technician",
