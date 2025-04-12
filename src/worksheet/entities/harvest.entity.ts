@@ -36,6 +36,12 @@ export class Harvest {
   @JoinColumn({ name: 'measuredBy' })
   measuredBy: number;
 
+  @Column({
+    type: 'varchar',
+    nullable: false,
+  })
+  status: string;
+
   @CreateDateColumn()
   createdAt: Date;
 

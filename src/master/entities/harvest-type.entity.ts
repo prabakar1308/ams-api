@@ -26,6 +26,12 @@ export class HarvestType {
   })
   description?: string;
 
+  @Column({
+    type: 'int',
+    nullable: true,
+  })
+  harvestTime?: number;
+
   @CreateDateColumn()
   createdAt: Date;
 

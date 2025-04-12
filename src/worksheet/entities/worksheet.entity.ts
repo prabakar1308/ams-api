@@ -67,21 +67,15 @@ export class Worksheet {
   @Column({
     type: 'varchar',
     length: 50,
-    nullable: true,
+    nullable: false,
   })
   inputSource: string;
 
   @Column({
     type: 'integer',
-    nullable: true,
+    nullable: false,
   })
-  tinsCount?: number;
-
-  @Column({
-    type: 'integer',
-    nullable: true,
-  })
-  bagsCount?: number;
+  inputCount: number;
 
   @Column({
     type: 'varchar',

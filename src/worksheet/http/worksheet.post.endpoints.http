@@ -35,6 +35,7 @@ Content-Type: application/json
 
 POST http://localhost:3000/worksheet/create-harvest
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjQsInVzZXJJZCI6IkdNSC1BTVMtMTYxMSIsImlhdCI6MTc0NDQzOTYyNiwiZXhwIjoxNzQ0NDQzMjI2LCJhdWQiOiJsb2NhbGhvc3Q6MzAwMCIsImlzcyI6ImxvY2FsaG9zdDozMDAwIn0.QBve6q0ADAZU78W-Hg0eKzyvX0AUc7dYQwzDw_qXKjE
 
 {
     // "worksheetId": 1,
@@ -43,11 +44,11 @@ Content-Type: application/json
     // "measuredBy": 1,
     // "restockCount": 10,
     // "restockUnit": "Millions"
-    "worksheetId": 2,
-    "tinsCount": 20,
-    "frozenCupsCount": 0,
+    "worksheetId": 3,
+    "tinsCount": 0,
+    "frozenCupsCount": 30,
     "measuredBy": 1,
-    "restockCount": 0,
-    "restockUnit": "",
+    "restockCount": 10,
+    "restockUnit": "millions",
     "statusId": 4
 }
