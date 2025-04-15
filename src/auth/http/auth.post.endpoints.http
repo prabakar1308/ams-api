@@ -1,0 +1,7 @@
+POST http://localhost:3000/auth/sign-in
+Content-Type: application/json
+
+{
+    "userId": "GMH-AMS-1611",
+    "password": "test_1611"
+}

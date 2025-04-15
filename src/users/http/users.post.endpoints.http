@@ -16,6 +16,25 @@ Content-Type: application/json
     "remarks": "test remarks"
 }
 
+POST http://localhost:3000/users
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjMsInVzZXJJZCI6IkdNSC1BTVMtMTExMiIsImlhdCI6MTc0NDM1MTY1NCwiZXhwIjoxNzQ0MzU1MjU0LCJhdWQiOiJsb2NhbGhvc3Q6MzAwMCIsImlzcyI6ImxvY2FsaG9zdDozMDAwIn0.hFYHeJ-9G9er3JvWPMPfvTuoKX-THpzvBuVS14z-iU4
+
+{
+    "userId": "GMH-AMS-1711",
+    "firstName": "Vineethra1",
+    "lastName": "PD",
+    "password": "test_1711",
+    "mobileNumber": "9500010704",
+    "role": "admin",
+    "designation": "technician",
+    "departmentUnit": "Unit-7",
+    "dateOfJoining": "2016-09-18T17:34:02.666Z",
+    "dateOfBirth": "2000-09-18T17:34:02.666Z",
+    "address": "test address",
+    "remarks": "test remarks"
+}
+
 
 PATCH http://localhost:3000/users
 Content-Type: application/json

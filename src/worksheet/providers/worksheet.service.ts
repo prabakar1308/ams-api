@@ -10,11 +10,13 @@ import { Restock } from '../entities/restock.entity';
 import { UsersService } from 'src/users/providers/users.service';
 import { PatchWorksheetDto } from '../dto/patch-worksheet.dto';
 import { ConfigService } from '@nestjs/config';
-import { WorksheetCreateManyProvider } from './worksheet-create-many-provider';
+import { WorksheetCreateManyProvider } from './worksheet-create-many.provider';
 import { CreateWorksheetsDto } from '../dto/create-worksheets.dto';
 import { GetWorksheetsDto } from '../dto/get-worksheets.dto';
 import { PaginationProvider } from 'src/common/pagination/providers/pagination.provider';
 import { Paginated } from 'src/common/pagination/interfaces/paginated.interface';
+import { WorksheetCreateProvider } from './worksheet-create.provider';
+import { ActiveUserData } from 'src/auth/interfaces/active-user-data.interface';
 
 @Injectable()
 export class WorksheetService {
@@ -30,6 +32,7 @@ export class WorksheetService {
     // inject datasource
     private readonly datasource: DataSource,
     private readonly worksheetCreatManyProvider: WorksheetCreateManyProvider,
+    private readonly worksheetCreatProvider: WorksheetCreateProvider,
     private readonly paginationProvider: PaginationProvider,
   ) {}
 
@@ -52,13 +55,11 @@ export class WorksheetService {
     // });
   }
 
-  public async createWorksheet(worksheet: CreateWorksheetDto) {
-    const user = await this.userService.findOneById(worksheet.userId);
-    const newWorksheet = this.worksheetRespository.create({
-      ...worksheet,
-      user: user,
-    });
-    return await this.worksheetRespository.save(newWorksheet);
+  public async createWorksheet(
+    worksheet: CreateWorksheetDto,
+    user: ActiveUserData,
+  ) {
+    return await this.worksheetCreatProvider.createWorksheet(worksheet, user);
   }
 
   public async createWorksheets(worksheets: CreateWorksheetsDto) {

@@ -36,6 +36,12 @@ export class Restock {
   })
   unitName: string;
 
+  @Column({
+    type: 'varchar',
+    nullable: false,
+  })
+  status: string;
+
   @CreateDateColumn()
   createdAt: Date;
 

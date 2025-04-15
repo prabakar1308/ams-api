@@ -28,7 +28,18 @@
 ## Project setup
 
 ```bash
+
+$ npm i -g @nestjs/cli
+
+$ npm install -g win-node-env
+
 $ npm install
+
+$ 'create connection gms in dbeaver and add database gms with schemas master and worksheet'
+$ 'username-postgres and password-pgadmin1234
+
+$ install http-yac extension in vs code to run endpoints in http folder
+
 ```
 
 ## Compile and run the project

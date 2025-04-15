@@ -1,5 +1,14 @@
+import { Exclude } from 'class-transformer';
+import { IsEmail } from 'class-validator';
 import { Worksheet } from 'src/worksheet/entities/worksheet.entity';
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  OneToMany,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 
 @Entity({ schema: 'master' })
 export class User {
@@ -28,8 +37,21 @@ export class User {
   })
   lastName: string;
 
-  @Column()
+  @Column({
+    type: 'varchar',
+    length: 96,
+    nullable: false,
+  })
+  @Exclude()
   password: string;
+
+  @Column({
+    type: 'varchar',
+    length: 96,
+    nullable: true,
+  })
+  @IsEmail()
+  email: string;
 
   @Column()
   mobileNumber: string;
@@ -57,4 +79,22 @@ export class User {
 
   @OneToMany(() => Worksheet, (worksheet) => worksheet.user)
   worksheets: Worksheet[]; // Assuming a user can have multiple worksheets
+
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @UpdateDateColumn()
+  updatedAt: Date;
+
+  @Column({
+    type: 'int',
+    nullable: true,
+  })
+  createdBy: number;
+
+  @Column({
+    type: 'int',
+    nullable: true,
+  })
+  updatedBy: number;
 }

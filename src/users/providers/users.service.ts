@@ -1,87 +1,44 @@
-import {
-  BadRequestException,
-  forwardRef,
-  Inject,
-  Injectable,
-  RequestTimeoutException,
-} from '@nestjs/common';
-import { GetUserParamDto } from '../dto/get-user-param.dto';
-import { AuthService } from 'src/auth/providers/auth.service';
+import { Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { User } from '../user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateUserDto } from '../dto/create-user.dto';
+import { CreateUserProvider } from './create-user.provider';
+import { FindUserByIdProvider } from './find-user-by-id.provider';
+import { PaginationProvider } from 'src/common/pagination/providers/pagination.provider';
+import { GetUsersDto } from '../dto/get-users.dto';
+import { Paginated } from 'src/common/pagination/interfaces/paginated.interface';
 
 @Injectable()
 export class UsersService {
   constructor(
-    @Inject(forwardRef(() => AuthService))
-    private readonly authService: AuthService,
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
+    private readonly paginationProvider: PaginationProvider,
+    private readonly createUserProvider: CreateUserProvider,
+    private readonly findUserById: FindUserByIdProvider,
   ) {}
 
   public async createUser(createUserDto: CreateUserDto) {
-    // check if user already exists
-    try {
-      const user = await this.userRepository.findOneBy({
-        userId: createUserDto.userId,
-      });
-      // another way to check if user already exists
-      // const user = await this.userRepository.findOne({
-      //   where: { userId: createUserDto.userId },
-      // });
-      if (user) {
-        throw new BadRequestException('The user already exists, Please check.');
-        return {
-          statusCode: 409,
-          message: 'User already exists',
-        };
-      }
-    } catch {
-      throw new RequestTimeoutException(
-        'Unable to process the request now. Please try again!',
-        {
-          description: 'Error connecting to the database',
-        },
-      );
-    }
-    // create user
-    const newUser = this.userRepository.create(createUserDto);
-    const savedUser = await this.userRepository.save(newUser);
-    return {
-      statusCode: 201,
-      message: 'User created successfully',
-      data: savedUser,
-    };
+    return await this.createUserProvider.createUser(createUserDto);
   }
 
-  public findAll(
-    getUserParamDto: GetUserParamDto,
-    limit: number,
-    page: number,
-  ) {
-    const isAuth = this.authService.isAuth();
-    console.log(isAuth);
-    console.log(getUserParamDto, limit, page);
-    return [
+  public async findOneByUserId(userId: string) {
+    console.log(this.findUserById);
+    return await this.findUserById.findOneByUserId(userId);
+  }
+
+  public async findAll(getUsersDto: GetUsersDto): Promise<Paginated<User>> {
+    return await this.paginationProvider.paginateQuery<User>(
       {
-        userId: 'GHM-A-123',
-        firstName: 'Praba',
-        lastName: 'G',
-        mobileNumber: '93434343434',
+        limit: getUsersDto.limit,
+        page: getUsersDto.page,
       },
-      {
-        userId: 'GHM-A-1234',
-        firstName: 'Praba1',
-        lastName: 'A',
-        mobileNumber: '93434343434',
-      },
-    ];
+      this.userRepository,
+    );
   }
 
   public async findOneById(id: number) {
-    // const isAuth = this.authService.isAuth();
     return await this.userRepository.findOneBy({ id });
   }
 }

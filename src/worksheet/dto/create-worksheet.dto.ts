@@ -47,14 +47,12 @@ export class CreateWorksheetDto {
   harvestTime: Date;
 
   @IsEnum(inputSource)
-  @IsOptional()
+  @IsNotEmpty()
   inputSource: inputSource;
 
-  @IsOptional()
-  tinsCount?: number;
-
-  @IsOptional()
-  bagsCount?: number;
+  @IsInt()
+  @IsNotEmpty()
+  inputCount: number;
 
   @IsOptional()
   @IsString()

@@ -1,21 +1,19 @@
 import {
   Body,
+  ClassSerializerInterceptor,
   Controller,
-  DefaultValuePipe,
-  // DefaultValuePipe,
   Get,
   Param,
-  ParseIntPipe,
   Patch,
-  // ParseIntPipe,
   Post,
   Query,
+  UseInterceptors,
 } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
-import { GetUserParamDto } from './dto/get-user-param.dto';
 import { PatchUserDto } from './dto/patch-user.dto';
 import { UsersService } from './providers/users.service';
 import { ApiOperation, ApiQuery } from '@nestjs/swagger';
+import { GetUsersDto } from './dto/get-users.dto';
 
 @Controller('users')
 export class UsersController {
@@ -35,7 +33,7 @@ export class UsersController {
   //   return 'users 1';
   // }
 
-  @Get('{/:id}')
+  @Get()
   @ApiOperation({
     summary: 'Fetches a list of users',
   })
@@ -46,15 +44,13 @@ export class UsersController {
     description: 'the number of entries per query',
     example: 10,
   })
-  public getUser(
-    @Query('limit', new DefaultValuePipe(10), ParseIntPipe) limit: number,
-    @Query('page', new DefaultValuePipe(10), ParseIntPipe) page: number,
-    @Param() getUserParamDto: GetUserParamDto,
-  ) {
-    return this.usersService.findAll(getUserParamDto, limit, page);
+  @UseInterceptors(ClassSerializerInterceptor)
+  public getUsers(@Query() getUsersDto: GetUsersDto) {
+    return this.usersService.findAll(getUsersDto);
   }
 
   @Post()
+  @UseInterceptors(ClassSerializerInterceptor)
   public createUsers(@Body() createUserDto: CreateUserDto) {
     return this.usersService.createUser(createUserDto);
   }

@@ -6,9 +6,7 @@
 }}
 
 GET http://localhost:3000/worksheet/get-worksheets
-?startDate={{startDate}}
-&endDate={{endDate}}
-&limit=1
+?limit=1
 &page=1
 
 
