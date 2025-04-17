@@ -24,7 +24,6 @@ export class UsersService {
   }
 
   public async findOneByUserId(userId: string) {
-    console.log(this.findUserById);
     return await this.findUserById.findOneByUserId(userId);
   }
 

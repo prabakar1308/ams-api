@@ -14,14 +14,6 @@ export class AuthService {
     private readonly refreshTokensProvider: RefreshTokensProvider,
   ) {}
 
-  public login(email: string, password: string, id: string) {
-    const user = this.usersService.findOneById(1234);
-
-    console.log(email, password, id, user);
-
-    return 'SAMPLE_TOKEN';
-  }
-
   public async signIn(signInDto: SignInDto) {
     return await this.signInProvider.signIn(signInDto);
   }

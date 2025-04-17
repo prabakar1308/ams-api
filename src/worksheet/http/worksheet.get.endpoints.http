@@ -5,9 +5,9 @@
     exports.endDate = date.toString();
 }}
 
-GET http://localhost:3000/worksheet/get-worksheets
+GET http://localhost:3000/api/worksheet/get-worksheets
 ?limit=1
 &page=1
 
 
-GET http://localhost:3000/worksheet/get-all-worksheets
+GET http://localhost:3000/api/worksheet/get-all-worksheets

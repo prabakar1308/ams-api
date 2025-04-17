@@ -1,4 +1,4 @@
-POST http://localhost:3000/master/worksheet-status
+POST http://localhost:3000/api/master/worksheet-status
 Content-Type: application/json
 
 {
@@ -6,7 +6,7 @@ Content-Type: application/json
   "value": "Completed"
 }
 
-POST http://localhost:3000/master/tanks
+POST http://localhost:3000/api/master/tanks
 Content-Type: application/json
 
 {

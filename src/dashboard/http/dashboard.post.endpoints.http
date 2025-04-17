@@ -1,4 +1,4 @@
-POST http://localhost:3000/dashboard/create-worksheet
+POST http://localhost:3000/api/dashboard/create-worksheet
 Content-Type: application/json
 
 {
@@ -18,7 +18,7 @@ Content-Type: application/json
 
 }
 
-PATCH http://localhost:3000/dashboard/update-worksheet
+PATCH http://localhost:3000/api/dashboard/update-worksheet
 Content-Type: application/json
 
 {
