@@ -30,8 +30,8 @@ const ENV = process.env.NODE_ENV;
     AuthModule,
     ConfigModule.forRoot({
       isGlobal: true,
-      // envFilePath: ['.env', '.env.development'],
-      envFilePath: !ENV ? '.env' : `.env.${ENV}`,
+       envFilePath: ['.env', '.env.development'],
+      //envFilePath: !ENV ? '.env' : `.env.${ENV}`,
       load: [appConfig, databaseConfig],
       validationSchema: environmentValidation,
     }),

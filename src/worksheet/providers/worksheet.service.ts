@@ -55,6 +55,17 @@ export class WorksheetService {
     // });
   }
 
+  public async getAllWorksheets(): Promise<Worksheet[]> {
+    return await this.worksheetRespository.find();
+    // return await this.worksheetRespository.find({
+    //   relations: {
+    //     user: true, //use this or eager inside entity to include user details
+    //   },
+    //   skip: ((query.page ?? 1) - 1) * (query.limit ?? 10),
+    //   take: query.limit,
+    // });
+  }
+
   public async createWorksheet(
     worksheet: CreateWorksheetDto,
     user: ActiveUserData,

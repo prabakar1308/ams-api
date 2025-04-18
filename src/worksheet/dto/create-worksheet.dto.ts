@@ -1,4 +1,5 @@
 import {
+  IsDate,
   IsEnum,
   IsInt,
   IsISO8601,
@@ -8,57 +9,86 @@ import {
   IsString,
 } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
-import { inputSource } from '../enums/input-source.enum';
+import { worksheetStatus } from 'src/dashboard/enums/worksheet-status.enum';
 
 export class CreateWorksheetDto {
-  @ApiProperty()
-  @IsNumber()
-  @IsNotEmpty()
-  statusId: number;
+   @ApiProperty()
+    @IsNumber()
+    @IsNotEmpty()
+    id: number;
+  
+    @ApiProperty({
+      enum: worksheetStatus,
+      description: 'possble values 1, 2, 3, 4, 5',
+      example: 1,
+    })
+   
+  
+    @IsNumber()
+    @IsNotEmpty()
+    ph: number;
+  
+    @IsNumber()
+    @IsNotEmpty()
+    salnity: number;
+  
+    @IsNumber()
+    @IsNotEmpty()
+    temperature: number;
+  
+    @IsNumber()
+    @IsNotEmpty()
+    tankTypeId: number;
+  
+    @IsNumber()
+    @IsNotEmpty()
+    tankNumber: number;
+  
+    @IsNumber()
+    @IsNotEmpty()
+    harvestTypeId: number;
+  
+    @IsDate()
+    harvestTime: Date;
+  
+    @IsString()
+    inputSource: string;
 
-  @IsNumber()
-  @IsNotEmpty()
-  ph: number;
+    @IsNumber()
+    @IsNotEmpty()
+    inputCount: number;
 
-  @IsNumber()
-  @IsNotEmpty()
-  salnity: number;
+    @IsString()
+    sourceUnitName: string;
 
-  @IsNumber()
-  @IsNotEmpty()
-  temperature: number;
+    @IsDate()
+    createdAt: Date;
 
-  @IsNumber()
-  // @IsNotEmpty()
-  @IsOptional()
-  tankTypeId: number;
+    @IsDate()
+    updatedAt: Date;
 
-  @IsNumber()
-  @IsNotEmpty()
-  tankNumber: number;
+    @IsDate()
+    deletedAt: Date;
 
-  @IsNumber()
-  // @IsNotEmpty()
-  @IsOptional()
-  harvestTypeId: number;
+    @IsNumber()
+    createdBy: number;
 
-  @IsISO8601()
-  @IsOptional()
-  harvestTime: Date;
+    @IsNumber()
+    updatedBy: number;
+    
+    @IsNumber()
+    statusId: number;
 
-  @IsEnum(inputSource)
-  @IsNotEmpty()
-  inputSource: inputSource;
-
-  @IsInt()
-  @IsNotEmpty()
-  inputCount: number;
-
-  @IsOptional()
-  @IsString()
-  sourceUnitName?: string;
-
-  @IsInt()
-  @IsNotEmpty()
-  userId: number;
+    @IsNumber()
+    userId: number;
+  
+    // @IsOptional()
+    // tinsCount?: number;
+  
+    // @IsOptional()
+    // bagsCount?: number;
+  
+    // @IsOptional()
+    // @IsString()
+    // sourceUnitName?: string;
 }

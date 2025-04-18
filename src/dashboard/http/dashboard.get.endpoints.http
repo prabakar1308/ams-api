@@ -1,1 +1,2 @@
 GET http://localhost:3000/dashboard/active-worksheets/1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsImlhdCI6MTc0NDkwNjQ5MiwiZXhwIjoxNzQ0OTEwMDkyLCJhdWQiOiJsb2NhbGhvc3Q6MzAwMCIsImlzcyI6ImxvY2FsaG9zdDozMDAwIn0.QXeKhPyAKKkJ10rIRmN2qVWbuciGJMoYPP83I5wTyak

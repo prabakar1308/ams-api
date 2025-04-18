@@ -1,5 +1,6 @@
 POST http://localhost:3000/dashboard/create-worksheet
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsImlhdCI6MTc0NDg3NTY3MSwiZXhwIjoxNzQ0ODc5MjcxLCJhdWQiOiJsb2NhbGhvc3Q6MzAwMCIsImlzcyI6ImxvY2FsaG9zdDozMDAwIn0.tqH9UYBId7GKg-hEThcL9qeXUz4FGFYglViSaQNDEcI
 
 {
     "worksheetId": 1,
@@ -8,9 +9,9 @@ Content-Type: application/json
     "salnity": 10,
     "temperature": 34,
     "tankType": "conventional",
-    "tankNumber": 1,
+    "tankNumber": 5,
     "harvestType": "manual",
-    "harvestTime": "2025-08-17T07:00:00",
+    "harvestTime": "2025-08-18T17:34:02.666Z",
     "inputSource": "bags",
     "tinsCount": 0,
     "bagsCount": 5,

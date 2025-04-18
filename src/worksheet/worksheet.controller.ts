@@ -23,13 +23,13 @@ export class WorksheetController {
   constructor(private readonly worksheetService: WorksheetService) {}
 
   /** Get All Worksheets */
-  // @ApiOperation({
-  //   summary: 'Get all worksheets',
-  // })
-  // @Get('get-all-worksheets')
-  // public getWorksheets() {
-  //   return this.worksheetService.getWorksheets();
-  // }
+  @ApiOperation({
+    summary: 'Get all worksheets',
+  })
+  @Get('get-all-worksheets')
+  public getWorksheets() {
+    return this.worksheetService.getAllWorksheets();
+  }
 
   @Get('get-worksheets')
   public getWorksheet(@Query() query: GetWorksheetsDto) {

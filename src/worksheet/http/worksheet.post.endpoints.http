@@ -1,13 +1,25 @@
 POST http://localhost:3000/worksheet/create-worksheet
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjMsInVzZXJJZCI6IkdNSC1BTVMtMTExMiIsImlhdCI6MTc0NDI4MTMyMiwiZXhwIjoxNzQ0Mjg0OTIyLCJhdWQiOiJsb2NhbGhvc3Q6MzAwMCIsImlzcyI6ImxvY2FsaG9zdDozMDAwIn0.TCOTw9MkK1JVV96NZreo957oPVB2-b4cEx1mF8gSFUc
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsImlhdCI6MTc0NDkwNjQ5MiwiZXhwIjoxNzQ0OTEwMDkyLCJhdWQiOiJsb2NhbGhvc3Q6MzAwMCIsImlzcyI6ImxvY2FsaG9zdDozMDAwIn0.QXeKhPyAKKkJ10rIRmN2qVWbuciGJMoYPP83I5wTyak
 
 {
-    "statusId": 2,
-    "ph": 1,
-    "salnity": 1,
-    "temperature": 1,
-    "tankNumber": 3,
+   "id": 1,
+    "ph": 7,
+    "salnity": 10,
+    "temperature": 34,
+    "tankTypeId": 1,
+    "tankNumber": 5,
+    "harvestTypeId": 1,
+    "harvestTime": "2025-08-18T17:34:02.666Z",
+    "inputSource": "bags",
+    "inputCount": 5,
+    "sourceUnitName": "kgs",
+    "createdAt": "2025-08-18T17:34:02.666Z",
+    "updatedAt": "2025-08-18T17:34:02.666Z",
+    "deletedAt": "2025-08-18T17:34:02.666Z",
+    "createdBy": 1,
+    "updatedBy": 1,
+    "statusId": 3,
     "userId": 1
 }
 
