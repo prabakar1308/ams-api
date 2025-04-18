@@ -1,4 +1,4 @@
-POST http://localhost:3000/users
+POST http://localhost:3000/api/users
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsImlhdCI6MTc0NDg3NTY3MSwiZXhwIjoxNzQ0ODc5MjcxLCJhdWQiOiJsb2NhbGhvc3Q6MzAwMCIsImlzcyI6ImxvY2FsaG9zdDozMDAwIn0.tqH9UYBId7GKg-hEThcL9qeXUz4FGFYglViSaQNDEcI
 
@@ -17,15 +17,14 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsImlhdCI6M
     "remarks": "test remarks"
 }
 
-POST http://localhost:3000/users
+POST http://localhost:3000/api/users
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjMsInVzZXJJZCI6IkdNSC1BTVMtMTExMiIsImlhdCI6MTc0NDM1MTY1NCwiZXhwIjoxNzQ0MzU1MjU0LCJhdWQiOiJsb2NhbGhvc3Q6MzAwMCIsImlzcyI6ImxvY2FsaG9zdDozMDAwIn0.hFYHeJ-9G9er3JvWPMPfvTuoKX-THpzvBuVS14z-iU4
 
 {
-    "userId": "GMH-AMS-1711",
-    "firstName": "Vineethra1",
+    "userId": "GMH-AMS-17111111",
+    "firstName": "Vineethra1test",
     "lastName": "PD",
-    "password": "test_1711",
+    "password": "test_17111",
     "mobileNumber": "9500010704",
     "role": "admin",
     "designation": "technician",
@@ -37,7 +36,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjMsInVzZXJJZ
 }
 
 
-PATCH http://localhost:3000/users
+PATCH http://localhost:3000/api/users
 Content-Type: application/json
 
 {

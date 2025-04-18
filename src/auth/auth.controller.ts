@@ -1,7 +1,6 @@
 import {
   Body,
   Controller,
-  Get,
   HttpCode,
   HttpStatus,
   Post,
@@ -17,12 +16,6 @@ import { RefreshTokenDto } from './dtos/refresh-token.dto';
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  @Get('login')
-  public login() {
-    return this.authService.login('test@re.com', 'test', '323323');
-  }
-
-  // @SetMetadata('authType', 'none')
   @Auth(AuthType.None)
   @Post('sign-in')
   @HttpCode(HttpStatus.OK)
@@ -31,7 +24,7 @@ export class AuthController {
   }
 
   @Auth(AuthType.None)
-  @Post('refresh-tokens')
+  @Post('refresh-token')
   @HttpCode(HttpStatus.OK)
   public async refreshTokens(@Body() refreshTokenDto: RefreshTokenDto) {
     return await this.authService.refreshTokens(refreshTokenDto);

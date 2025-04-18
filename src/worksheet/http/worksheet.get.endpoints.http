@@ -5,12 +5,9 @@
     exports.endDate = date.toString();
 }}
 
-GET http://localhost:3000/worksheet/get-worksheets
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsImlhdCI6MTc0NDkwNjQ5MiwiZXhwIjoxNzQ0OTEwMDkyLCJhdWQiOiJsb2NhbGhvc3Q6MzAwMCIsImlzcyI6ImxvY2FsaG9zdDozMDAwIn0.QXeKhPyAKKkJ10rIRmN2qVWbuciGJMoYPP83I5wTyak
-
+GET http://localhost:3000/api/worksheet/get-worksheets
 ?limit=1
 &page=1
 
 
-GET http://localhost:3000/worksheet/get-all-worksheets
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsImlhdCI6MTc0NDkwNjQ5MiwiZXhwIjoxNzQ0OTEwMDkyLCJhdWQiOiJsb2NhbGhvc3Q6MzAwMCIsImlzcyI6ImxvY2FsaG9zdDozMDAwIn0.QXeKhPyAKKkJ10rIRmN2qVWbuciGJMoYPP83I5wTyak
+GET http://localhost:3000/api/worksheet/get-all-worksheets

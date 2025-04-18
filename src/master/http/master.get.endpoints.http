@@ -1,1 +1,1 @@
-GET http://localhost:3000/master/tanks?type=conventional
+GET http://localhost:3000/api/master/tanks?type=conventional
