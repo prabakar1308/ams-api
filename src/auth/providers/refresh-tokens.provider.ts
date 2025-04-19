@@ -41,8 +41,11 @@ export class RefreshTokensProvider {
       if (!user) {
         throw new UnauthorizedException();
       }
+
       // generate the tokens
-      return await this.generateTokenProvider.generateTokens(user);
+      const tokens = await this.generateTokenProvider.generateTokens(user);
+
+      return { ...tokens, userId: user.userId, userRole: user.role };
     } catch (error) {
       console.log(error);
       throw new UnauthorizedException(error);

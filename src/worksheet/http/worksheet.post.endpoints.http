@@ -1,9 +1,8 @@
 POST http://localhost:3000/api/worksheet/create-worksheet
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsImlhdCI6MTc0NDkwNjQ5MiwiZXhwIjoxNzQ0OTEwMDkyLCJhdWQiOiJsb2NhbGhvc3Q6MzAwMCIsImlzcyI6ImxvY2FsaG9zdDozMDAwIn0.QXeKhPyAKKkJ10rIRmN2qVWbuciGJMoYPP83I5wTyak
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjUsInVzZXJJZCI6IkdNSC1BTVMtMTcxMSIsImlhdCI6MTc0NTA4MzcwOSwiZXhwIjoxNzQ1MDg3MzA5LCJhdWQiOiJsb2NhbGhvc3Q6MzAwMCIsImlzcyI6ImxvY2FsaG9zdDozMDAwIn0.aN7s92E3uGU3m9SaBzWsJoqlgH25icgzXpx0zBIT0as
 
 {
-   "id": 1,
     "ph": 7,
     "salnity": 10,
     "temperature": 34,
@@ -14,9 +13,6 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsImlhdCI6M
     "inputSource": "bags",
     "inputCount": 5,
     "sourceUnitName": "kgs",
-    "createdAt": "2025-08-18T17:34:02.666Z",
-    "updatedAt": "2025-08-18T17:34:02.666Z",
-    "deletedAt": "2025-08-18T17:34:02.666Z",
     "createdBy": 1,
     "updatedBy": 1,
     "statusId": 3,

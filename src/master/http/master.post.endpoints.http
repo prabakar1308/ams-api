@@ -1,10 +1,26 @@
 POST http://localhost:3000/api/master/worksheet-status
 Content-Type: application/json
 
+// create one by one freshly
 {
-  "description": "Indicates the tank harvest is completed",
-  "value": "Completed"
+  "description": "Indicates the tank is ready for stocking",
+  "value": "Ready For Stocking"
 }
+
+// {
+//   "description": "Indicates the tank is in stocking",
+//   "value": "In Stocking"
+// }
+
+// {
+//   "description": "Indicates the tank is ready for harvest",
+//   "value": "Ready For Harvest"
+// }
+
+// {
+//   "description": "Indicates the tank harvest is completed",
+//   "value": "Completed"
+// }
 
 POST http://localhost:3000/api/master/tanks
 Content-Type: application/json

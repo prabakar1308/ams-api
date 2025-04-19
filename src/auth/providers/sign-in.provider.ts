@@ -38,6 +38,8 @@ export class SignInProvider {
 
     if (!isEqual) throw new UnauthorizedException('Incorrect Password');
 
-    return await this.generateTokenProvider.generateTokens(user);
+    const tokens = await this.generateTokenProvider.generateTokens(user);
+
+    return { ...tokens, userId: user.userId, userRole: user.role };
   }
 }

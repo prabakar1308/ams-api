@@ -7,7 +7,7 @@ import {
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Response } from 'express';
-import { catchError, delay, map, Observable, throwError } from 'rxjs';
+import { catchError, map, Observable, throwError } from 'rxjs';
 
 @Injectable()
 export class DataResponseInterceptor implements NestInterceptor {
@@ -16,7 +16,6 @@ export class DataResponseInterceptor implements NestInterceptor {
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
     const response = context.switchToHttp().getResponse<Response>();
     return next.handle().pipe(
-      delay(2000), // Simulate a delay of 1 second
       map((data: unknown) => ({
         status: response.statusCode,
         message: response.statusMessage,
