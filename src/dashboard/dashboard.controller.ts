@@ -29,7 +29,7 @@ export class DashboardController {
   @Post('create-worksheet')
   public createWorksheet(@Body() createWorksheetDto: CreateWorksheetDto) {
     console.log(createWorksheetDto);
-    return 'Workshett created';
+    return 'Worksheet created';
   }
 
   // TODO: move this to worksheet module later
@@ -39,6 +39,6 @@ export class DashboardController {
   @Patch('update-worksheet')
   public updateWorksheet(@Body() createWorksheetDto: PatchWorksheetDto) {
     console.log(createWorksheetDto);
-    return 'Workshett created';
+    return 'Worksheet Updated';
   }
 }

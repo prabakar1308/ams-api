@@ -100,14 +100,20 @@ export class Worksheet {
   deletedAt: Date;
 
   @Column({
-    type: 'int',
+    type: 'integer',
     nullable: true,
   })
   createdBy: number;
 
   @Column({
-    type: 'int',
+    type: 'integer',
     nullable: true,
   })
   updatedBy: number;
+
+  @Column({
+    type: 'integer',
+    nullable: false,
+  })
+  userId: number;
 }

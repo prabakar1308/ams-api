@@ -1,4 +1,5 @@
 import {
+  IsDate,
   IsEnum,
   IsISO8601,
   IsNotEmpty,
@@ -48,7 +49,7 @@ export class CreateWorksheetDto {
   @IsEnum(harvestType)
   harvestType: harvestType;
 
-  @IsISO8601()
+  @IsDate()
   harvestTime: Date;
 
   @IsEnum(inputSource)
