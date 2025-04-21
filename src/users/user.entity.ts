@@ -1,5 +1,6 @@
 import { Exclude } from 'class-transformer';
 import { IsEmail } from 'class-validator';
+import { BaseEntity } from 'src/common/entities/base.entity';
 import { Worksheet } from 'src/worksheet/entities/worksheet.entity';
 import {
   Column,
@@ -11,7 +12,7 @@ import {
 } from 'typeorm';
 
 @Entity({ schema: 'master' })
-export class User {
+export class User extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -85,16 +86,4 @@ export class User {
 
   @UpdateDateColumn()
   updatedAt: Date;
-
-  @Column({
-    type: 'int',
-    nullable: true,
-  })
-  createdBy: number;
-
-  @Column({
-    type: 'int',
-    nullable: true,
-  })
-  updatedBy: number;
 }

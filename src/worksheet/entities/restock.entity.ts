@@ -9,9 +9,10 @@ import {
 } from 'typeorm';
 import { Worksheet } from './worksheet.entity';
 import { Harvest } from './harvest.entity';
+import { BaseEntity } from 'src/common/entities/base.entity';
 
 @Entity({ schema: 'worksheet' })
-export class Restock {
+export class Restock extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -47,16 +48,4 @@ export class Restock {
 
   @UpdateDateColumn()
   updatedAt: Date;
-
-  @Column({
-    type: 'int',
-    nullable: true,
-  })
-  createdBy: number;
-
-  @Column({
-    type: 'int',
-    nullable: true,
-  })
-  updatedBy: number;
 }

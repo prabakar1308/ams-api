@@ -3,18 +3,16 @@ Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjUsInVzZXJJZCI6IkdNSC1BTVMtMTcxMSIsImlhdCI6MTc0NTIwODE0MCwiZXhwIjoxNzUyOTg0MTQwLCJhdWQiOiJsb2NhbGhvc3Q6MzAwMCIsImlzcyI6ImxvY2FsaG9zdDozMDAwIn0.rpUgvrO5iGls0A-_H1s2v5nir1cnJMXvgyFqqtxMnzY
 
 {
-    "ph": 8,
-    "salnity": 10,
-    "temperature": 30,
+    "ph": 7,
+    "salnity": 35,
+    "temperature": 32,
     "tankTypeId": 1,
-    "tankNumber": 1,
+    "tankNumber": 21,
     "harvestTypeId": 1,
     "harvestTime": "2025-08-18T17:34:02.666Z",
     "inputSource": "bags",
-    "inputCount": 5,
+    "inputCount": 20,
     "sourceUnitName": "kgs",
-    "createdBy": 1,
-    "updatedBy": 1,
     "statusId": 2,
     "userId": 1
 }
@@ -35,8 +33,6 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjUsInVzZXJJZ
     "inputSource": "tins",
     "inputCount": 12,
     "sourceUnitName": "",
-    "createdBy": 1,
-    "updatedBy": 1,
     "statusId": 1,
     "userId": 3
 }, {
@@ -50,8 +46,6 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjUsInVzZXJJZ
     "inputSource": "tins",
     "inputCount": 10,
     "sourceUnitName": "",
-    "createdBy": 1,
-    "updatedBy": 1,
     "statusId": 1,
     "userId": 3
 }]

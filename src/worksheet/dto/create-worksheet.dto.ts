@@ -49,21 +49,5 @@ export class CreateWorksheetDto {
   sourceUnitName: string;
 
   @IsNumber()
-  createdBy: number;
-
-  @IsNumber()
-  updatedBy: number;
-
-  @IsNumber()
   userId: number;
-
-  // @IsOptional()
-  // tinsCount?: number;
-
-  // @IsOptional()
-  // bagsCount?: number;
-
-  // @IsOptional()
-  // @IsString()
-  // sourceUnitName?: string;
 }

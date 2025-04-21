@@ -19,6 +19,8 @@ import { APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 import { AccessTokenGuard } from './auth/guards/access-token/access-token.guard';
 import { AuthenticationGuard } from './auth/guards/authentication/authentication.guard';
 import { DataResponseInterceptor } from './common/interceptors/data-response/data-response.interceptor';
+import { ClsModule } from 'nestjs-cls';
+import { UserSubscriber } from './common/event.subscriber';
 
 const ENV = process.env.NODE_ENV;
 
@@ -66,6 +68,10 @@ const ENV = process.env.NODE_ENV;
     JwtModule.registerAsync(jwtConfig.asProvider()),
     WorksheetModule,
     PaginationModule,
+    ClsModule.forRoot({
+      global: true,
+      middleware: { mount: true },
+    }),
   ],
   controllers: [AppController],
   providers: [
@@ -80,6 +86,7 @@ const ENV = process.env.NODE_ENV;
     },
     // added inside provider as it is dependent with AuthenticationGuard
     AccessTokenGuard,
+    UserSubscriber,
   ],
 })
 export class AppModule {}

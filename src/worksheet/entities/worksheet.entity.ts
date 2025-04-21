@@ -1,3 +1,4 @@
+import { BaseEntity } from 'src/common/entities/base.entity';
 import { HarvestType } from 'src/master/entities/harvest-type.entity';
 import { TankType } from 'src/master/entities/tank-type.entity';
 import { WorksheetStatus } from 'src/master/entities/worksheet-status.entity';
@@ -13,7 +14,7 @@ import {
 } from 'typeorm';
 
 @Entity({ schema: 'worksheet' })
-export class Worksheet {
+export class Worksheet extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -101,18 +102,6 @@ export class Worksheet {
 
   @DeleteDateColumn()
   deletedAt: Date;
-
-  @Column({
-    type: 'integer',
-    nullable: true,
-  })
-  createdBy: number;
-
-  @Column({
-    type: 'integer',
-    nullable: true,
-  })
-  updatedBy: number;
 
   @Column({
     type: 'integer',

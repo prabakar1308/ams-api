@@ -10,9 +10,10 @@ import {
 } from 'typeorm';
 import { Worksheet } from './worksheet.entity';
 import { User } from 'src/users/user.entity';
+import { BaseEntity } from 'src/common/entities/base.entity';
 
 @Entity({ schema: 'worksheet' })
-export class Harvest {
+export class Harvest extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -47,16 +48,4 @@ export class Harvest {
 
   @UpdateDateColumn()
   updatedAt: Date;
-
-  @Column({
-    type: 'int',
-    nullable: true,
-  })
-  createdBy: number;
-
-  @Column({
-    type: 'int',
-    nullable: true,
-  })
-  updatedBy: number;
 }
