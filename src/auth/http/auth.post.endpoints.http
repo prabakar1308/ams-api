@@ -2,6 +2,7 @@ POST http://localhost:3000/api/auth/sign-in
 Content-Type: application/json
 
 {
-    "userId": "GMH-AMS-3103",
-    "password": "test@313"
+    
+    "userId": "GMH-AMS-1711",
+    "password": "test_1711"
 }

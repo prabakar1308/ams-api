@@ -1,29 +1,9 @@
-POST http://localhost:3000/api/dashboard/create-worksheet
+POST http://localhost:3000/api/dashboard/active-worksheets
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsImlhdCI6MTc0NDg3NTY3MSwiZXhwIjoxNzQ0ODc5MjcxLCJhdWQiOiJsb2NhbGhvc3Q6MzAwMCIsImlzcyI6ImxvY2FsaG9zdDozMDAwIn0.tqH9UYBId7GKg-hEThcL9qeXUz4FGFYglViSaQNDEcI
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjUsInVzZXJJZCI6IkdNSC1BTVMtMTcxMSIsImlhdCI6MTc0NTIwODE0MCwiZXhwIjoxNzUyOTg0MTQwLCJhdWQiOiJsb2NhbGhvc3Q6MzAwMCIsImlzcyI6ImxvY2FsaG9zdDozMDAwIn0.rpUgvrO5iGls0A-_H1s2v5nir1cnJMXvgyFqqtxMnzY
 
 {
-    "worksheetId": 1,
-    "status": 1,
-    "ph": 7,
-    "salnity": 10,
-    "temperature": 34,
-    "tankType": "conventional",
-    "tankNumber": 5,
-    "harvestType": "manual",
-    "harvestTime": "2025-08-18T17:34:02.666Z",
-    "inputSource": "bags",
-    "tinsCount": 0,
-    "bagsCount": 5,
-    "sourceUnitName": "kgs"
-
-}
-
-PATCH http://localhost:3000/api/dashboard/update-worksheet
-Content-Type: application/json
-
-{
-    "worksheetId": 1,
-    "status": 5
-
+    "userId": 5,
+    "tankTypeId": 0,
+    "statusId": 3
 }

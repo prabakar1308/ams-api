@@ -6,12 +6,14 @@ import {
 import { Worksheet } from '../entities/worksheet.entity';
 import { DataSource } from 'typeorm';
 import { CreateWorksheetsDto } from '../dto/create-worksheets.dto';
+import { WorksheetDependentsProvider } from './worksheet-dependents.provider';
 
 @Injectable()
 export class WorksheetCreateManyProvider {
   constructor(
     // inject datasource
     private readonly datasource: DataSource,
+    private readonly worksheetDependentsProvider: WorksheetDependentsProvider,
   ) {}
 
   public async createWorksheets(createWorksheetsDto: CreateWorksheetsDto) {
@@ -29,7 +31,26 @@ export class WorksheetCreateManyProvider {
     }
     try {
       for (const worksheet of createWorksheetsDto.worksheets) {
-        const newWorksheet = queryRunner.manager.create(Worksheet, worksheet);
+        // Dependent columns check
+        const currentUser =
+          await this.worksheetDependentsProvider.getWorksheetUser(worksheet);
+        const status =
+          await this.worksheetDependentsProvider.getWorksheetStatus(worksheet);
+        const tankType =
+          await this.worksheetDependentsProvider.getWorksheetTankType(
+            worksheet,
+          );
+        const harvestType =
+          await this.worksheetDependentsProvider.getWorksheetHarvestType(
+            worksheet,
+          );
+        const newWorksheet = queryRunner.manager.create(Worksheet, {
+          ...worksheet,
+          status: status || undefined,
+          tankType: tankType || undefined,
+          user: currentUser || undefined,
+          harvestType: harvestType || undefined,
+        });
         const result = await queryRunner.manager.save(newWorksheet);
         newWorksheets.push(result);
       }

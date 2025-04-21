@@ -14,7 +14,7 @@ export class CreateUserDto {
   @MaxLength(50)
   userId: string;
 
-  @IsString({ message: 'First Name1 must be a string' })
+  @IsString({ message: 'First Name must be a string' })
   @MaxLength(96)
   firstName: string;
 

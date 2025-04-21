@@ -25,6 +25,6 @@ import { Salnity } from './entities/salnity.entity';
       Salnity,
     ]),
   ], // Add your entities here
-  exports: [MasterService],
+  exports: [MasterService, WorksheetStatusService],
 })
 export class MasterModule {}

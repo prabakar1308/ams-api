@@ -25,7 +25,7 @@ export class AccessTokenGuard implements CanActivate {
     // Extract the token from header
     const token = this.extractRequestFromHeader(request);
     // Validate the token
-    if (!token) throw new UnauthorizedException();
+    if (!token) throw new UnauthorizedException('Bearer Token not found');
 
     try {
       const payload = await this.jwtService.verifyAsync<{

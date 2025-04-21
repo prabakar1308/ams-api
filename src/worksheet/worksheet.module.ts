@@ -9,6 +9,8 @@ import { UsersModule } from 'src/users/users.module';
 import { WorksheetCreateManyProvider } from './providers/worksheet-create-many.provider';
 import { PaginationModule } from 'src/common/pagination/pagination.module';
 import { WorksheetCreateProvider } from './providers/worksheet-create.provider';
+import { MasterModule } from 'src/master/master.module';
+import { WorksheetDependentsProvider } from './providers/worksheet-dependents.provider';
 
 @Module({
   controllers: [WorksheetController],
@@ -16,11 +18,13 @@ import { WorksheetCreateProvider } from './providers/worksheet-create.provider';
     WorksheetService,
     WorksheetCreateManyProvider,
     WorksheetCreateProvider,
+    WorksheetDependentsProvider,
   ],
   imports: [
     TypeOrmModule.forFeature([Worksheet, Harvest, Restock]),
     UsersModule,
     PaginationModule,
+    MasterModule,
   ],
   exports: [WorksheetService],
 })

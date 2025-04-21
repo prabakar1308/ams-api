@@ -18,4 +18,12 @@ export class WorksheetStatusService {
     );
     return await this.worksheetStatusRepository.save(worksheetStatus);
   }
+
+  public async getWorksheetStatus() {
+    return await this.worksheetStatusRepository.find();
+  }
+
+  public async getWorksheetStatusById(id: number) {
+    return await this.worksheetStatusRepository.findOneBy({ id });
+  }
 }

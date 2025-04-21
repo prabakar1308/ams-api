@@ -1,3 +1,5 @@
+import { HarvestType } from 'src/master/entities/harvest-type.entity';
+import { TankType } from 'src/master/entities/tank-type.entity';
 import { WorksheetStatus } from 'src/master/entities/worksheet-status.entity';
 import { User } from 'src/users/user.entity';
 import {
@@ -5,7 +7,6 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
-  JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
@@ -16,9 +17,8 @@ export class Worksheet {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => WorksheetStatus)
-  @JoinColumn({ name: 'statusId' })
-  statusId: number;
+  @ManyToOne(() => WorksheetStatus, (status) => status.id, { eager: true })
+  status: WorksheetStatus;
 
   @Column({
     type: 'decimal',
@@ -39,11 +39,13 @@ export class Worksheet {
   })
   temperature: number;
 
-  @Column({
-    type: 'integer',
-    nullable: true,
-  })
-  tankTypeId: number;
+  // @Column({
+  //   type: 'integer',
+  //   nullable: true,
+  // })
+  // tankTypeId: number;
+  @ManyToOne(() => TankType, (type) => type.id, { eager: true })
+  tankType: TankType;
 
   @Column({
     type: 'integer',
@@ -51,11 +53,13 @@ export class Worksheet {
   })
   tankNumber: number;
 
-  @Column({
-    type: 'integer',
-    nullable: true,
-  })
-  harvestTypeId: number;
+  // @Column({
+  //   type: 'integer',
+  //   nullable: true,
+  // })
+  // harvestTypeId: number;
+  @ManyToOne(() => HarvestType, (type) => type.id, { eager: true })
+  harvestType: HarvestType;
 
   @Column({
     type: 'timestamp',
@@ -85,7 +89,6 @@ export class Worksheet {
   sourceUnitName?: string;
 
   @ManyToOne(() => User, (user) => user.worksheets, {
-    nullable: true,
     eager: true, // to retrive with user details
   })
   user: User | null;

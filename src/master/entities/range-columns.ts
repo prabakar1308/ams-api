@@ -10,12 +10,12 @@ export abstract class RangeColumns {
   id: number;
 
   @Column({
-    type: 'integer',
+    type: 'numeric',
   })
   min: number;
 
   @Column({
-    type: 'integer',
+    type: 'numeric',
   })
   max: number;
 

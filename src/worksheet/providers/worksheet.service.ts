@@ -17,6 +17,7 @@ import { PaginationProvider } from 'src/common/pagination/providers/pagination.p
 import { Paginated } from 'src/common/pagination/interfaces/paginated.interface';
 import { WorksheetCreateProvider } from './worksheet-create.provider';
 import { ActiveUserData } from 'src/auth/interfaces/active-user-data.interface';
+import { WorksheetStatusService } from 'src/master/providers/worksheet-status.service';
 
 @Injectable()
 export class WorksheetService {
@@ -34,6 +35,7 @@ export class WorksheetService {
     private readonly worksheetCreatManyProvider: WorksheetCreateManyProvider,
     private readonly worksheetCreatProvider: WorksheetCreateProvider,
     private readonly paginationProvider: PaginationProvider,
+    private readonly worksheetStatusService: WorksheetStatusService,
   ) {}
 
   public async getWorksheets(
@@ -81,12 +83,26 @@ export class WorksheetService {
     const worksheet = await this.worksheetRespository.findOneBy({
       id: patchWorksheetDto.id,
     });
-
-    // update properities
     if (!worksheet) {
       throw new Error('Worksheet not found');
     }
-    worksheet.statusId = patchWorksheetDto.statusId ?? worksheet.statusId;
+
+    let status: Worksheet['status'] = worksheet.status;
+    if (patchWorksheetDto.statusId) {
+      // check if statusId is valid
+      const fetchedStatus =
+        await this.worksheetStatusService.getWorksheetStatusById(
+          patchWorksheetDto.statusId,
+        );
+
+      if (!fetchedStatus) {
+        throw new Error('Worksheet Status not found');
+      }
+
+      status = fetchedStatus;
+    }
+
+    worksheet.status = status;
 
     return await this.worksheetRespository.save(worksheet);
   }
