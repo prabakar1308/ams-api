@@ -2,24 +2,23 @@ import { ConflictException, Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 
-import { ActiveUserData } from 'src/auth/interfaces/active-user-data.interface';
 import { CreateWorksheetDto } from '../dto/create-worksheet.dto';
 import { Worksheet } from '../entities/worksheet.entity';
 import { WorksheetDependentsProvider } from './worksheet-dependents.provider';
+import { WorksheetHistory } from '../entities/worksheet-history.entity';
+import { worksheetHistory } from '../enums/worksheet-history-actions.enum';
 
 @Injectable()
 export class WorksheetCreateProvider {
   constructor(
     @InjectRepository(Worksheet)
     private readonly worksheetRespository: Repository<Worksheet>,
+    @InjectRepository(WorksheetHistory)
+    private readonly worksheetHistoryRespository: Repository<WorksheetHistory>,
     private readonly worksheetDependentsProvider: WorksheetDependentsProvider,
   ) {}
 
-  public async createWorksheet(
-    worksheet: CreateWorksheetDto,
-    user: ActiveUserData,
-  ) {
-    console.log(user);
+  public async createWorksheet(worksheet: CreateWorksheetDto) {
     const currentUser =
       await this.worksheetDependentsProvider.getWorksheetUser(worksheet);
     const status =
@@ -38,7 +37,14 @@ export class WorksheetCreateProvider {
     });
 
     try {
-      return await this.worksheetRespository.save(newWorksheet);
+      const worksheetResult =
+        await this.worksheetRespository.save(newWorksheet);
+      const newWorksheetHistory = this.worksheetHistoryRespository.create({
+        worksheet: worksheetResult,
+        action: worksheetHistory.WORKSHEET_CREATED,
+      });
+      await this.worksheetHistoryRespository.save(newWorksheetHistory);
+      return worksheetResult;
     } catch (error) {
       throw new ConflictException(error, {
         description: 'Ensure the worksheet parameters are correct.',

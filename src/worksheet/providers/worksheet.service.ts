@@ -16,14 +16,19 @@ import { GetWorksheetsDto } from '../dto/get-worksheets.dto';
 import { PaginationProvider } from 'src/common/pagination/providers/pagination.provider';
 import { Paginated } from 'src/common/pagination/interfaces/paginated.interface';
 import { WorksheetCreateProvider } from './worksheet-create.provider';
-import { ActiveUserData } from 'src/auth/interfaces/active-user-data.interface';
 import { WorksheetStatusService } from 'src/master/providers/worksheet-status.service';
+import { PatchWorksheetsDto } from '../dto/patch-worksheets.dto';
+import { WorksheetUpdateManyProvider } from './worksheet-update-many.provider';
+import { WorksheetHistory } from '../entities/worksheet-history.entity';
+import { GetWorksheetHistoryDto } from '../dto/get-worksheet-history.dto';
 
 @Injectable()
 export class WorksheetService {
   constructor(
     @InjectRepository(Worksheet)
     private readonly worksheetRespository: Repository<Worksheet>,
+    @InjectRepository(WorksheetHistory)
+    private readonly worksheetHistoryRespository: Repository<WorksheetHistory>,
     @InjectRepository(Harvest)
     private readonly harvestRespository: Repository<Harvest>,
     @InjectRepository(Restock)
@@ -33,6 +38,7 @@ export class WorksheetService {
     // inject datasource
     private readonly datasource: DataSource,
     private readonly worksheetCreatManyProvider: WorksheetCreateManyProvider,
+    private readonly worksheetUpdateManyProvider: WorksheetUpdateManyProvider,
     private readonly worksheetCreatProvider: WorksheetCreateProvider,
     private readonly paginationProvider: PaginationProvider,
     private readonly worksheetStatusService: WorksheetStatusService,
@@ -57,6 +63,16 @@ export class WorksheetService {
     // });
   }
 
+  public async getWorksheetHistory(
+    query: GetWorksheetHistoryDto,
+  ): Promise<WorksheetHistory[]> {
+    return await this.worksheetHistoryRespository.findBy({
+      worksheet: {
+        id: query.worksheetId,
+      },
+    });
+  }
+
   public async getAllWorksheets(): Promise<Worksheet[]> {
     return await this.worksheetRespository.find();
     // return await this.worksheetRespository.find({
@@ -68,11 +84,8 @@ export class WorksheetService {
     // });
   }
 
-  public async createWorksheet(
-    worksheet: CreateWorksheetDto,
-    user: ActiveUserData,
-  ) {
-    return await this.worksheetCreatProvider.createWorksheet(worksheet, user);
+  public async createWorksheet(worksheet: CreateWorksheetDto) {
+    return await this.worksheetCreatProvider.createWorksheet(worksheet);
   }
 
   public async createWorksheets(worksheets: CreateWorksheetsDto) {
@@ -105,6 +118,12 @@ export class WorksheetService {
     worksheet.status = status;
 
     return await this.worksheetRespository.save(worksheet);
+  }
+
+  public async updateWorksheets(patchWorksheetsDto: PatchWorksheetsDto) {
+    return await this.worksheetUpdateManyProvider.updateWorksheets(
+      patchWorksheetsDto,
+    );
   }
 
   public async deleteWorksheet(id: number) {

@@ -12,6 +12,8 @@ export class PatchWorksheetDto extends PartialType(CreateWorksheetDto) {
   id: number;
 
   @IsInt()
-  @IsNotEmpty()
-  statusId: number;
+  statusId?: number;
+
+  @IsInt()
+  userId?: number;
 }

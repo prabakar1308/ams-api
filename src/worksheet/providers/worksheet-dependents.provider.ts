@@ -4,6 +4,7 @@ import { CreateWorksheetDto } from '../dto/create-worksheet.dto';
 import { WorksheetStatusService } from 'src/master/providers/worksheet-status.service';
 import { UsersService } from 'src/users/providers/users.service';
 import { MasterService } from 'src/master/providers/master.service';
+import { PatchWorksheetDto } from '../dto/patch-worksheet.dto';
 
 @Injectable()
 export class WorksheetDependentsProvider {
@@ -13,7 +14,9 @@ export class WorksheetDependentsProvider {
     private readonly masterService: MasterService,
   ) {}
 
-  public async getWorksheetUser(worksheet: CreateWorksheetDto) {
+  public async getWorksheetUser(
+    worksheet: CreateWorksheetDto | PatchWorksheetDto,
+  ) {
     let user: Worksheet['user'] | null = null;
     if (worksheet.userId) {
       // check if userId is valid
@@ -28,7 +31,9 @@ export class WorksheetDependentsProvider {
     return user;
   }
 
-  public async getWorksheetStatus(worksheet: CreateWorksheetDto) {
+  public async getWorksheetStatus(
+    worksheet: CreateWorksheetDto | PatchWorksheetDto,
+  ) {
     let status: Worksheet['status'] | null = null;
     if (worksheet.statusId) {
       // check if statusId is valid

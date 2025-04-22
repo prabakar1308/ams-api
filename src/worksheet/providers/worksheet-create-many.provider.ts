@@ -7,6 +7,8 @@ import { Worksheet } from '../entities/worksheet.entity';
 import { DataSource } from 'typeorm';
 import { CreateWorksheetsDto } from '../dto/create-worksheets.dto';
 import { WorksheetDependentsProvider } from './worksheet-dependents.provider';
+import { WorksheetHistory } from '../entities/worksheet-history.entity';
+import { worksheetHistory } from '../enums/worksheet-history-actions.enum';
 
 @Injectable()
 export class WorksheetCreateManyProvider {
@@ -53,6 +55,16 @@ export class WorksheetCreateManyProvider {
         });
         const result = await queryRunner.manager.save(newWorksheet);
         newWorksheets.push(result);
+
+        // update worksheet history
+        const newWorksheetHistory = queryRunner.manager.create(
+          WorksheetHistory,
+          {
+            worksheet: result,
+            action: worksheetHistory.WORKSHEET_CREATED,
+          },
+        );
+        await queryRunner.manager.save(newWorksheetHistory);
       }
 
       // if sucessfull, commit
