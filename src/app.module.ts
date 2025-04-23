@@ -21,6 +21,7 @@ import { AuthenticationGuard } from './auth/guards/authentication/authentication
 import { DataResponseInterceptor } from './common/interceptors/data-response/data-response.interceptor';
 import { ClsModule } from 'nestjs-cls';
 import { UserSubscriber } from './common/event.subscriber';
+import { ScheduleModule } from '@nestjs/schedule';
 
 const ENV = process.env.NODE_ENV;
 
@@ -72,6 +73,7 @@ const ENV = process.env.NODE_ENV;
       global: true,
       middleware: { mount: true },
     }),
+    ScheduleModule.forRoot(),
   ],
   controllers: [AppController],
   providers: [

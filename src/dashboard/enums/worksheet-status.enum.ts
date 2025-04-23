@@ -7,9 +7,9 @@
 // }
 
 export enum worksheetStatus {
-  OPEN = 1,
-  READY_FOR_STOCKING = 2,
-  IN_STOCKING = 3,
-  READY_FOR_HARVEST = 4,
-  COMPLETE = 5,
+  // OPEN = 1,
+  READY_FOR_STOCKING = 1,
+  IN_STOCKING = 2,
+  READY_FOR_HARVEST = 3,
+  COMPLETE = 4,
 }

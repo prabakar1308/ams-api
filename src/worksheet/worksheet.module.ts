@@ -16,6 +16,7 @@ import { Restock } from './entities/restock.entity';
 import { WorksheetHistory } from './entities/worksheet-history.entity';
 import { WorksheetUpdateManyProvider } from './providers/worksheet-update-many.provider';
 import { WorksheetHarvestManyProvider } from './providers/worksheet-harvest-many.provider';
+import { WorksheetTasksProvider } from './providers/worksheet-tasks.provider';
 
 @Module({
   controllers: [WorksheetController],
@@ -26,6 +27,7 @@ import { WorksheetHarvestManyProvider } from './providers/worksheet-harvest-many
     WorksheetDependentsProvider,
     WorksheetUpdateManyProvider,
     WorksheetHarvestManyProvider,
+    WorksheetTasksProvider,
   ],
   imports: [
     TypeOrmModule.forFeature([Worksheet, Harvest, Restock, WorksheetHistory]),

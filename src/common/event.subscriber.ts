@@ -22,9 +22,10 @@ export class UserSubscriber implements EntitySubscriberInterface<BaseEntity> {
   }
 
   beforeInsert(event: InsertEvent<BaseEntity>) {
-    event.entity.createdBy = this.cls.get<{
+    const user = this.cls.get<{
       sub: number;
-    }>('user').sub;
+    }>('user');
+    event.entity.createdBy = user ? user.sub : 0;
   }
 
   beforeUpdate(event: UpdateEvent<BaseEntity>) {
@@ -32,7 +33,7 @@ export class UserSubscriber implements EntitySubscriberInterface<BaseEntity> {
       const user = this.cls.get<{
         sub: number;
       }>('user');
-      event.entity.updatedBy = user.sub;
+      event.entity.updatedBy = user ? user.sub : 0;
     }
   }
 }
