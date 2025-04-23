@@ -17,6 +17,7 @@ import { CreateWorksheetsDto } from './dto/create-worksheets.dto';
 import { GetWorksheetsDto } from './dto/get-worksheets.dto';
 import { PatchWorksheetsDto } from './dto/patch-worksheets.dto';
 import { GetWorksheetHistoryDto } from './dto/get-worksheet-history.dto';
+import { CreateHarvestsDto } from './dto/create-harvests.dto';
 
 @Controller('worksheet')
 export class WorksheetController {
@@ -109,5 +110,13 @@ export class WorksheetController {
     console.log(createHarvestDto);
 
     return this.worksheetService.createHarvest(createHarvestDto);
+  }
+
+  @ApiOperation({
+    summary: 'Creates multiple new harvest',
+  })
+  @Post('create-multiple-harvest')
+  public createHarvests(@Body() createHarvestsDto: CreateHarvestsDto) {
+    return this.worksheetService.createWorksheetHarvests(createHarvestsDto);
   }
 }

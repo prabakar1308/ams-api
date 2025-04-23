@@ -71,3 +71,19 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjUsInVzZXJJZ
     "restockUnit": "millions",
     "statusId": 4
 }
+
+POST http://localhost:3000/api/worksheet/create-multiple-harvest
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjUsInVzZXJJZCI6IkdNSC1BTVMtMTcxMSIsImlhdCI6MTc0NTIwODE0MCwiZXhwIjoxNzUyOTg0MTQwLCJhdWQiOiJsb2NhbGhvc3Q6MzAwMCIsImlzcyI6ImxvY2FsaG9zdDozMDAwIn0.rpUgvrO5iGls0A-_H1s2v5nir1cnJMXvgyFqqtxMnzY
+
+{
+  "harvests": [{
+    "worksheetId": 13,
+    "tinsCount": 0,
+    "frozenCupsCount": 30,
+    "measuredBy": 1,
+    "restockCount": 10,
+    "restockUnit": "millions",
+    "statusId": 4
+  }]
+}

@@ -76,7 +76,6 @@ export class WorksheetUpdateManyProvider {
           user,
           status,
         });
-        console.log('cuu', updatedWorksheet);
         const result = await queryRunner.manager.save(updatedWorksheet);
         updatedWorksheets.push(result);
 

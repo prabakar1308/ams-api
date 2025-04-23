@@ -21,6 +21,8 @@ import { PatchWorksheetsDto } from '../dto/patch-worksheets.dto';
 import { WorksheetUpdateManyProvider } from './worksheet-update-many.provider';
 import { WorksheetHistory } from '../entities/worksheet-history.entity';
 import { GetWorksheetHistoryDto } from '../dto/get-worksheet-history.dto';
+import { CreateHarvestsDto } from '../dto/create-harvests.dto';
+import { WorksheetHarvestManyProvider } from './worksheet-harvest-many.provider';
 
 @Injectable()
 export class WorksheetService {
@@ -42,6 +44,7 @@ export class WorksheetService {
     private readonly worksheetCreatProvider: WorksheetCreateProvider,
     private readonly paginationProvider: PaginationProvider,
     private readonly worksheetStatusService: WorksheetStatusService,
+    private readonly worksheetHarvestManyProvider: WorksheetHarvestManyProvider,
   ) {}
 
   public async getWorksheets(
@@ -176,5 +179,11 @@ export class WorksheetService {
   public async createRestock(restock: CreateRestockDto) {
     const newRestock = this.restockRespository.create(restock);
     return await this.restockRespository.save(newRestock);
+  }
+
+  public async createWorksheetHarvests(createHarvestsDto: CreateHarvestsDto) {
+    return await this.worksheetHarvestManyProvider.createWorksheetHarvests(
+      createHarvestsDto,
+    );
   }
 }
