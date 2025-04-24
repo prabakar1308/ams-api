@@ -23,6 +23,8 @@ import { WorksheetHistory } from '../entities/worksheet-history.entity';
 import { GetWorksheetHistoryDto } from '../dto/get-worksheet-history.dto';
 import { CreateHarvestsDto } from '../dto/create-harvests.dto';
 import { WorksheetHarvestManyProvider } from './worksheet-harvest-many.provider';
+import { CreateTransitsDto } from '../dto/create-transits.dto';
+import { WorksheetTransitManyProvider } from './worksheet-transit-many.provider';
 
 @Injectable()
 export class WorksheetService {
@@ -45,6 +47,7 @@ export class WorksheetService {
     private readonly paginationProvider: PaginationProvider,
     private readonly worksheetStatusService: WorksheetStatusService,
     private readonly worksheetHarvestManyProvider: WorksheetHarvestManyProvider,
+    private readonly worksheetTransitManyProvider: WorksheetTransitManyProvider,
   ) {}
 
   public async getWorksheets(
@@ -163,7 +166,7 @@ export class WorksheetService {
       restock.worksheetId = newHarvest.worksheetId;
       restock.harvestId = harvestResponse.id;
       restock.count = harvest.restockCount;
-      restock.unitName = harvest.restockUnit;
+      restock.unitId = harvest.restockUnitId;
       const restockResponse = await this.createRestock(restock);
       response = { ...response, restock: restockResponse };
     }
@@ -184,6 +187,12 @@ export class WorksheetService {
   public async createWorksheetHarvests(createHarvestsDto: CreateHarvestsDto) {
     return await this.worksheetHarvestManyProvider.createWorksheetHarvests(
       createHarvestsDto,
+    );
+  }
+
+  public async createMultipleTransits(createTransitsDto: CreateTransitsDto) {
+    return await this.worksheetTransitManyProvider.createMultipleTransits(
+      createTransitsDto,
     );
   }
 }

@@ -64,3 +64,28 @@ VALUES(nextval('master.ph_id_seq'::regclass), 7.5, 8.5, '', now(), now(), 0, 0);
 INSERT INTO master.salnity
 (id, min, max, unit, "createdAt", "updatedAt", "createdBy", "updatedBy")
 VALUES(nextval('master.salnity_id_seq'::regclass), 25, 30, '', now(), now(), 0, 0);
+
+----Unit-----
+INSERT INTO master.unit
+("createdBy", "updatedBy", id, value, description, "createdAt", "updatedAt")
+VALUES(1, 1, nextval('master.unit_id_seq'::regclass), 'Tins', 'Tins', now(), now());
+INSERT INTO master.unit
+("createdBy", "updatedBy", id, value, description, "createdAt", "updatedAt")
+VALUES(1, 1, nextval('master.unit_id_seq'::regclass), 'Frozen Cups', 'Frozen Cups', now(), now());
+INSERT INTO master.unit
+("createdBy", "updatedBy", id, value, description, "createdAt", "updatedAt")
+VALUES(1, 1, nextval('master.unit_id_seq'::regclass), 'Millions', 'Millions', now(), now());
+
+
+
+
+---- Unit Sector ------
+INSERT INTO master.unit_sector
+("createdBy", "updatedBy", id, "name", description, "location", "createdAt", "updatedAt")
+VALUES(1, 1, nextval('master.unit_sector_id_seq'::regclass), 'Unit-I', 'Unit I - produces raw materials', 'Pondy 1', now(), now());
+INSERT INTO master.unit_sector
+("createdBy", "updatedBy", id, "name", description, "location", "createdAt", "updatedAt")
+VALUES(1,1, nextval('master.unit_sector_id_seq'::regclass), 'Unit-II', 'Unit II - produces raw materials', 'Pondy 2', now(), now());
+INSERT INTO master.unit_sector
+("createdBy", "updatedBy", id, "name", description, "location", "createdAt", "updatedAt")
+VALUES(1, 1, nextval('master.unit_sector_id_seq'::regclass), 'Unit-III', 'Unit III - produces raw materials', 'Pondy 3', now(), now());

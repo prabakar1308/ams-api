@@ -52,7 +52,7 @@ export class WorksheetHarvestManyProvider {
           restock.worksheetId = newHarvest.worksheetId;
           restock.harvestId = harvestResponse.id;
           restock.count = harvest.restockCount;
-          restock.unitName = harvest.restockUnit;
+          restock.unitId = harvest.restockUnitId;
           restock.status = 'A';
 
           const newRestock = queryRunner.manager.create(Restock, restock);

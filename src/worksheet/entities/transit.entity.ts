@@ -4,27 +4,26 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
-  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { Worksheet } from './worksheet.entity';
-import { Harvest } from './harvest.entity';
 import { BaseEntity } from 'src/common/entities/base.entity';
+import { Harvest } from './harvest.entity';
+import { UnitSector } from 'src/master/entities/unit-sector.entity';
 import { Unit } from 'src/master/entities/unit.entity';
 
 @Entity({ schema: 'worksheet' })
-export class Restock extends BaseEntity {
+export class Transit extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @OneToOne(() => Worksheet)
-  @JoinColumn({ name: 'worksheetId' })
-  worksheetId: number;
-
-  @OneToOne(() => Harvest)
+  @ManyToOne(() => Harvest, (harvest) => harvest.id, { eager: true })
   @JoinColumn({ name: 'harvestId' })
   harvestId: number;
+
+  @ManyToOne(() => UnitSector, (unitSector) => unitSector.id, { eager: true })
+  @JoinColumn({ name: 'unitSectorId' })
+  unitSectorId: number;
 
   @Column({
     type: 'integer',
@@ -35,12 +34,6 @@ export class Restock extends BaseEntity {
   @ManyToOne(() => Unit, (unit) => unit.id, { eager: true })
   @JoinColumn({ name: 'unitId' })
   unitId: number;
-
-  @Column({
-    type: 'varchar',
-    nullable: false,
-  })
-  status: string;
 
   @CreateDateColumn()
   createdAt: Date;

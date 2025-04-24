@@ -11,6 +11,7 @@ import {
 import { Worksheet } from './worksheet.entity';
 import { User } from 'src/users/user.entity';
 import { BaseEntity } from 'src/common/entities/base.entity';
+import { Unit } from 'src/master/entities/unit.entity';
 
 @Entity({ schema: 'worksheet' })
 export class Harvest extends BaseEntity {
@@ -25,15 +26,20 @@ export class Harvest extends BaseEntity {
     type: 'integer',
     nullable: false,
   })
-  tinsCount: number;
+  count: number;
 
+  // same as count when it is created, will get updated based on the transit update
   @Column({
     type: 'integer',
-    nullable: false,
+    nullable: true,
   })
-  frozenCupsCount: number;
+  countInStock: number;
 
-  @ManyToOne(() => User)
+  @ManyToOne(() => Unit, (unit) => unit.id, { eager: true })
+  @JoinColumn({ name: 'unitId' })
+  unitId: number;
+
+  @ManyToOne(() => User, (user) => user.id, { eager: true })
   @JoinColumn({ name: 'measuredBy' })
   measuredBy: number;
 

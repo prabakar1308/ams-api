@@ -18,6 +18,7 @@ import { GetWorksheetsDto } from './dto/get-worksheets.dto';
 import { PatchWorksheetsDto } from './dto/patch-worksheets.dto';
 import { GetWorksheetHistoryDto } from './dto/get-worksheet-history.dto';
 import { CreateHarvestsDto } from './dto/create-harvests.dto';
+import { CreateTransitsDto } from './dto/create-transits.dto';
 
 @Controller('worksheet')
 export class WorksheetController {
@@ -117,6 +118,15 @@ export class WorksheetController {
   })
   @Post('create-multiple-harvest')
   public createHarvests(@Body() createHarvestsDto: CreateHarvestsDto) {
+    console.log(createHarvestsDto);
     return this.worksheetService.createWorksheetHarvests(createHarvestsDto);
+  }
+
+  @ApiOperation({
+    summary: 'Creates multiple new transit live',
+  })
+  @Post('create-multiple-transit')
+  public createMultipleTransits(@Body() createTransitsDto: CreateTransitsDto) {
+    return this.worksheetService.createMultipleTransits(createTransitsDto);
   }
 }

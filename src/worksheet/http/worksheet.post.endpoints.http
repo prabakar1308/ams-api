@@ -57,18 +57,12 @@ Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjUsInVzZXJJZCI6IkdNSC1BTVMtMTcxMSIsImlhdCI6MTc0NTIwODE0MCwiZXhwIjoxNzUyOTg0MTQwLCJhdWQiOiJsb2NhbGhvc3Q6MzAwMCIsImlzcyI6ImxvY2FsaG9zdDozMDAwIn0.rpUgvrO5iGls0A-_H1s2v5nir1cnJMXvgyFqqtxMnzY
 
 {
-    // "worksheetId": 1,
-    // "tinsCount": 0,
-    // "frozenCupsCount": 12,
-    // "measuredBy": 1,
-    // "restockCount": 10,
-    // "restockUnit": "Millions"
-    "worksheetId": 3,
-    "tinsCount": 0,
-    "frozenCupsCount": 30,
+   "worksheetId": 13,
+    "count": 30,
+    "unitId": 2, // 1 - Tins, 2- Frozen Cups, 3 - Millions
     "measuredBy": 1,
     "restockCount": 10,
-    "restockUnit": "millions",
+    "restockUnitId": 3,
     "statusId": 4
 }
 
@@ -79,11 +73,27 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjUsInVzZXJJZ
 {
   "harvests": [{
     "worksheetId": 13,
-    "tinsCount": 0,
-    "frozenCupsCount": 30,
+    "count": 50,
+    "countInStock": 50,
+    "unitId": 1,
     "measuredBy": 1,
     "restockCount": 10,
-    "restockUnit": "millions",
+    "restockUnitId": 3,
     "statusId": 4
+  }]
+}
+
+
+
+POST http://localhost:3000/api/worksheet/create-multiple-transit
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjUsInVzZXJJZCI6IkdNSC1BTVMtMTcxMSIsImlhdCI6MTc0NTIwODE0MCwiZXhwIjoxNzUyOTg0MTQwLCJhdWQiOiJsb2NhbGhvc3Q6MzAwMCIsImlzcyI6ImxvY2FsaG9zdDozMDAwIn0.rpUgvrO5iGls0A-_H1s2v5nir1cnJMXvgyFqqtxMnzY
+
+{
+  "transits": [{
+    "harvestId": 6,
+    "unitSectorId": 1,
+    "count": 20,
+    "unitId": 1
   }]
 }

@@ -2,11 +2,13 @@ import { BaseEntity } from 'src/common/entities/base.entity';
 import {
   Column,
   CreateDateColumn,
+  Entity,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 
-export abstract class GenericColumns extends BaseEntity {
+@Entity({ schema: 'master' })
+export class UnitSector extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -16,7 +18,7 @@ export abstract class GenericColumns extends BaseEntity {
     nullable: false,
     unique: true,
   })
-  value: string;
+  name: string;
 
   @Column({
     type: 'varchar',
@@ -24,6 +26,13 @@ export abstract class GenericColumns extends BaseEntity {
     nullable: true,
   })
   description?: string;
+
+  @Column({
+    type: 'varchar',
+    length: 256,
+    nullable: true,
+  })
+  location?: string;
 
   @CreateDateColumn()
   createdAt: Date;

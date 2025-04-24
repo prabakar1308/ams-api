@@ -10,6 +10,8 @@ import { Tank } from './entities/tank.entity';
 import { Ph } from './entities/ph.entity';
 import { Temperature } from './entities/temperature.entity';
 import { Salnity } from './entities/salnity.entity';
+import { UnitSector } from './entities/unit-sector.entity';
+import { Unit } from './entities/unit.entity';
 
 @Module({
   controllers: [MasterController],
@@ -23,6 +25,8 @@ import { Salnity } from './entities/salnity.entity';
       Ph,
       Temperature,
       Salnity,
+      UnitSector,
+      Unit,
     ]),
   ], // Add your entities here
   exports: [MasterService, WorksheetStatusService],

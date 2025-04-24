@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
+import { IsNotEmpty, IsNumber, IsOptional } from 'class-validator';
 
 export class CreateHarvestDto {
   @ApiProperty({
@@ -11,23 +11,32 @@ export class CreateHarvestDto {
   worksheetId: number;
 
   @ApiProperty({
-    description: 'The number of tins generated in this harvest',
+    description: 'The count generated in this harvest',
     example: 10,
   })
   @IsNumber()
   @IsOptional()
-  tinsCount: number;
+  count: number;
 
   @ApiProperty({
-    description: 'The number of frozen cups generated in this harvest',
+    description: 'The count pending for live transit',
     example: 10,
   })
   @IsNumber()
   @IsOptional()
-  frozenCupsCount: number;
+  countInStock?: number;
 
   @ApiProperty({
-    description: 'The user id of the person who created this harvest',
+    description: 'The unit id of count generated in this harvest',
+    example: 10,
+  })
+  @IsNumber()
+  @IsOptional()
+  unitId: number;
+
+  @ApiProperty({
+    description:
+      'The user id of the person who measured and creating this harvest',
     example: 'GMH-AMS-001',
   })
   @IsNumber()
@@ -43,8 +52,7 @@ export class CreateHarvestDto {
   statusId: number;
 
   @ApiProperty({
-    description:
-      'The number of restock count in millions pending in this harvest',
+    description: 'The number of restock count pending in this harvest',
     example: 80,
   })
   @IsNumber()
@@ -52,10 +60,10 @@ export class CreateHarvestDto {
   restockCount: number;
 
   @ApiProperty({
-    description: 'restock count unit name',
+    description: 'restock count unit id',
     example: 80,
   })
-  @IsString()
+  @IsNumber()
   @IsOptional()
-  restockUnit: string;
+  restockUnitId: number;
 }

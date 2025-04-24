@@ -1,15 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty, IsNumber } from 'class-validator';
 
-export class CreateRestockDto {
-  @ApiProperty({
-    description: 'The restock of the corresponding worksheet id',
-    example: 1,
-  })
-  @IsNumber()
-  @IsNotEmpty()
-  worksheetId: number;
-
+export class CreateTransitDto {
   @ApiProperty({
     description: 'The restock of the corresponding harvest id',
     example: 1,
@@ -19,25 +11,24 @@ export class CreateRestockDto {
   harvestId: number;
 
   @ApiProperty({
-    description: 'status of the restocked item',
+    description: 'Unit sector id of this live transit',
     example: 1,
   })
   @IsNumber()
   @IsNotEmpty()
-  status: string;
+  unitSectorId: number;
 
   @ApiProperty({
-    description:
-      'The number of restock count in millions pending in this harvest',
-    example: 10,
+    description: 'Count of live transit to unit sector',
+    example: 1,
   })
   @IsNumber()
   @IsNotEmpty()
   count: number;
 
   @ApiProperty({
-    description: 'Restock unit name',
-    example: 10,
+    description: `Count's unit id of live transit to unit sector`,
+    example: 1,
   })
   @IsNumber()
   @IsNotEmpty()

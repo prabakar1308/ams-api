@@ -17,6 +17,8 @@ import { WorksheetHistory } from './entities/worksheet-history.entity';
 import { WorksheetUpdateManyProvider } from './providers/worksheet-update-many.provider';
 import { WorksheetHarvestManyProvider } from './providers/worksheet-harvest-many.provider';
 import { WorksheetTasksProvider } from './providers/worksheet-tasks.provider';
+import { Transit } from './entities/transit.entity';
+import { WorksheetTransitManyProvider } from './providers/worksheet-transit-many.provider';
 
 @Module({
   controllers: [WorksheetController],
@@ -28,9 +30,16 @@ import { WorksheetTasksProvider } from './providers/worksheet-tasks.provider';
     WorksheetUpdateManyProvider,
     WorksheetHarvestManyProvider,
     WorksheetTasksProvider,
+    WorksheetTransitManyProvider,
   ],
   imports: [
-    TypeOrmModule.forFeature([Worksheet, Harvest, Restock, WorksheetHistory]),
+    TypeOrmModule.forFeature([
+      Worksheet,
+      Harvest,
+      Restock,
+      WorksheetHistory,
+      Transit,
+    ]),
     UsersModule,
     PaginationModule,
     MasterModule,
