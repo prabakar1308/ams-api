@@ -1,17 +1,21 @@
 import { Exclude } from 'class-transformer';
 import { IsEmail } from 'class-validator';
+import { BaseEntity } from 'src/common/entities/base.entity';
+import { UnitSector } from 'src/master/entities/unit-sector.entity';
 import { Worksheet } from 'src/worksheet/entities/worksheet.entity';
 import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
+  ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 
 @Entity({ schema: 'master' })
-export class User {
+export class User extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -21,7 +25,7 @@ export class User {
     nullable: false,
     unique: true,
   })
-  userId: string;
+  userCode: string;
 
   @Column({
     type: 'varchar',
@@ -62,8 +66,12 @@ export class User {
   @Column()
   designation: string;
 
-  @Column()
-  departmentUnit: string;
+  @ManyToOne(() => UnitSector, (unitSector) => unitSector.id, {
+    eager: true,
+    nullable: false,
+  })
+  @JoinColumn({ name: 'unitSectorId' })
+  unitSectorId: number;
 
   @Column()
   dateOfBirth: Date;
@@ -85,16 +93,4 @@ export class User {
 
   @UpdateDateColumn()
   updatedAt: Date;
-
-  @Column({
-    type: 'int',
-    nullable: true,
-  })
-  createdBy: number;
-
-  @Column({
-    type: 'int',
-    nullable: true,
-  })
-  updatedBy: number;
 }

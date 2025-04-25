@@ -1,6 +1,9 @@
 import { IsNotEmpty, IsOptional } from 'class-validator';
 
-export class CreateTankTypeDto {
+export class PatchGenericDto {
+  @IsNotEmpty()
+  id: number;
+
   @IsNotEmpty()
   value: string;
 

@@ -1,30 +1,30 @@
 import {
   Column,
   CreateDateColumn,
+  JoinColumn,
+  ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { Unit } from './unit.entity';
 
 export abstract class RangeColumns {
   @PrimaryGeneratedColumn()
   id: number;
 
   @Column({
-    type: 'integer',
+    type: 'numeric',
   })
   min: number;
 
   @Column({
-    type: 'integer',
+    type: 'numeric',
   })
   max: number;
 
-  @Column({
-    type: 'varchar',
-    length: 50,
-    nullable: true,
-  })
-  unit: string;
+  @ManyToOne(() => Unit, (unit) => unit.id, { eager: true, nullable: true })
+  @JoinColumn({ name: 'unitId' })
+  unitId: number;
 
   @CreateDateColumn()
   createdAt: Date;

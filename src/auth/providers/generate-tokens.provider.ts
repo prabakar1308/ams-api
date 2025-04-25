@@ -16,7 +16,7 @@ export class GenerateTokensProvider {
   public async signToken<T>(userId: number, expiresIn: number, payload?: T) {
     return await this.jwtService.signAsync(
       {
-        sub: userId,
+        userId: userId,
         ...payload,
       },
       {
@@ -35,7 +35,7 @@ export class GenerateTokensProvider {
         user.id,
         this.jwtConfiguration.accessTokenTtl,
         {
-          userId: user.userId,
+          userCode: user.userCode,
         },
       ),
       // generate refresh token

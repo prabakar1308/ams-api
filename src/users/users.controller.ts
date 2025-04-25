@@ -3,7 +3,6 @@ import {
   ClassSerializerInterceptor,
   Controller,
   Get,
-  Param,
   Patch,
   Post,
   Query,
@@ -18,20 +17,6 @@ import { GetUsersDto } from './dto/get-users.dto';
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
-  //   @Get('users')
-  //   public getUsers() {
-  //     return 'users';
-  //   }
-
-  // @Get('users{/:id}')
-  // public getUser(
-  //   @Query() query: any,
-  //   @Param('id', new DefaultValuePipe(1), ParseIntPipe) id?: number,
-  // ) {
-  //   console.log(id);
-  //   console.log(query);
-  //   return 'users 1';
-  // }
 
   @Get()
   @ApiOperation({
@@ -55,13 +40,9 @@ export class UsersController {
     return this.usersService.createUser(createUserDto);
   }
 
-  @Patch('{/:id}')
-  public patchUser(
-    @Param('id') id: number,
-    @Body() patchUserDto: PatchUserDto,
-  ) {
-    console.log(id);
-    console.log(patchUserDto);
-    return patchUserDto;
+  @Patch()
+  @UseInterceptors(ClassSerializerInterceptor)
+  public patchUser(@Body() patchUserDto: PatchUserDto) {
+    return this.usersService.updateUser(patchUserDto);
   }
 }

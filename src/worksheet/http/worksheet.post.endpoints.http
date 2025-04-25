@@ -1,62 +1,99 @@
 POST http://localhost:3000/api/worksheet/create-worksheet
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjUsInVzZXJJZCI6IkdNSC1BTVMtMTcxMSIsImlhdCI6MTc0NTA4MzcwOSwiZXhwIjoxNzQ1MDg3MzA5LCJhdWQiOiJsb2NhbGhvc3Q6MzAwMCIsImlzcyI6ImxvY2FsaG9zdDozMDAwIn0.aN7s92E3uGU3m9SaBzWsJoqlgH25icgzXpx0zBIT0as
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjUsInVzZXJJZCI6IkdNSC1BTVMtMTcxMSIsImlhdCI6MTc0NTIwODE0MCwiZXhwIjoxNzUyOTg0MTQwLCJhdWQiOiJsb2NhbGhvc3Q6MzAwMCIsImlzcyI6ImxvY2FsaG9zdDozMDAwIn0.rpUgvrO5iGls0A-_H1s2v5nir1cnJMXvgyFqqtxMnzY
 
 {
     "ph": 7,
-    "salnity": 10,
-    "temperature": 34,
+    "salnity": 35,
+    "temperature": 32,
     "tankTypeId": 1,
-    "tankNumber": 5,
+    "tankNumber": 21,
     "harvestTypeId": 1,
     "harvestTime": "2025-08-18T17:34:02.666Z",
     "inputSource": "bags",
-    "inputCount": 5,
+    "inputCount": 20,
     "sourceUnitName": "kgs",
-    "createdBy": 1,
-    "updatedBy": 1,
-    "statusId": 3,
+    "statusId": 2,
     "userId": 1
 }
 
 POST http://localhost:3000/api/worksheet/create-worksheets
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjUsInVzZXJJZCI6IkdNSC1BTVMtMTcxMSIsImlhdCI6MTc0NTIwODE0MCwiZXhwIjoxNzUyOTg0MTQwLCJhdWQiOiJsb2NhbGhvc3Q6MzAwMCIsImlzcyI6ImxvY2FsaG9zdDozMDAwIn0.rpUgvrO5iGls0A-_H1s2v5nir1cnJMXvgyFqqtxMnzY
 
 {
   "worksheets": [{
-    "statusId": 2,
     "ph": 8,
-    "salnity": 20,
-    "temperature": 29,
-    "tankNumber": 7,
-    "userId": 1
-}, {
-    "statusId": 2,
-    "ph": 8,
-    "salnity": 21,
+    "salnity": 10,
     "temperature": 30,
-    "tankNumber": 8,
-    "userId": 1
+    "tankTypeId": 2,
+    "tankNumber": 17,
+    "harvestTypeId": 2,
+    "harvestTime": "2025-08-18T17:34:02.666Z",
+    "inputSource": "tins",
+    "inputCount": 12,
+    "sourceUnitName": "",
+    "statusId": 1,
+    "userId": 3
+}, {
+    "ph": 8,
+    "salnity": 10,
+    "temperature": 30,
+    "tankTypeId": 2,
+    "tankNumber": 18,
+    "harvestTypeId": 2,
+    "harvestTime": "2025-08-18T17:34:02.666Z",
+    "inputSource": "tins",
+    "inputCount": 10,
+    "sourceUnitName": "",
+    "statusId": 1,
+    "userId": 3
 }]
 }
 
 
 POST http://localhost:3000/api/worksheet/create-harvest
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjQsInVzZXJJZCI6IkdNSC1BTVMtMTYxMSIsImlhdCI6MTc0NDQzOTYyNiwiZXhwIjoxNzQ0NDQzMjI2LCJhdWQiOiJsb2NhbGhvc3Q6MzAwMCIsImlzcyI6ImxvY2FsaG9zdDozMDAwIn0.QBve6q0ADAZU78W-Hg0eKzyvX0AUc7dYQwzDw_qXKjE
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjUsInVzZXJJZCI6IkdNSC1BTVMtMTcxMSIsImlhdCI6MTc0NTIwODE0MCwiZXhwIjoxNzUyOTg0MTQwLCJhdWQiOiJsb2NhbGhvc3Q6MzAwMCIsImlzcyI6ImxvY2FsaG9zdDozMDAwIn0.rpUgvrO5iGls0A-_H1s2v5nir1cnJMXvgyFqqtxMnzY
 
 {
-    // "worksheetId": 1,
-    // "tinsCount": 0,
-    // "frozenCupsCount": 12,
-    // "measuredBy": 1,
-    // "restockCount": 10,
-    // "restockUnit": "Millions"
-    "worksheetId": 3,
-    "tinsCount": 0,
-    "frozenCupsCount": 30,
+   "worksheetId": 13,
+    "count": 30,
+    "unitId": 2, // 1 - Tins, 2- Frozen Cups, 3 - Millions
     "measuredBy": 1,
     "restockCount": 10,
-    "restockUnit": "millions",
+    "restockUnitId": 3,
     "statusId": 4
+}
+
+POST http://localhost:3000/api/worksheet/create-multiple-harvest
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjUsInVzZXJJZCI6IkdNSC1BTVMtMTcxMSIsImlhdCI6MTc0NTIwODE0MCwiZXhwIjoxNzUyOTg0MTQwLCJhdWQiOiJsb2NhbGhvc3Q6MzAwMCIsImlzcyI6ImxvY2FsaG9zdDozMDAwIn0.rpUgvrO5iGls0A-_H1s2v5nir1cnJMXvgyFqqtxMnzY
+
+{
+  "harvests": [{
+    "worksheetId": 13,
+    "count": 50,
+    "countInStock": 50,
+    "unitId": 1,
+    "measuredBy": 1,
+    "restockCount": 10,
+    "restockUnitId": 3,
+    "statusId": 4
+  }]
+}
+
+
+
+POST http://localhost:3000/api/worksheet/create-multiple-transit
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjUsInVzZXJJZCI6IkdNSC1BTVMtMTcxMSIsImlhdCI6MTc0NTIwODE0MCwiZXhwIjoxNzUyOTg0MTQwLCJhdWQiOiJsb2NhbGhvc3Q6MzAwMCIsImlzcyI6ImxvY2FsaG9zdDozMDAwIn0.rpUgvrO5iGls0A-_H1s2v5nir1cnJMXvgyFqqtxMnzY
+
+{
+  "transits": [{
+    "harvestId": 6,
+    "unitSectorId": 1,
+    "count": 20,
+    "unitId": 1
+  }]
 }

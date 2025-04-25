@@ -19,6 +19,14 @@ export class CreateRestockDto {
   harvestId: number;
 
   @ApiProperty({
+    description: 'status of the restocked item',
+    example: 1,
+  })
+  @IsNumber()
+  @IsNotEmpty()
+  status: string;
+
+  @ApiProperty({
     description:
       'The number of restock count in millions pending in this harvest',
     example: 10,
@@ -33,5 +41,5 @@ export class CreateRestockDto {
   })
   @IsNumber()
   @IsNotEmpty()
-  unitName: string;
+  unitId: number;
 }

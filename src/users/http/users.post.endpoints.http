@@ -1,34 +1,16 @@
 POST http://localhost:3000/api/users
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsImlhdCI6MTc0NDg3NTY3MSwiZXhwIjoxNzQ0ODc5MjcxLCJhdWQiOiJsb2NhbGhvc3Q6MzAwMCIsImlzcyI6ImxvY2FsaG9zdDozMDAwIn0.tqH9UYBId7GKg-hEThcL9qeXUz4FGFYglViSaQNDEcI
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjUsInVzZXJJZCI6IkdNSC1BTVMtMTcxMSIsImlhdCI6MTc0NTIwODE0MCwiZXhwIjoxNzUyOTg0MTQwLCJhdWQiOiJsb2NhbGhvc3Q6MzAwMCIsImlzcyI6ImxvY2FsaG9zdDozMDAwIn0.rpUgvrO5iGls0A-_H1s2v5nir1cnJMXvgyFqqtxMnzY
 
 {
-    "userId": "GMH-AMS-1234",
-    "firstName": "Prabakaran",
-    "lastName": "A",
-    "password": "test_98880",
+    "userCode": "GMH-AMS-1111",
+    "firstName": "AMS",
+    "lastName": "User",
+    "password": "test_1111",
     "mobileNumber": "9500010704",
     "role": "admin",
     "designation": "technician",
-    "departmentUnit": "Unit-7",
-    "dateOfJoining": "2016-09-18T17:34:02.666Z",
-    "dateOfBirth": "2000-09-18T17:34:02.666Z",
-    "address": "test address",
-    "remarks": "test remarks"
-}
-
-POST http://localhost:3000/api/users
-Content-Type: application/json
-
-{
-    "userId": "GMH-AMS-17111111",
-    "firstName": "Vineethra1test",
-    "lastName": "PD",
-    "password": "test_17111",
-    "mobileNumber": "9500010704",
-    "role": "admin",
-    "designation": "technician",
-    "departmentUnit": "Unit-7",
+    "unitSectorId": 1,
     "dateOfJoining": "2016-09-18T17:34:02.666Z",
     "dateOfBirth": "2000-09-18T17:34:02.666Z",
     "address": "test address",
@@ -38,8 +20,10 @@ Content-Type: application/json
 
 PATCH http://localhost:3000/api/users
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjUsInVzZXJJZCI6IkdNSC1BTVMtMTcxMSIsImlhdCI6MTc0NTIwODE0MCwiZXhwIjoxNzUyOTg0MTQwLCJhdWQiOiJsb2NhbGhvc3Q6MzAwMCIsImlzcyI6ImxvY2FsaG9zdDozMDAwIn0.rpUgvrO5iGls0A-_H1s2v5nir1cnJMXvgyFqqtxMnzY
 
 {
-    "name": "testcreate",
-    "mobileNumber": "9500010704"
+    "id": 9,
+    "firstName": "AMS",
+    "lastName": "Admin"
 }

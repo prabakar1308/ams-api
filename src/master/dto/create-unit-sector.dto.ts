@@ -1,9 +1,12 @@
 import { IsNotEmpty, IsOptional } from 'class-validator';
 
-export class CreateHarvestTypeDto {
+export class CreateUnitSectorDto {
   @IsNotEmpty()
-  value: string;
+  name: string;
 
   @IsOptional()
   description: string;
+
+  @IsOptional()
+  location: string;
 }

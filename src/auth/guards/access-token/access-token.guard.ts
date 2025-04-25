@@ -8,6 +8,7 @@ import {
 import { ConfigType } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { Request } from 'express';
+import { ClsService } from 'nestjs-cls';
 import jwtConfig from 'src/auth/config/jwt.config';
 import { REQUEST_USER_KEY } from 'src/auth/constants/auth.contants';
 
@@ -17,6 +18,7 @@ export class AccessTokenGuard implements CanActivate {
     private readonly jwtService: JwtService,
     @Inject(jwtConfig.KEY)
     private readonly jwtConfiguration: ConfigType<typeof jwtConfig>,
+    private cls: ClsService,
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
@@ -25,14 +27,15 @@ export class AccessTokenGuard implements CanActivate {
     // Extract the token from header
     const token = this.extractRequestFromHeader(request);
     // Validate the token
-    if (!token) throw new UnauthorizedException();
+    if (!token) throw new UnauthorizedException('Bearer Token not found');
 
     try {
       const payload = await this.jwtService.verifyAsync<{
-        sub: string;
-        email: string;
+        userId: number;
+        userCode: string;
       }>(token, this.jwtConfiguration);
       // Use the payload if necessary, e.g., attach it to the request object
+      this.cls.set('user', payload);
       request[REQUEST_USER_KEY] = payload;
     } catch (error) {
       throw new UnauthorizedException(error);

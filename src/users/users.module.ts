@@ -7,10 +7,16 @@ import { User } from './user.entity';
 import { CreateUserProvider } from './providers/create-user.provider';
 import { FindUserByIdProvider } from './providers/find-user-by-id.provider';
 import { PaginationModule } from 'src/common/pagination/pagination.module';
+import { UpdateUserProvider } from './providers/update-user.provider';
 
 @Module({
   controllers: [UsersController],
-  providers: [UsersService, CreateUserProvider, FindUserByIdProvider],
+  providers: [
+    UsersService,
+    CreateUserProvider,
+    FindUserByIdProvider,
+    UpdateUserProvider,
+  ],
   exports: [UsersService],
   imports: [
     forwardRef(() => AuthModule),

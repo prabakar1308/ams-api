@@ -1,3 +1,4 @@
+import { BaseEntity } from 'src/common/entities/base.entity';
 import {
   Column,
   CreateDateColumn,
@@ -5,7 +6,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
-export abstract class GenericColumns {
+export abstract class GenericColumns extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -29,16 +30,4 @@ export abstract class GenericColumns {
 
   @UpdateDateColumn()
   updatedAt: Date;
-
-  @Column({
-    type: 'int',
-    nullable: true,
-  })
-  createdBy: number;
-
-  @Column({
-    type: 'int',
-    nullable: true,
-  })
-  updatedBy: number;
 }

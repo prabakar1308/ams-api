@@ -3,15 +3,18 @@ import {
   CreateDateColumn,
   Entity,
   JoinColumn,
+  ManyToOne,
   OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { Worksheet } from './worksheet.entity';
 import { Harvest } from './harvest.entity';
+import { BaseEntity } from 'src/common/entities/base.entity';
+import { Unit } from 'src/master/entities/unit.entity';
 
 @Entity({ schema: 'worksheet' })
-export class Restock {
+export class Restock extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -29,12 +32,9 @@ export class Restock {
   })
   count: number;
 
-  @Column({
-    type: 'varchar',
-    length: 50,
-    nullable: false,
-  })
-  unitName: string;
+  @ManyToOne(() => Unit, (unit) => unit.id, { eager: true })
+  @JoinColumn({ name: 'unitId' })
+  unitId: number;
 
   @Column({
     type: 'varchar',
@@ -47,16 +47,4 @@ export class Restock {
 
   @UpdateDateColumn()
   updatedAt: Date;
-
-  @Column({
-    type: 'int',
-    nullable: true,
-  })
-  createdBy: number;
-
-  @Column({
-    type: 'int',
-    nullable: true,
-  })
-  updatedBy: number;
 }

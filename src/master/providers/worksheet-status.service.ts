@@ -1,8 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { WorksheetStatus } from '../entities/worksheet-status.entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
-import { CreateWorksheetStatusDto } from '../dto/create-worksheet-status.dto';
+
+import { PatchGenericDto } from '../dto/patch-base-generic.dto';
+import { WorksheetStatus } from '../entities/worksheet-status.entity';
 
 @Injectable()
 export class WorksheetStatusService {
@@ -10,12 +11,18 @@ export class WorksheetStatusService {
     @InjectRepository(WorksheetStatus)
     private readonly worksheetStatusRepository: Repository<WorksheetStatus>,
   ) {}
-  public async createWorksheetStatus(
-    createWorksheetStatusDto: CreateWorksheetStatusDto,
-  ) {
+  public async updateWorksheetStatus(patchWorksheetStatusDto: PatchGenericDto) {
     const worksheetStatus = this.worksheetStatusRepository.create(
-      createWorksheetStatusDto,
+      patchWorksheetStatusDto,
     );
     return await this.worksheetStatusRepository.save(worksheetStatus);
+  }
+
+  public async getWorksheetStatus() {
+    return await this.worksheetStatusRepository.find();
+  }
+
+  public async getWorksheetStatusById(id: number) {
+    return await this.worksheetStatusRepository.findOneBy({ id });
   }
 }

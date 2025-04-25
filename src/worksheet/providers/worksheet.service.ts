@@ -16,13 +16,23 @@ import { GetWorksheetsDto } from '../dto/get-worksheets.dto';
 import { PaginationProvider } from 'src/common/pagination/providers/pagination.provider';
 import { Paginated } from 'src/common/pagination/interfaces/paginated.interface';
 import { WorksheetCreateProvider } from './worksheet-create.provider';
-import { ActiveUserData } from 'src/auth/interfaces/active-user-data.interface';
+import { WorksheetStatusService } from 'src/master/providers/worksheet-status.service';
+import { PatchWorksheetsDto } from '../dto/patch-worksheets.dto';
+import { WorksheetUpdateManyProvider } from './worksheet-update-many.provider';
+import { WorksheetHistory } from '../entities/worksheet-history.entity';
+import { GetWorksheetHistoryDto } from '../dto/get-worksheet-history.dto';
+import { CreateHarvestsDto } from '../dto/create-harvests.dto';
+import { WorksheetHarvestManyProvider } from './worksheet-harvest-many.provider';
+import { CreateTransitsDto } from '../dto/create-transits.dto';
+import { WorksheetTransitManyProvider } from './worksheet-transit-many.provider';
 
 @Injectable()
 export class WorksheetService {
   constructor(
     @InjectRepository(Worksheet)
     private readonly worksheetRespository: Repository<Worksheet>,
+    @InjectRepository(WorksheetHistory)
+    private readonly worksheetHistoryRespository: Repository<WorksheetHistory>,
     @InjectRepository(Harvest)
     private readonly harvestRespository: Repository<Harvest>,
     @InjectRepository(Restock)
@@ -32,8 +42,12 @@ export class WorksheetService {
     // inject datasource
     private readonly datasource: DataSource,
     private readonly worksheetCreatManyProvider: WorksheetCreateManyProvider,
+    private readonly worksheetUpdateManyProvider: WorksheetUpdateManyProvider,
     private readonly worksheetCreatProvider: WorksheetCreateProvider,
     private readonly paginationProvider: PaginationProvider,
+    private readonly worksheetStatusService: WorksheetStatusService,
+    private readonly worksheetHarvestManyProvider: WorksheetHarvestManyProvider,
+    private readonly worksheetTransitManyProvider: WorksheetTransitManyProvider,
   ) {}
 
   public async getWorksheets(
@@ -55,6 +69,16 @@ export class WorksheetService {
     // });
   }
 
+  public async getWorksheetHistory(
+    query: GetWorksheetHistoryDto,
+  ): Promise<WorksheetHistory[]> {
+    return await this.worksheetHistoryRespository.findBy({
+      worksheet: {
+        id: query.worksheetId,
+      },
+    });
+  }
+
   public async getAllWorksheets(): Promise<Worksheet[]> {
     return await this.worksheetRespository.find();
     // return await this.worksheetRespository.find({
@@ -66,11 +90,8 @@ export class WorksheetService {
     // });
   }
 
-  public async createWorksheet(
-    worksheet: CreateWorksheetDto,
-    user: ActiveUserData,
-  ) {
-    return await this.worksheetCreatProvider.createWorksheet(worksheet, user);
+  public async createWorksheet(worksheet: CreateWorksheetDto) {
+    return await this.worksheetCreatProvider.createWorksheet(worksheet);
   }
 
   public async createWorksheets(worksheets: CreateWorksheetsDto) {
@@ -81,14 +102,34 @@ export class WorksheetService {
     const worksheet = await this.worksheetRespository.findOneBy({
       id: patchWorksheetDto.id,
     });
-
-    // update properities
     if (!worksheet) {
       throw new Error('Worksheet not found');
     }
-    worksheet.statusId = patchWorksheetDto.statusId ?? worksheet.statusId;
+
+    let status: Worksheet['status'] = worksheet.status;
+    if (patchWorksheetDto.statusId) {
+      // check if statusId is valid
+      const fetchedStatus =
+        await this.worksheetStatusService.getWorksheetStatusById(
+          patchWorksheetDto.statusId,
+        );
+
+      if (!fetchedStatus) {
+        throw new Error('Worksheet Status not found');
+      }
+
+      status = fetchedStatus;
+    }
+
+    worksheet.status = status;
 
     return await this.worksheetRespository.save(worksheet);
+  }
+
+  public async updateWorksheets(patchWorksheetsDto: PatchWorksheetsDto) {
+    return await this.worksheetUpdateManyProvider.updateWorksheets(
+      patchWorksheetsDto,
+    );
   }
 
   public async deleteWorksheet(id: number) {
@@ -125,7 +166,7 @@ export class WorksheetService {
       restock.worksheetId = newHarvest.worksheetId;
       restock.harvestId = harvestResponse.id;
       restock.count = harvest.restockCount;
-      restock.unitName = harvest.restockUnit;
+      restock.unitId = harvest.restockUnitId;
       const restockResponse = await this.createRestock(restock);
       response = { ...response, restock: restockResponse };
     }
@@ -141,5 +182,17 @@ export class WorksheetService {
   public async createRestock(restock: CreateRestockDto) {
     const newRestock = this.restockRespository.create(restock);
     return await this.restockRespository.save(newRestock);
+  }
+
+  public async createWorksheetHarvests(createHarvestsDto: CreateHarvestsDto) {
+    return await this.worksheetHarvestManyProvider.createWorksheetHarvests(
+      createHarvestsDto,
+    );
+  }
+
+  public async createMultipleTransits(createTransitsDto: CreateTransitsDto) {
+    return await this.worksheetTransitManyProvider.createMultipleTransits(
+      createTransitsDto,
+    );
   }
 }

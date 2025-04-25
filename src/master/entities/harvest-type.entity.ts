@@ -1,3 +1,4 @@
+import { BaseEntity } from 'src/common/entities/base.entity';
 import {
   Column,
   CreateDateColumn,
@@ -7,7 +8,7 @@ import {
 } from 'typeorm';
 
 @Entity({ schema: 'master' })
-export class HarvestType {
+export class HarvestType extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -37,16 +38,4 @@ export class HarvestType {
 
   @UpdateDateColumn()
   updatedAt: Date;
-
-  @Column({
-    type: 'int',
-    nullable: false,
-  })
-  createdBy: number;
-
-  @Column({
-    type: 'int',
-    nullable: false,
-  })
-  updatedBy: number;
 }

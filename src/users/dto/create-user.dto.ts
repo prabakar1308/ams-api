@@ -2,6 +2,7 @@
 import {
   IsDate,
   IsEnum,
+  IsInt,
   IsMobilePhone,
   IsOptional,
   IsString,
@@ -12,9 +13,9 @@ import { UserRole } from '../enums/user-role.enum';
 export class CreateUserDto {
   @IsString({ message: 'User ID must be a string' })
   @MaxLength(50)
-  userId: string;
+  userCode: string;
 
-  @IsString({ message: 'First Name1 must be a string' })
+  @IsString({ message: 'First Name must be a string' })
   @MaxLength(96)
   firstName: string;
 
@@ -32,8 +33,8 @@ export class CreateUserDto {
   @IsString({ message: 'Designation must be a string' })
   designation: string;
 
-  @IsString({ message: 'Department Unit must be a string' })
-  departmentUnit: string;
+  @IsInt({ message: 'Unit Sector Id must be a number' })
+  unitSectorId: number;
 
   @IsMobilePhone(
     'en-IN',

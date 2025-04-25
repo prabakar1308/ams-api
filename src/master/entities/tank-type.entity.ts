@@ -6,5 +6,5 @@ export class TankType extends GenericColumns {
   @Column({
     type: 'integer',
   })
-  limit: string;
+  limit: number;
 }

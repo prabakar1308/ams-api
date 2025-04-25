@@ -15,8 +15,10 @@ import { WorksheetService } from './providers/worksheet.service';
 import { CreateHarvestDto } from './dto/create-harvest.dto';
 import { CreateWorksheetsDto } from './dto/create-worksheets.dto';
 import { GetWorksheetsDto } from './dto/get-worksheets.dto';
-import { ActiveUser } from 'src/auth/decorator/active-user.decorator';
-import { ActiveUserData } from 'src/auth/interfaces/active-user-data.interface';
+import { PatchWorksheetsDto } from './dto/patch-worksheets.dto';
+import { GetWorksheetHistoryDto } from './dto/get-worksheet-history.dto';
+import { CreateHarvestsDto } from './dto/create-harvests.dto';
+import { CreateTransitsDto } from './dto/create-transits.dto';
 
 @Controller('worksheet')
 export class WorksheetController {
@@ -37,6 +39,11 @@ export class WorksheetController {
     return this.worksheetService.getWorksheets(query);
   }
 
+  @Get('get-worksheet-history')
+  public getWorksheetHistory(@Query() query: GetWorksheetHistoryDto) {
+    return this.worksheetService.getWorksheetHistory(query);
+  }
+
   /** Create Worksheet */
   @ApiOperation({
     summary: 'Creates a new worksheet and assigned to user',
@@ -44,12 +51,13 @@ export class WorksheetController {
   @Post('create-worksheet')
   public createWorksheet(
     @Body() createWorksheetDto: CreateWorksheetDto,
-    @ActiveUser() user: ActiveUserData,
+    // @ActiveUser() user: ActiveUserData,
   ) {
-    return this.worksheetService.createWorksheet(createWorksheetDto, user);
+    return this.worksheetService.createWorksheet(createWorksheetDto);
   }
 
   /** Create Worksheets */
+  // Use this API for create
   @ApiOperation({
     summary: 'Creates the set of worksheets',
   })
@@ -65,6 +73,16 @@ export class WorksheetController {
   @Patch('update-worksheet')
   public updateWorksheet(@Body() patchWorksheetDto: PatchWorksheetDto) {
     return this.worksheetService.updateWorksheet(patchWorksheetDto);
+  }
+
+  /** Update Multiple Worksheets */
+  // Use this API for update
+  @ApiOperation({
+    summary: 'Updates multiple worksheets',
+  })
+  @Patch('update-worksheets')
+  public updateWorksheets(@Body() patchWorksheetsDto: PatchWorksheetsDto) {
+    return this.worksheetService.updateWorksheets(patchWorksheetsDto);
   }
 
   /** Delete Worksheet */
@@ -93,5 +111,22 @@ export class WorksheetController {
     console.log(createHarvestDto);
 
     return this.worksheetService.createHarvest(createHarvestDto);
+  }
+
+  @ApiOperation({
+    summary: 'Creates multiple new harvest',
+  })
+  @Post('create-multiple-harvest')
+  public createHarvests(@Body() createHarvestsDto: CreateHarvestsDto) {
+    console.log(createHarvestsDto);
+    return this.worksheetService.createWorksheetHarvests(createHarvestsDto);
+  }
+
+  @ApiOperation({
+    summary: 'Creates multiple new transit live',
+  })
+  @Post('create-multiple-transit')
+  public createMultipleTransits(@Body() createTransitsDto: CreateTransitsDto) {
+    return this.worksheetService.createMultipleTransits(createTransitsDto);
   }
 }

@@ -1,38 +1,50 @@
 import { ConflictException, Injectable } from '@nestjs/common';
-import { CreateWorksheetDto } from '../dto/create-worksheet.dto';
-import { UsersService } from 'src/users/providers/users.service';
 import { Repository } from 'typeorm';
-import { Worksheet } from '../entities/worksheet.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { ActiveUserData } from 'src/auth/interfaces/active-user-data.interface';
-import { User } from 'src/users/user.entity';
+
+import { CreateWorksheetDto } from '../dto/create-worksheet.dto';
+import { Worksheet } from '../entities/worksheet.entity';
+import { WorksheetDependentsProvider } from './worksheet-dependents.provider';
+import { WorksheetHistory } from '../entities/worksheet-history.entity';
+import { worksheetHistory } from '../enums/worksheet-history-actions.enum';
 
 @Injectable()
 export class WorksheetCreateProvider {
   constructor(
-    private readonly userService: UsersService,
     @InjectRepository(Worksheet)
     private readonly worksheetRespository: Repository<Worksheet>,
+    @InjectRepository(WorksheetHistory)
+    private readonly worksheetHistoryRespository: Repository<WorksheetHistory>,
+    private readonly worksheetDependentsProvider: WorksheetDependentsProvider,
   ) {}
 
-  public async createWorksheet(
-    worksheet: CreateWorksheetDto,
-    user: ActiveUserData,
-  ) {
-    let currentUser: User | null;
-    try {
-      currentUser = await this.userService.findOneById(user.sub);
-    } catch (error) {
-      throw new ConflictException(error);
-    }
+  public async createWorksheet(worksheet: CreateWorksheetDto) {
+    const currentUser =
+      await this.worksheetDependentsProvider.getWorksheetUser(worksheet);
+    const status =
+      await this.worksheetDependentsProvider.getWorksheetStatus(worksheet);
+    const tankType =
+      await this.worksheetDependentsProvider.getWorksheetTankType(worksheet);
+    const harvestType =
+      await this.worksheetDependentsProvider.getWorksheetHarvestType(worksheet);
 
     const newWorksheet = this.worksheetRespository.create({
       ...worksheet,
       user: currentUser,
+      status: status || undefined,
+      tankType: tankType || undefined,
+      harvestType: harvestType || undefined,
     });
 
     try {
-      return await this.worksheetRespository.save(newWorksheet);
+      const worksheetResult =
+        await this.worksheetRespository.save(newWorksheet);
+      const newWorksheetHistory = this.worksheetHistoryRespository.create({
+        worksheet: worksheetResult,
+        action: worksheetHistory.WORKSHEET_CREATED,
+      });
+      await this.worksheetHistoryRespository.save(newWorksheetHistory);
+      return worksheetResult;
     } catch (error) {
       throw new ConflictException(error, {
         description: 'Ensure the worksheet parameters are correct.',

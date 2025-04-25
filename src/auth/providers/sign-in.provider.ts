@@ -20,7 +20,7 @@ export class SignInProvider {
   ) {}
 
   public async signIn(signInDto: SignInDto) {
-    const user = await this.userService.findOneByUserId(signInDto.userId);
+    const user = await this.userService.findOneByUserCode(signInDto.userId);
 
     // compare password to the hash
     let isEqual: boolean = false;
@@ -40,6 +40,12 @@ export class SignInProvider {
 
     const tokens = await this.generateTokenProvider.generateTokens(user);
 
-    return { ...tokens, userId: user.userId, userRole: user.role };
+    return {
+      ...tokens,
+      userCode: user.userCode,
+      userRole: user.role,
+      userName: `${user.firstName} ${user.lastName}`,
+      userId: user.id,
+    };
   }
 }
