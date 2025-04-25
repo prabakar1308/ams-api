@@ -51,6 +51,7 @@ import { UnitSectorService } from './providers/unit-sector.service';
     HarvestTypeService,
     TankService,
     TankTypeService,
+    UnitSectorService,
   ],
 })
 export class MasterModule {}

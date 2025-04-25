@@ -35,7 +35,10 @@ export class UpdateUserProvider {
       throw new BadRequestException('The user does not exists, Please check.');
     }
     // update user
-    const updatedUser = this.userRepository.create(patchUserDto);
+    const updatedUser = this.userRepository.create({
+      ...existingUser,
+      ...patchUserDto,
+    });
     return await this.userRepository.save(updatedUser);
   }
 }

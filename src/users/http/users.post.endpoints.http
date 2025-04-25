@@ -1,24 +1,5 @@
 POST http://localhost:3000/api/users
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsImlhdCI6MTc0NDg3NTY3MSwiZXhwIjoxNzQ0ODc5MjcxLCJhdWQiOiJsb2NhbGhvc3Q6MzAwMCIsImlzcyI6ImxvY2FsaG9zdDozMDAwIn0.tqH9UYBId7GKg-hEThcL9qeXUz4FGFYglViSaQNDEcI
-
-{
-    "userId": "GMH-AMS-1234",
-    "firstName": "Prabakaran",
-    "lastName": "A",
-    "password": "test_98880",
-    "mobileNumber": "9500010704",
-    "role": "admin",
-    "designation": "technician",
-    "departmentUnit": "Unit-7",
-    "dateOfJoining": "2016-09-18T17:34:02.666Z",
-    "dateOfBirth": "2000-09-18T17:34:02.666Z",
-    "address": "test address",
-    "remarks": "test remarks"
-}
-
-POST http://localhost:3000/api/users
-Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjUsInVzZXJJZCI6IkdNSC1BTVMtMTcxMSIsImlhdCI6MTc0NTIwODE0MCwiZXhwIjoxNzUyOTg0MTQwLCJhdWQiOiJsb2NhbGhvc3Q6MzAwMCIsImlzcyI6ImxvY2FsaG9zdDozMDAwIn0.rpUgvrO5iGls0A-_H1s2v5nir1cnJMXvgyFqqtxMnzY
 
 {
@@ -29,7 +10,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjUsInVzZXJJZ
     "mobileNumber": "9500010704",
     "role": "admin",
     "designation": "technician",
-    "departmentUnit": "Unit-7",
+    "unitSectorId": 1,
     "dateOfJoining": "2016-09-18T17:34:02.666Z",
     "dateOfBirth": "2000-09-18T17:34:02.666Z",
     "address": "test address",
@@ -39,8 +20,10 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjUsInVzZXJJZ
 
 PATCH http://localhost:3000/api/users
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjUsInVzZXJJZCI6IkdNSC1BTVMtMTcxMSIsImlhdCI6MTc0NTIwODE0MCwiZXhwIjoxNzUyOTg0MTQwLCJhdWQiOiJsb2NhbGhvc3Q6MzAwMCIsImlzcyI6ImxvY2FsaG9zdDozMDAwIn0.rpUgvrO5iGls0A-_H1s2v5nir1cnJMXvgyFqqtxMnzY
 
 {
-    "name": "testcreate",
-    "mobileNumber": "9500010704"
+    "id": 9,
+    "firstName": "AMS",
+    "lastName": "Admin"
 }

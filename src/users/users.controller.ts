@@ -41,6 +41,7 @@ export class UsersController {
   }
 
   @Patch()
+  @UseInterceptors(ClassSerializerInterceptor)
   public patchUser(@Body() patchUserDto: PatchUserDto) {
     return this.usersService.updateUser(patchUserDto);
   }

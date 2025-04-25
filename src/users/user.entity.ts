@@ -1,11 +1,14 @@
 import { Exclude } from 'class-transformer';
 import { IsEmail } from 'class-validator';
 import { BaseEntity } from 'src/common/entities/base.entity';
+import { UnitSector } from 'src/master/entities/unit-sector.entity';
 import { Worksheet } from 'src/worksheet/entities/worksheet.entity';
 import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
+  ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
@@ -63,8 +66,12 @@ export class User extends BaseEntity {
   @Column()
   designation: string;
 
-  @Column()
-  departmentUnit: string;
+  @ManyToOne(() => UnitSector, (unitSector) => unitSector.id, {
+    eager: true,
+    nullable: false,
+  })
+  @JoinColumn({ name: 'unitSectorId' })
+  unitSectorId: number;
 
   @Column()
   dateOfBirth: Date;

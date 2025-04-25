@@ -9,10 +9,7 @@ CREATE SCHEMA worksheet AUTHORIZATION msadmin;
 
 
 --- Default User -----
--- INSERT INTO master."user"
--- (id, "userId", "firstName", "lastName", "mobileNumber", "role", designation, "departmentUnit", "dateOfBirth", address, "dateOfJoining", remarks, email, "password", "createdAt", "updatedAt", "createdBy", "updatedBy")
--- VALUES(nextval('master.user_id_seq'::regclass), 'GMH-AMS-001', 'Test', 'User', '95000000', 'admin', 'tech', 'Unit-1', '2000-09-18 23:04:02.666', 'test address', '2016-09-18 23:04:02.666', 'test', '', '', now(), now(), 0, 0);
-
+---- Create user using user.post.endpoints.http
 ---Tank Types ---
 
 INSERT INTO master.tank_type
