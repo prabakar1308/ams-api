@@ -8,8 +8,40 @@ CREATE SCHEMA worksheet AUTHORIZATION msadmin;
 ---CREATE TABLES --> It will be automatically done after building the ams-api code
 
 
+
+---- Unit Sector ------
+INSERT INTO master.unit_sector
+("createdBy", "updatedBy", id, "name", description, "location", "createdAt", "updatedAt")
+VALUES(1, 1, nextval('master.unit_sector_id_seq'::regclass), 'Unit-I', 'Unit I - produces raw materials', 'Pondy 1', now(), now());
+INSERT INTO master.unit_sector
+("createdBy", "updatedBy", id, "name", description, "location", "createdAt", "updatedAt")
+VALUES(1,1, nextval('master.unit_sector_id_seq'::regclass), 'Unit-II', 'Unit II - produces raw materials', 'Pondy 2', now(), now());
+INSERT INTO master.unit_sector
+("createdBy", "updatedBy", id, "name", description, "location", "createdAt", "updatedAt")
+VALUES(1, 1, nextval('master.unit_sector_id_seq'::regclass), 'Unit-III', 'Unit III - produces raw materials', 'Pondy 3', now(), now());
+
+
 --- Default User -----
 ---- Create user using user.post.endpoints.http
+
+----Unit-----
+INSERT INTO master.unit
+("createdBy", "updatedBy", id, value, description, "createdAt", "updatedAt")
+VALUES(1, 1, nextval('master.unit_id_seq'::regclass), 'Tins', 'Tins', now(), now());
+INSERT INTO master.unit
+("createdBy", "updatedBy", id, value, description, "createdAt", "updatedAt")
+VALUES(1, 1, nextval('master.unit_id_seq'::regclass), 'Frozen Cups', 'Frozen Cups', now(), now());
+INSERT INTO master.unit
+("createdBy", "updatedBy", id, value, description, "createdAt", "updatedAt")
+VALUES(1, 1, nextval('master.unit_id_seq'::regclass), 'Millions', 'Millions', now(), now());
+INSERT INTO master.unit
+("createdBy", "updatedBy", id, value, description, "createdAt", "updatedAt")
+VALUES(1, 1, nextval('master.unit_id_seq'::regclass), 'Degree Celsius', 'Degree Celsius', now(), now());
+INSERT INTO master.unit
+("createdBy", "updatedBy", id, value, description, "createdAt", "updatedAt")
+VALUES(1, 1, nextval('master.unit_id_seq'::regclass), 'PPT', 'Parts per thousand', now(), now());
+
+
 ---Tank Types ---
 
 INSERT INTO master.tank_type
@@ -53,56 +85,24 @@ INSERT INTO master.worksheet_status
 VALUES(nextval('master.worksheet_status_id_seq'::regclass), 'Completed', 'Indicates the tank harvest is completed', now(), now(), 1, 1);
 
 
-----Unit-----
-INSERT INTO master.unit
-("createdBy", "updatedBy", id, value, description, "createdAt", "updatedAt")
-VALUES(1, 1, nextval('master.unit_id_seq'::regclass), 'Tins', 'Tins', now(), now());
-INSERT INTO master.unit
-("createdBy", "updatedBy", id, value, description, "createdAt", "updatedAt")
-VALUES(1, 1, nextval('master.unit_id_seq'::regclass), 'Frozen Cups', 'Frozen Cups', now(), now());
-INSERT INTO master.unit
-("createdBy", "updatedBy", id, value, description, "createdAt", "updatedAt")
-VALUES(1, 1, nextval('master.unit_id_seq'::regclass), 'Millions', 'Millions', now(), now());
-INSERT INTO master.unit
-("createdBy", "updatedBy", id, value, description, "createdAt", "updatedAt")
-VALUES(1, 1, nextval('master.unit_id_seq'::regclass), 'Degree Celsius', 'Degree Celsius', now(), now());
-INSERT INTO master.unit
-("createdBy", "updatedBy", id, value, description, "createdAt", "updatedAt")
-VALUES(1, 1, nextval('master.unit_id_seq'::regclass), 'PPT', 'Parts per thousand', now(), now());
-
-
 ---- Temperature -----
 INSERT INTO master.temperature
-(id, min, max, unitId, "createdAt", "updatedAt", "createdBy", "updatedBy")
-VALUES(nextval('master.temperature_id_seq'::regclass), 25, 35, 4, now(), now(), 1, 1);
+(id, min, max, "unitId", "createdAt", "updatedAt", "createdBy", "updatedBy")
+VALUES(nextval('master.temperature_id_seq'::regclass), 25, 35, 1, now(), now(), 1, 1);
 
 
 ---- Tank -----
 INSERT INTO master.tank
-(id, min, max, unitId, "createdAt", "updatedAt", "createdBy", "updatedBy")
+(id, min, max, "unitId", "createdAt", "updatedAt", "createdBy", "updatedBy")
 VALUES(nextval('master.tank_id_seq'::regclass), 1, 25, NULL, now(), now(), 1, 1);
 
 ---- PH -----
 INSERT INTO master.ph
-(id, min, max, unitId, "createdAt", "updatedAt", "createdBy", "updatedBy")
+(id, min, max, "unitId", "createdAt", "updatedAt", "createdBy", "updatedBy")
 VALUES(nextval('master.ph_id_seq'::regclass), 7.5, 8.5, NULL, now(), now(), 0, 0);
 
 ---- Salinity -----
 INSERT INTO master.salnity
-(id, min, max, unitId, "createdAt", "updatedAt", "createdBy", "updatedBy")
+(id, min, max, "unitId", "createdAt", "updatedAt", "createdBy", "updatedBy")
 VALUES(nextval('master.salnity_id_seq'::regclass), 25, 30, 5, now(), now(), 0, 0);
 
-
-
-
-
----- Unit Sector ------
-INSERT INTO master.unit_sector
-("createdBy", "updatedBy", id, "name", description, "location", "createdAt", "updatedAt")
-VALUES(1, 1, nextval('master.unit_sector_id_seq'::regclass), 'Unit-I', 'Unit I - produces raw materials', 'Pondy 1', now(), now());
-INSERT INTO master.unit_sector
-("createdBy", "updatedBy", id, "name", description, "location", "createdAt", "updatedAt")
-VALUES(1,1, nextval('master.unit_sector_id_seq'::regclass), 'Unit-II', 'Unit II - produces raw materials', 'Pondy 2', now(), now());
-INSERT INTO master.unit_sector
-("createdBy", "updatedBy", id, "name", description, "location", "createdAt", "updatedAt")
-VALUES(1, 1, nextval('master.unit_sector_id_seq'::regclass), 'Unit-III', 'Unit III - produces raw materials', 'Pondy 3', now(), now());
