@@ -3,15 +3,17 @@ import { Worksheet } from '../entities/worksheet.entity';
 import { CreateWorksheetDto } from '../dto/create-worksheet.dto';
 import { WorksheetStatusService } from 'src/master/providers/worksheet-status.service';
 import { UsersService } from 'src/users/providers/users.service';
-import { MasterService } from 'src/master/providers/master.service';
 import { PatchWorksheetDto } from '../dto/patch-worksheet.dto';
+import { HarvestTypeService } from 'src/master/providers/harvest-type.service';
+import { TankTypeService } from 'src/master/providers/tank-type.service';
 
 @Injectable()
 export class WorksheetDependentsProvider {
   constructor(
     private readonly worksheetStatusService: WorksheetStatusService,
     private readonly userService: UsersService,
-    private readonly masterService: MasterService,
+    private readonly harvestTypeService: HarvestTypeService,
+    private readonly tankTypeService: TankTypeService,
   ) {}
 
   public async getWorksheetUser(
@@ -55,7 +57,7 @@ export class WorksheetDependentsProvider {
   public async getWorksheetTankType(worksheet: CreateWorksheetDto) {
     let tankType: Worksheet['tankType'] | null = null;
     if (worksheet.tankTypeId) {
-      const fetchedTankType = await this.masterService.getWorksheetTankTypeById(
+      const fetchedTankType = await this.tankTypeService.getTankTypesById(
         worksheet.tankTypeId,
       );
 
@@ -73,7 +75,7 @@ export class WorksheetDependentsProvider {
     let harvestType: Worksheet['harvestType'] | null = null;
     if (worksheet.harvestTypeId) {
       const fetchedHarvestType =
-        await this.masterService.getWorksheetHarvestTypeById(
+        await this.harvestTypeService.getHarvestTypeById(
           worksheet.harvestTypeId,
         );
 

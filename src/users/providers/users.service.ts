@@ -8,6 +8,8 @@ import { FindUserByIdProvider } from './find-user-by-id.provider';
 import { PaginationProvider } from 'src/common/pagination/providers/pagination.provider';
 import { GetUsersDto } from '../dto/get-users.dto';
 import { Paginated } from 'src/common/pagination/interfaces/paginated.interface';
+import { UpdateUserProvider } from './update-user.provider';
+import { PatchUserDto } from '../dto/patch-user.dto';
 
 @Injectable()
 export class UsersService {
@@ -16,11 +18,16 @@ export class UsersService {
     private readonly userRepository: Repository<User>,
     private readonly paginationProvider: PaginationProvider,
     private readonly createUserProvider: CreateUserProvider,
+    private readonly updateUserProvider: UpdateUserProvider,
     private readonly findUserById: FindUserByIdProvider,
   ) {}
 
   public async createUser(createUserDto: CreateUserDto) {
     return await this.createUserProvider.createUser(createUserDto);
+  }
+
+  public async updateUser(patchUserDto: PatchUserDto) {
+    return await this.updateUserProvider.updateUser(patchUserDto);
   }
 
   public async findOneByUserId(userId: string) {

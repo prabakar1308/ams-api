@@ -27,10 +27,6 @@ export class CreateUserProvider {
       existingUser = await this.userRepository.findOneBy({
         userId: createUserDto.userId,
       });
-      // another way to check if user already exists
-      // const user = await this.userRepository.findOne({
-      //   where: { userId: createUserDto.userId },
-      // });
     } catch (error) {
       console.log(error);
       throw new RequestTimeoutException(
@@ -49,11 +45,6 @@ export class CreateUserProvider {
       ...createUserDto,
       password: await this.hashingProvider.hashPassword(createUserDto.password),
     });
-    const savedUser = await this.userRepository.save(newUser);
-    return {
-      statusCode: 201,
-      message: 'User created successfully',
-      data: savedUser,
-    };
+    return await this.userRepository.save(newUser);
   }
 }

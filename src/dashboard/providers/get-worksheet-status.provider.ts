@@ -1,18 +1,18 @@
 import { Injectable } from '@nestjs/common';
-import { MasterService } from 'src/master/providers/master.service';
 import { UsersService } from 'src/users/providers/users.service';
 import { ActiveWorksheet } from '../interfaces/active-worksheet.interface';
 import { WorksheetService } from 'src/worksheet/providers/worksheet.service';
 import { ConfigService } from '@nestjs/config';
 import { GetWorksheetStatusDto } from '../dto/get-worksheet-status.dto';
+import { TankService } from 'src/master/providers/tank.service';
 
 @Injectable()
 export class GetWorksheetStatusProvider {
   constructor(
     private readonly usersService: UsersService,
-    private masterService: MasterService,
-    private worksheetService: WorksheetService,
-    private configService: ConfigService,
+    private readonly tankService: TankService,
+    private readonly worksheetService: WorksheetService,
+    private readonly configService: ConfigService,
   ) {}
 
   public async getActiveWorksheets(
@@ -21,7 +21,7 @@ export class GetWorksheetStatusProvider {
     // const user = await this.usersService.findOneByUserId(
     //   getWorksheetStatusDto.userId[0],
     // );
-    const tankDetails = await this.masterService.getTankDetails();
+    const tankDetails = await this.tankService.getTankDetails();
     const worksheets = await this.worksheetService.getWorksheets({
       limit: 25,
       page: 1,

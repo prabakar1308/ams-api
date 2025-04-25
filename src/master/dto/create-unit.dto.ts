@@ -1,6 +1,6 @@
 import { IsNotEmpty, IsOptional } from 'class-validator';
 
-export class CreateWorksheetStatusDto {
+export class CreateUnitDto {
   @IsNotEmpty()
   value: string;
 
