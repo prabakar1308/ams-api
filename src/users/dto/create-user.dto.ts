@@ -13,7 +13,7 @@ import { UserRole } from '../enums/user-role.enum';
 export class CreateUserDto {
   @IsString({ message: 'User ID must be a string' })
   @MaxLength(50)
-  userId: string;
+  userCode: string;
 
   @IsString({ message: 'First Name must be a string' })
   @MaxLength(96)

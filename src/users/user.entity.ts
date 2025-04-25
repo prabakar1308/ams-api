@@ -25,7 +25,7 @@ export class User extends BaseEntity {
     nullable: false,
     unique: true,
   })
-  userId: string;
+  userCode: string;
 
   @Column({
     type: 'varchar',

@@ -14,12 +14,12 @@ export class FindUserByIdProvider {
     private readonly usersRepository: Repository<User>,
   ) {}
 
-  public async findOneByUserId(userId: string) {
+  public async findOneByUserCode(userCode: string) {
     let user: User | null;
 
     try {
       // null if user is not found
-      user = await this.usersRepository.findOneBy({ userId });
+      user = await this.usersRepository.findOneBy({ userCode });
     } catch (error) {
       throw new RequestTimeoutException(error, {
         description: 'Could not fetch user',

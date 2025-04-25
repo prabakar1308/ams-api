@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Patch } from '@nestjs/common';
+import { Body, Controller, Get, Patch, Post } from '@nestjs/common';
 import { WorksheetStatusService } from './providers/worksheet-status.service';
 import { PatchGenericDto } from './dto/patch-base-generic.dto';
 import { PatchRangeGenericDto } from './dto/patch-range-generic.dto';
@@ -97,7 +97,7 @@ export class MasterController {
     return this.unitService.getUnits();
   }
 
-  @Patch('unit')
+  @Post('unit')
   public createUnit(@Body() createUnitDto: CreateUnitDto) {
     return this.unitService.createUnit(createUnitDto);
   }
@@ -113,7 +113,7 @@ export class MasterController {
     return this.unitSectorService.getUnitSectors();
   }
 
-  @Patch('unit-sector')
+  @Post('unit-sector')
   public createUnitSector(@Body() createUnitSectorDto: CreateUnitSectorDto) {
     return this.unitSectorService.createUnitSector(createUnitSectorDto);
   }

@@ -115,8 +115,8 @@ export class WorksheetTasksProvider {
         let currentValue = '';
         switch (patchWorksheetsDto.updateAction) {
           case worksheetHistory.WORKSHEET_ASSIGNEE_UPDATED:
-            previousValue = currentWorksheet.user?.userId || '';
-            currentValue = updatedWorksheet.user?.userId || '';
+            previousValue = currentWorksheet.user?.userCode || '';
+            currentValue = updatedWorksheet.user?.userCode || '';
             break;
           case worksheetHistory.WORKSHEET_STATUS_UPDATED:
             previousValue = currentWorksheet.status.value.toString();

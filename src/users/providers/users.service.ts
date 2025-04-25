@@ -30,8 +30,8 @@ export class UsersService {
     return await this.updateUserProvider.updateUser(patchUserDto);
   }
 
-  public async findOneByUserId(userId: string) {
-    return await this.findUserById.findOneByUserId(userId);
+  public async findOneByUserCode(userCode: string) {
+    return await this.findUserById.findOneByUserCode(userCode);
   }
 
   public async findAll(getUsersDto: GetUsersDto): Promise<Paginated<User>> {

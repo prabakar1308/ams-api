@@ -25,7 +25,7 @@ export class CreateUserProvider {
     let existingUser: User | null;
     try {
       existingUser = await this.userRepository.findOneBy({
-        userId: createUserDto.userId,
+        userCode: createUserDto.userCode,
       });
     } catch (error) {
       console.log(error);

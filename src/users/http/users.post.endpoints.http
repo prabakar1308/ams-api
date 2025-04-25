@@ -3,7 +3,7 @@ Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjUsInVzZXJJZCI6IkdNSC1BTVMtMTcxMSIsImlhdCI6MTc0NTIwODE0MCwiZXhwIjoxNzUyOTg0MTQwLCJhdWQiOiJsb2NhbGhvc3Q6MzAwMCIsImlzcyI6ImxvY2FsaG9zdDozMDAwIn0.rpUgvrO5iGls0A-_H1s2v5nir1cnJMXvgyFqqtxMnzY
 
 {
-    "userId": "GMH-AMS-1111",
+    "userCode": "GMH-AMS-1111",
     "firstName": "AMS",
     "lastName": "User",
     "password": "test_1111",
