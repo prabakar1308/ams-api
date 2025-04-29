@@ -25,6 +25,7 @@ import { CreateHarvestsDto } from '../dto/create-harvests.dto';
 import { WorksheetHarvestManyProvider } from './worksheet-harvest-many.provider';
 import { CreateTransitsDto } from '../dto/create-transits.dto';
 import { WorksheetTransitManyProvider } from './worksheet-transit-many.provider';
+import { GetWorksheetsProvider } from './get-worksheets.provider';
 
 @Injectable()
 export class WorksheetService {
@@ -48,6 +49,7 @@ export class WorksheetService {
     private readonly worksheetStatusService: WorksheetStatusService,
     private readonly worksheetHarvestManyProvider: WorksheetHarvestManyProvider,
     private readonly worksheetTransitManyProvider: WorksheetTransitManyProvider,
+    private readonly getWorksheetsProvider: GetWorksheetsProvider,
   ) {}
 
   public async getWorksheets(
@@ -67,6 +69,12 @@ export class WorksheetService {
     //   skip: ((query.page ?? 1) - 1) * (query.limit ?? 10),
     //   take: query.limit,
     // });
+  }
+
+  public async getActiveWorksheets(getWorksheetStatusDto: GetWorksheetsDto) {
+    return await this.getWorksheetsProvider.getActiveWorksheets(
+      getWorksheetStatusDto,
+    );
   }
 
   public async getWorksheetHistory(

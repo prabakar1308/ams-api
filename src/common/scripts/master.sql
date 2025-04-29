@@ -73,6 +73,9 @@ VALUES(nextval('master.harvest_type_id_seq'::regclass), 'Restocking', 'Harvest b
 ---- Worksheet Status ----
 INSERT INTO master.worksheet_status
 (id, value, description, "createdAt", "updatedAt", "createdBy", "updatedBy")
+VALUES(0, 'Free/Open', 'Indicates the tank is free', now(), now(), 1, 1);
+INSERT INTO master.worksheet_status
+(id, value, description, "createdAt", "updatedAt", "createdBy", "updatedBy")
 VALUES(nextval('master.worksheet_status_id_seq'::regclass), 'Ready For Stocking', 'Indicates the tank is ready for stocking', now(), now(), 1, 1);
 INSERT INTO master.worksheet_status
 (id, value, description, "createdAt", "updatedAt", "createdBy", "updatedBy")

@@ -33,6 +33,11 @@ export class WorksheetController {
     return this.worksheetService.getAllWorksheets();
   }
 
+  @Post('get-active-worksheets')
+  public getActiveWorksheet(@Body() body: GetWorksheetsDto) {
+    return this.worksheetService.getActiveWorksheets(body);
+  }
+
   @Get('get-worksheets')
   public getWorksheet(@Query() query: GetWorksheetsDto) {
     console.log(query);

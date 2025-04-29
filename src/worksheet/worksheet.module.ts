@@ -19,6 +19,7 @@ import { WorksheetHarvestManyProvider } from './providers/worksheet-harvest-many
 import { WorksheetTasksProvider } from './providers/worksheet-tasks.provider';
 import { Transit } from './entities/transit.entity';
 import { WorksheetTransitManyProvider } from './providers/worksheet-transit-many.provider';
+import { GetWorksheetsProvider } from './providers/get-worksheets.provider';
 
 @Module({
   controllers: [WorksheetController],
@@ -31,6 +32,7 @@ import { WorksheetTransitManyProvider } from './providers/worksheet-transit-many
     WorksheetHarvestManyProvider,
     WorksheetTasksProvider,
     WorksheetTransitManyProvider,
+    GetWorksheetsProvider,
   ],
   imports: [
     TypeOrmModule.forFeature([
