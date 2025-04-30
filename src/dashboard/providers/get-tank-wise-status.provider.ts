@@ -94,7 +94,7 @@ export class GetTankWiseStatusProvider {
           id: filteredWorksheet.length ? filteredWorksheet[0].user?.id : 0,
           name: filteredWorksheet.length
             ? `${filteredWorksheet[0].user?.firstName} ${filteredWorksheet[0].user?.lastName}`
-            : 'Un-Assigned',
+            : 'Free/Open',
           value: 1,
           description: `Tank ${index}`,
         });
