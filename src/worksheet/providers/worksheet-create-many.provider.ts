@@ -46,12 +46,18 @@ export class WorksheetCreateManyProvider {
           await this.worksheetDependentsProvider.getWorksheetHarvestType(
             worksheet,
           );
+        const inputUnit =
+          await this.worksheetDependentsProvider.getWorksheetInputUnit(
+            worksheet,
+          );
+
         const newWorksheet = queryRunner.manager.create(Worksheet, {
           ...worksheet,
           status: status || undefined,
           tankType: tankType || undefined,
           user: currentUser || undefined,
           harvestType: harvestType || undefined,
+          inputUnit: inputUnit || undefined,
         });
         const result = await queryRunner.manager.save(newWorksheet);
         newWorksheets.push(result);

@@ -27,13 +27,16 @@ export class WorksheetCreateProvider {
       await this.worksheetDependentsProvider.getWorksheetTankType(worksheet);
     const harvestType =
       await this.worksheetDependentsProvider.getWorksheetHarvestType(worksheet);
+    const inputUnit =
+      await this.worksheetDependentsProvider.getWorksheetInputUnit(worksheet);
 
     const newWorksheet = this.worksheetRespository.create({
       ...worksheet,
-      user: currentUser,
+      user: currentUser || undefined,
       status: status || undefined,
       tankType: tankType || undefined,
       harvestType: harvestType || undefined,
+      inputUnit: inputUnit || undefined,
     });
 
     try {

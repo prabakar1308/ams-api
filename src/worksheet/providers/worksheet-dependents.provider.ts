@@ -6,6 +6,7 @@ import { UsersService } from 'src/users/providers/users.service';
 import { PatchWorksheetDto } from '../dto/patch-worksheet.dto';
 import { HarvestTypeService } from 'src/master/providers/harvest-type.service';
 import { TankTypeService } from 'src/master/providers/tank-type.service';
+import { UnitService } from 'src/master/providers/unit.service';
 
 @Injectable()
 export class WorksheetDependentsProvider {
@@ -14,6 +15,7 @@ export class WorksheetDependentsProvider {
     private readonly userService: UsersService,
     private readonly harvestTypeService: HarvestTypeService,
     private readonly tankTypeService: TankTypeService,
+    private readonly unitService: UnitService,
   ) {}
 
   public async getWorksheetUser(
@@ -87,5 +89,22 @@ export class WorksheetDependentsProvider {
     }
 
     return harvestType;
+  }
+
+  public async getWorksheetInputUnit(worksheet: CreateWorksheetDto) {
+    let inputUnit: Worksheet['inputUnit'] | null = null;
+    if (worksheet.inputUnitId) {
+      const fetchedUnit = await this.unitService.getUnitById(
+        worksheet.inputUnitId,
+      );
+
+      if (!fetchedUnit) {
+        throw new Error('Worksheet Unit Id not found');
+      }
+
+      inputUnit = fetchedUnit;
+    }
+
+    return inputUnit;
   }
 }

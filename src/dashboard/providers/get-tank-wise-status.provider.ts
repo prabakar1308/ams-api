@@ -3,6 +3,7 @@ import { WorksheetService } from 'src/worksheet/providers/worksheet.service';
 import { ConfigService } from '@nestjs/config';
 import { TankService } from 'src/master/providers/tank.service';
 import { TankWiseStatus } from '../interfaces/tank-wise-status';
+import { worksheetStatus } from '../enums/worksheet-status.enum';
 
 @Injectable()
 export class GetTankWiseStatusProvider {
@@ -55,7 +56,9 @@ export class GetTankWiseStatusProvider {
             sheet.status.id !== worksheetCompletedStatusId,
         );
         tankStatuses.push({
-          id: filteredWorksheet.length ? filteredWorksheet[0].status.id : 0,
+          id: filteredWorksheet.length
+            ? filteredWorksheet[0].status.id
+            : worksheetStatus.OPEN,
           name: filteredWorksheet.length
             ? filteredWorksheet[0].status.value
             : 'Free/Open',
