@@ -1,6 +1,12 @@
-export function getDateDifference(harvestTime: Date | undefined) {
+import { worksheetStatus } from 'src/dashboard/enums/worksheet-status.enum';
+
+export function getDateDifference(
+  harvestTime: Date | undefined,
+  statusId: number,
+) {
   let isPast = true;
   if (!harvestTime) return undefined;
+
   let diff = 0;
   if (harvestTime > new Date()) {
     isPast = false;
@@ -11,6 +17,23 @@ export function getDateDifference(harvestTime: Date | undefined) {
   const minutes =
     Math.floor(diff / (60 * 1000)) - (days * 24 * 60 + hours * 60);
 
-  const result = days ? `${days} days ` : '';
-  return { text: `${result}${hours} hours ${minutes} mins`, isPast };
+  let timeText = days ? `${days} days ` : '';
+  let result = { text: '', status: '' };
+  timeText = `${timeText}${hours} hours ${minutes} mins`;
+  switch (statusId) {
+    case Number(worksheetStatus.READY_FOR_STOCKING):
+      result = { text: `Created ${timeText} ago`, status: 'warning' };
+      break;
+    case Number(worksheetStatus.IN_STOCKING):
+      if (isPast)
+        result = { text: `Harvest - ${timeText} overdue`, status: 'error' };
+      else result = { text: `Harvest in ${timeText}`, status: 'success' };
+      break;
+    case Number(worksheetStatus.READY_FOR_HARVEST):
+      result = { text: `Harvest - ${timeText} overdue`, status: 'error' };
+      break;
+    default:
+      break;
+  }
+  return result;
 }

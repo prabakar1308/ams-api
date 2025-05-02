@@ -8,12 +8,20 @@ export interface ActiveWorksheet {
 export interface WorksheetTank {
   tankNumber: number;
   worksheetId?: number;
+  tankType?: { id: number; value: string };
   harvestType?: { id: number; value: string };
   inputSource?: string;
   assignedUser?: { id: number; value: string };
   status?: { id: number; value: string };
-  harvestTimeDiff?: {
+  harvestHours?: number;
+  timeDifference?: {
     text: string;
-    isPast: boolean;
+    status: string;
   };
+  parameters?: WorksheetParameters[];
+}
+
+export interface WorksheetParameters {
+  label: string;
+  value: string;
 }

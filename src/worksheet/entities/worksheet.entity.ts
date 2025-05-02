@@ -55,10 +55,16 @@ export class Worksheet extends BaseEntity {
 
   @Column({
     type: 'timestamp',
-    default: () => 'CURRENT_TIMESTAMP',
+    // default: () => 'CURRENT_TIMESTAMP',
     nullable: true,
   })
   harvestTime: Date;
+
+  @Column({
+    type: 'integer',
+    nullable: false,
+  })
+  harvestHours: number;
 
   @Column({
     type: 'integer',

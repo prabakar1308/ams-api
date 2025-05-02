@@ -8,6 +8,7 @@ import { TankTypeService } from 'src/master/providers/tank-type.service';
 import { worksheetStatus } from 'src/dashboard/enums/worksheet-status.enum';
 import {
   ActiveWorksheet,
+  WorksheetParameters,
   WorksheetTank,
 } from '../interfaces/active-worksheet.interface';
 import { GetWorksheetsDto } from '../dto/get-worksheets.dto';
@@ -82,17 +83,47 @@ export class GetWorksheetsProvider {
     return activeWorksheets.map(({ tankNumber, worksheet }) => {
       const {
         id,
+        tankType,
         harvestType,
         status,
         user,
         inputCount,
         inputUnit,
         harvestTime,
+        harvestHours,
+        createdAt,
+        ph,
+        salnity,
+        temperature,
       } = worksheet || {};
+
+      const dateInput =
+        status &&
+        status.id &&
+        Number(status.id) === Number(worksheetStatus.READY_FOR_STOCKING)
+          ? createdAt
+          : harvestTime;
+
+      const parameters: WorksheetParameters[] = [];
+      const inputValue = `${inputCount} ${this.getUnitValue(inputUnit)}`;
+
+      parameters.push({ label: 'Input', value: inputValue });
+      if (ph) parameters.push({ label: 'PH', value: ph.toString() });
+
+      if (salnity)
+        parameters.push({ label: 'Salnity', value: salnity.toString() });
+      if (temperature)
+        parameters.push({
+          label: 'Temperature',
+          value: temperature.toString(),
+        });
 
       return {
         tankNumber,
         worksheetId: id || 0,
+        tankType: tankType
+          ? { id: tankType.id, value: tankType.value }
+          : undefined,
         harvestType: harvestType
           ? { id: harvestType.id, value: harvestType.value }
           : undefined,
@@ -100,10 +131,10 @@ export class GetWorksheetsProvider {
         assignedUser: user
           ? { id: user.id, value: `${user.firstName} ${user.lastName}` }
           : undefined,
-        inputSource: inputCount
-          ? `${inputCount} ${this.getUnitValue(inputUnit)}`
-          : '',
-        harvestTimeDiff: getDateDifference(harvestTime),
+        inputSource: inputCount ? inputValue : '',
+        harvestHours,
+        timeDifference: getDateDifference(dateInput, status ? status.id : 0),
+        parameters,
       };
     });
   }

@@ -10,6 +10,7 @@ import { WorksheetDependentsProvider } from './worksheet-dependents.provider';
 import { WorksheetHistory } from '../entities/worksheet-history.entity';
 import { PatchWorksheetsDto } from '../dto/patch-worksheets.dto';
 import { worksheetHistory } from '../enums/worksheet-history-actions.enum';
+import { worksheetStatus } from 'src/dashboard/enums/worksheet-status.enum';
 
 @Injectable()
 export class WorksheetUpdateManyProvider {
@@ -55,6 +56,7 @@ export class WorksheetUpdateManyProvider {
           user = currentUser;
         }
         let status: Worksheet['status'] = currentWorksheet.status;
+        let harvestProps = {};
         if (worksheet.statusId) {
           const currentStatus =
             await this.worksheetDependentsProvider.getWorksheetStatus(
@@ -64,17 +66,26 @@ export class WorksheetUpdateManyProvider {
             throw new ConflictException('Worksheet Status not found');
           }
           status = currentStatus;
-        }
 
-        // currentWorksheet = {
-        //   ...currentWorksheet,
-        //   user,
-        //   status,
-        // };
+          // update harvest time when movng from ready for stocking to in stocking
+          if (
+            Number(currentWorksheet.status.id) ===
+              Number(worksheetStatus.READY_FOR_STOCKING) &&
+            Number(worksheet.statusId) === Number(worksheetStatus.IN_STOCKING)
+          ) {
+            const harvestTime = new Date(
+              new Date().setHours(new Date().getHours() + 18),
+            );
+            harvestProps = {
+              harvestTime: new Date(harvestTime),
+            };
+          }
+        }
         const updatedWorksheet = queryRunner.manager.create(Worksheet, {
           ...currentWorksheet,
           user,
           status,
+          ...harvestProps,
         });
         const result = await queryRunner.manager.save(updatedWorksheet);
         updatedWorksheets.push(result);

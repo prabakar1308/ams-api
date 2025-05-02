@@ -1,4 +1,4 @@
-import { IsDate, IsNotEmpty, IsNumber } from 'class-validator';
+import { IsDate, IsNotEmpty, IsNumber, IsOptional } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 import { worksheetStatus } from 'src/dashboard/enums/worksheet-status.enum';
 
@@ -36,7 +36,12 @@ export class CreateWorksheetDto {
   harvestTypeId: number;
 
   @IsDate()
+  @IsOptional()
   harvestTime: Date;
+
+  @IsNumber()
+  @IsNotEmpty()
+  harvestHours: number;
 
   @IsNumber()
   @IsNotEmpty()

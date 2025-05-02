@@ -3,6 +3,7 @@ import {
   Controller,
   Delete,
   Get,
+  Param,
   ParseIntPipe,
   Patch,
   Post,
@@ -29,7 +30,7 @@ export class WorksheetController {
     summary: 'Get all worksheets',
   })
   @Get('get-all-worksheets')
-  public getWorksheets() {
+  public getAllWorksheets() {
     return this.worksheetService.getAllWorksheets();
   }
 
@@ -39,9 +40,14 @@ export class WorksheetController {
   }
 
   @Get('get-worksheets')
-  public getWorksheet(@Query() query: GetWorksheetsDto) {
+  public getWorksheets(@Query() query: GetWorksheetsDto) {
     console.log(query);
     return this.worksheetService.getWorksheets(query);
+  }
+
+  @Get('get-worksheet/:id')
+  public getWorksheet(@Param('id', ParseIntPipe) id: number) {
+    return this.worksheetService.getWorksheetById(id);
   }
 
   @Get('get-worksheet-history')

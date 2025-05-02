@@ -98,6 +98,10 @@ export class WorksheetService {
     // });
   }
 
+  public async getWorksheetById(id: number): Promise<Worksheet | null> {
+    return await this.worksheetRespository.findOneBy({ id });
+  }
+
   public async createWorksheet(worksheet: CreateWorksheetDto) {
     return await this.worksheetCreatProvider.createWorksheet(worksheet);
   }
