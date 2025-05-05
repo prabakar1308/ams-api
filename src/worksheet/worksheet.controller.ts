@@ -14,7 +14,6 @@ import { CreateWorksheetDto } from './dto/create-worksheet.dto';
 import { PatchWorksheetDto } from './dto/patch-worksheet.dto';
 import { WorksheetService } from './providers/worksheet.service';
 import { CreateHarvestDto } from './dto/create-harvest.dto';
-import { CreateWorksheetsDto } from './dto/create-worksheets.dto';
 import { GetWorksheetsDto } from './dto/get-worksheets.dto';
 import { PatchWorksheetsDto } from './dto/patch-worksheets.dto';
 import { GetWorksheetHistoryDto } from './dto/get-worksheet-history.dto';
@@ -41,7 +40,6 @@ export class WorksheetController {
 
   @Get('get-worksheets')
   public getWorksheets(@Query() query: GetWorksheetsDto) {
-    console.log(query);
     return this.worksheetService.getWorksheets(query);
   }
 
@@ -73,7 +71,7 @@ export class WorksheetController {
     summary: 'Creates the set of worksheets',
   })
   @Post('create-worksheets')
-  public createWorksheets(@Body() createWorksheetsDto: CreateWorksheetsDto) {
+  public createWorksheets(@Body() createWorksheetsDto: CreateWorksheetDto) {
     return this.worksheetService.createWorksheets(createWorksheetsDto);
   }
 
@@ -119,8 +117,6 @@ export class WorksheetController {
   })
   @Post('create-harvest')
   public createHarvest(@Body() createHarvestDto: CreateHarvestDto) {
-    console.log(createHarvestDto);
-
     return this.worksheetService.createHarvest(createHarvestDto);
   }
 
@@ -129,7 +125,6 @@ export class WorksheetController {
   })
   @Post('create-multiple-harvest')
   public createHarvests(@Body() createHarvestsDto: CreateHarvestsDto) {
-    console.log(createHarvestsDto);
     return this.worksheetService.createWorksheetHarvests(createHarvestsDto);
   }
 

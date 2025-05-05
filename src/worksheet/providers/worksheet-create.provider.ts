@@ -32,6 +32,7 @@ export class WorksheetCreateProvider {
 
     const newWorksheet = this.worksheetRespository.create({
       ...worksheet,
+      tankNumber: worksheet.tanks[0],
       user: currentUser || undefined,
       status: status || undefined,
       tankType: tankType || undefined,

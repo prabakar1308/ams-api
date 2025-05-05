@@ -5,10 +5,10 @@ import {
 } from '@nestjs/common';
 import { Worksheet } from '../entities/worksheet.entity';
 import { DataSource } from 'typeorm';
-import { CreateWorksheetsDto } from '../dto/create-worksheets.dto';
 import { WorksheetDependentsProvider } from './worksheet-dependents.provider';
 import { WorksheetHistory } from '../entities/worksheet-history.entity';
 import { worksheetHistory } from '../enums/worksheet-history-actions.enum';
+import { CreateWorksheetDto } from '../dto/create-worksheet.dto';
 
 @Injectable()
 export class WorksheetCreateManyProvider {
@@ -18,7 +18,7 @@ export class WorksheetCreateManyProvider {
     private readonly worksheetDependentsProvider: WorksheetDependentsProvider,
   ) {}
 
-  public async createWorksheets(createWorksheetsDto: CreateWorksheetsDto) {
+  public async createWorksheets(createWorksheetDto: CreateWorksheetDto) {
     const newWorksheets: Worksheet[] = [];
     // create query runner instance
     const queryRunner = this.datasource.createQueryRunner();
@@ -32,27 +32,32 @@ export class WorksheetCreateManyProvider {
       throw new RequestTimeoutException('Could not connect to the database.');
     }
     try {
-      for (const worksheet of createWorksheetsDto.worksheets) {
-        // Dependent columns check
-        const currentUser =
-          await this.worksheetDependentsProvider.getWorksheetUser(worksheet);
-        const status =
-          await this.worksheetDependentsProvider.getWorksheetStatus(worksheet);
-        const tankType =
-          await this.worksheetDependentsProvider.getWorksheetTankType(
-            worksheet,
-          );
-        const harvestType =
-          await this.worksheetDependentsProvider.getWorksheetHarvestType(
-            worksheet,
-          );
-        const inputUnit =
-          await this.worksheetDependentsProvider.getWorksheetInputUnit(
-            worksheet,
-          );
+      // Dependent columns check
+      const currentUser =
+        await this.worksheetDependentsProvider.getWorksheetUser(
+          createWorksheetDto,
+        );
+      const status =
+        await this.worksheetDependentsProvider.getWorksheetStatus(
+          createWorksheetDto,
+        );
+      const tankType =
+        await this.worksheetDependentsProvider.getWorksheetTankType(
+          createWorksheetDto,
+        );
+      const harvestType =
+        await this.worksheetDependentsProvider.getWorksheetHarvestType(
+          createWorksheetDto,
+        );
+      const inputUnit =
+        await this.worksheetDependentsProvider.getWorksheetInputUnit(
+          createWorksheetDto,
+        );
 
+      for (const tankNumber of createWorksheetDto.tanks) {
         const newWorksheet = queryRunner.manager.create(Worksheet, {
-          ...worksheet,
+          ...createWorksheetDto,
+          tankNumber,
           status: status || undefined,
           tankType: tankType || undefined,
           user: currentUser || undefined,

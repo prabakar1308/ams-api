@@ -1,17 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { CreateWorksheetDto } from '../dto/create-worksheet.dto';
-import { DataSource, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { Worksheet } from '../entities/worksheet.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateHarvestDto } from '../dto/create-harvest.dto';
 import { Harvest } from '../entities/harvest.entity';
 import { CreateRestockDto } from '../dto/create-restock.dto';
 import { Restock } from '../entities/restock.entity';
-import { UsersService } from 'src/users/providers/users.service';
 import { PatchWorksheetDto } from '../dto/patch-worksheet.dto';
-import { ConfigService } from '@nestjs/config';
 import { WorksheetCreateManyProvider } from './worksheet-create-many.provider';
-import { CreateWorksheetsDto } from '../dto/create-worksheets.dto';
 import { GetWorksheetsDto } from '../dto/get-worksheets.dto';
 import { PaginationProvider } from 'src/common/pagination/providers/pagination.provider';
 import { Paginated } from 'src/common/pagination/interfaces/paginated.interface';
@@ -38,10 +35,6 @@ export class WorksheetService {
     private readonly harvestRespository: Repository<Harvest>,
     @InjectRepository(Restock)
     private readonly restockRespository: Repository<Restock>,
-    private readonly userService: UsersService,
-    private readonly configService: ConfigService,
-    // inject datasource
-    private readonly datasource: DataSource,
     private readonly worksheetCreatManyProvider: WorksheetCreateManyProvider,
     private readonly worksheetUpdateManyProvider: WorksheetUpdateManyProvider,
     private readonly worksheetCreatProvider: WorksheetCreateProvider,
@@ -106,7 +99,7 @@ export class WorksheetService {
     return await this.worksheetCreatProvider.createWorksheet(worksheet);
   }
 
-  public async createWorksheets(worksheets: CreateWorksheetsDto) {
+  public async createWorksheets(worksheets: CreateWorksheetDto) {
     return await this.worksheetCreatManyProvider.createWorksheets(worksheets);
   }
 
@@ -148,7 +141,6 @@ export class WorksheetService {
     const worksheet = await this.worksheetRespository.findOneBy({
       id,
     });
-    console.log(worksheet);
     if (!worksheet) {
       throw new Error('Worksheet not found');
     }
@@ -159,7 +151,6 @@ export class WorksheetService {
     const worksheet = await this.worksheetRespository.findOneBy({
       id,
     });
-    console.log(worksheet);
     if (!worksheet) {
       throw new Error('Worksheet not found');
     }
@@ -171,7 +162,6 @@ export class WorksheetService {
     const newHarvest = this.harvestRespository.create(harvest);
     const harvestResponse = await this.harvestRespository.save(newHarvest);
     response = { ...response, harvest: harvestResponse };
-    console.log(harvestResponse);
     // If restock count is greater than 0, create a new restock entry
     if (harvest.restockCount > 0) {
       const restock = new CreateRestockDto();

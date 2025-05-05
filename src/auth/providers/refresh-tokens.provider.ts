@@ -25,7 +25,6 @@ export class RefreshTokensProvider {
 
   public async refreshTokens(refreshTokenDto: RefreshTokenDto) {
     try {
-      console.log(refreshTokenDto, this.jwtConfiguration.audience);
       // verify the refresh token using jwtService
       const { userId } = await this.jwtService.verifyAsync<
         Pick<ActiveUserData, 'userId'>
@@ -37,7 +36,6 @@ export class RefreshTokensProvider {
 
       // fetch user from database
       const user = await this.userService.findOneById(userId);
-      console.log(user);
       if (!user) {
         throw new UnauthorizedException();
       }
@@ -47,7 +45,6 @@ export class RefreshTokensProvider {
 
       return { ...tokens, userCode: user.userCode, userRole: user.role };
     } catch (error) {
-      console.log(error);
       throw new UnauthorizedException(error);
     }
   }

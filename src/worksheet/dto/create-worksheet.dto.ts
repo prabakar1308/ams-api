@@ -1,4 +1,10 @@
-import { IsDate, IsNotEmpty, IsNumber, IsOptional } from 'class-validator';
+import {
+  IsArray,
+  IsDate,
+  IsNotEmpty,
+  IsNumber,
+  IsOptional,
+} from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 import { worksheetStatus } from 'src/dashboard/enums/worksheet-status.enum';
 
@@ -27,9 +33,9 @@ export class CreateWorksheetDto {
   @IsNotEmpty()
   tankTypeId: number;
 
-  @IsNumber()
+  @IsArray()
   @IsNotEmpty()
-  tankNumber: number;
+  tanks: number[];
 
   @IsNumber()
   @IsNotEmpty()
