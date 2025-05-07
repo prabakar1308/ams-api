@@ -100,7 +100,12 @@ export class WorksheetService {
   }
 
   public async createWorksheets(worksheets: CreateWorksheetDto) {
-    return await this.worksheetCreatManyProvider.createWorksheets(worksheets);
+    await this.worksheetCreatManyProvider.createWorksheets(worksheets);
+    return await this.getActiveWorksheets({
+      tankTypeId: worksheets.tankTypeId,
+      userId: 0,
+      statusId: 0,
+    });
   }
 
   public async updateWorksheet(patchWorksheetDto: PatchWorksheetDto) {

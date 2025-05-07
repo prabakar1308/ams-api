@@ -35,13 +35,13 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjUsInVzZXJJZ
     "salnity": 35,
     "temperature": 32,
     "tankTypeId": 2,
-    "tanks": [8,9],
+    "tanks": [20],
     "harvestTypeId": 1,
     "harvestHours": 18,
     "inputCount": 20,
     "inputUnitId": 6,
     "statusId": 2,
-    "userId": 1
+    "userId": 3
 }
 // {
 //   "worksheets": [{

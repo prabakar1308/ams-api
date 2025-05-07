@@ -9,6 +9,7 @@ import { WorksheetDependentsProvider } from './worksheet-dependents.provider';
 import { WorksheetHistory } from '../entities/worksheet-history.entity';
 import { worksheetHistory } from '../enums/worksheet-history-actions.enum';
 import { CreateWorksheetDto } from '../dto/create-worksheet.dto';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class WorksheetCreateManyProvider {
@@ -16,6 +17,7 @@ export class WorksheetCreateManyProvider {
     // inject datasource
     private readonly datasource: DataSource,
     private readonly worksheetDependentsProvider: WorksheetDependentsProvider,
+    private readonly configService: ConfigService,
   ) {}
 
   public async createWorksheets(createWorksheetDto: CreateWorksheetDto) {
@@ -55,6 +57,31 @@ export class WorksheetCreateManyProvider {
         );
 
       for (const tankNumber of createWorksheetDto.tanks) {
+        // check active worksheet exists for tank no.
+        const worksheetCompletedStatusId = +this.configService.get(
+          'WORKSHEET_COMPLETED_STATUS',
+        );
+        const worksheets = tankType
+          ? await queryRunner.manager
+              .createQueryBuilder(Worksheet, 'worksheet')
+              .where('worksheet.tankNumber = :tankNumber', {
+                tankNumber,
+              })
+              .andWhere('worksheet.tankTypeId = :tankTypeId', {
+                tankTypeId: tankType.id,
+              })
+              .andWhere('worksheet.statusId NOT IN (:...statusIds)', {
+                statusIds: [worksheetCompletedStatusId], // Add more IDs if needed
+              })
+              .getMany()
+          : [];
+
+        if (worksheets && worksheets.length) {
+          throw new ConflictException(
+            `Active Worksheet is still exists for ${tankNumber}`,
+          );
+        }
+
         const newWorksheet = queryRunner.manager.create(Worksheet, {
           ...createWorksheetDto,
           tankNumber,
@@ -83,7 +110,7 @@ export class WorksheetCreateManyProvider {
     } catch (error) {
       // if unsuccessfull, rollback
       await queryRunner.rollbackTransaction();
-      throw new ConflictException('Could not complete the transaction', {
+      throw new ConflictException(String(error), {
         description: String(error),
       });
     } finally {
