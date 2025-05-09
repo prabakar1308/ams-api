@@ -10,6 +10,7 @@ import { WorksheetHistory } from '../entities/worksheet-history.entity';
 import { worksheetHistory } from '../enums/worksheet-history-actions.enum';
 import { CreateWorksheetDto } from '../dto/create-worksheet.dto';
 import { ConfigService } from '@nestjs/config';
+import { Restock } from '../entities/restock.entity';
 
 @Injectable()
 export class WorksheetCreateManyProvider {
@@ -56,6 +57,13 @@ export class WorksheetCreateManyProvider {
           createWorksheetDto,
         );
 
+      let restocks: Restock[] = [];
+      if (createWorksheetDto.restocks && createWorksheetDto.restocks.length) {
+        restocks = await this.worksheetDependentsProvider.findMultipleRestocks(
+          createWorksheetDto.restocks,
+        );
+      }
+
       for (const tankNumber of createWorksheetDto.tanks) {
         // check active worksheet exists for tank no.
         const worksheetCompletedStatusId = +this.configService.get(
@@ -90,6 +98,7 @@ export class WorksheetCreateManyProvider {
           user: currentUser || undefined,
           harvestType: harvestType || undefined,
           inputUnit: inputUnit || undefined,
+          restocks,
         });
         const result = await queryRunner.manager.save(newWorksheet);
         newWorksheets.push(result);

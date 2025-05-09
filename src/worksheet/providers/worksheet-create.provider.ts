@@ -7,6 +7,7 @@ import { Worksheet } from '../entities/worksheet.entity';
 import { WorksheetDependentsProvider } from './worksheet-dependents.provider';
 import { WorksheetHistory } from '../entities/worksheet-history.entity';
 import { worksheetHistory } from '../enums/worksheet-history-actions.enum';
+import { Restock } from '../entities/restock.entity';
 
 @Injectable()
 export class WorksheetCreateProvider {
@@ -30,6 +31,13 @@ export class WorksheetCreateProvider {
     const inputUnit =
       await this.worksheetDependentsProvider.getWorksheetInputUnit(worksheet);
 
+    let restocks: Restock[] = [];
+    if (worksheet.restocks && worksheet.restocks.length) {
+      restocks = await this.worksheetDependentsProvider.findMultipleRestocks(
+        worksheet.restocks,
+      );
+    }
+
     const newWorksheet = this.worksheetRespository.create({
       ...worksheet,
       tankNumber: worksheet.tanks[0],
@@ -38,6 +46,7 @@ export class WorksheetCreateProvider {
       tankType: tankType || undefined,
       harvestType: harvestType || undefined,
       inputUnit: inputUnit || undefined,
+      restocks,
     });
 
     try {

@@ -1,28 +1,32 @@
 import { Injectable } from '@nestjs/common';
-import { CreateWorksheetDto } from '../dto/create-worksheet.dto';
 import { Repository } from 'typeorm';
-import { Worksheet } from '../entities/worksheet.entity';
 import { InjectRepository } from '@nestjs/typeorm';
+
+import { CreateWorksheetDto } from '../dto/create-worksheet.dto';
 import { CreateHarvestDto } from '../dto/create-harvest.dto';
-import { Harvest } from '../entities/harvest.entity';
 import { CreateRestockDto } from '../dto/create-restock.dto';
-import { Restock } from '../entities/restock.entity';
 import { PatchWorksheetDto } from '../dto/patch-worksheet.dto';
-import { WorksheetCreateManyProvider } from './worksheet-create-many.provider';
+import { PatchWorksheetsDto } from '../dto/patch-worksheets.dto';
 import { GetWorksheetsDto } from '../dto/get-worksheets.dto';
+import { GetWorksheetHistoryDto } from '../dto/get-worksheet-history.dto';
+import { CreateTransitsDto } from '../dto/create-transits.dto';
+import { CreateHarvestsDto } from '../dto/create-harvests.dto';
+
+import { Worksheet } from '../entities/worksheet.entity';
+import { Harvest } from '../entities/harvest.entity';
+import { WorksheetHistory } from '../entities/worksheet-history.entity';
+
+import { GetWorksheetsProvider } from './get-worksheets.provider';
+import { WorksheetCreateProvider } from './worksheet-create.provider';
+import { WorksheetCreateManyProvider } from './worksheet-create-many.provider';
+import { WorksheetUpdateManyProvider } from './worksheet-update-many.provider';
+import { WorksheetHarvestManyProvider } from './harvest/worksheet-harvest-many.provider';
+import { WorksheetTransitManyProvider } from './transit/worksheet-transit-many.provider';
+
 import { PaginationProvider } from 'src/common/pagination/providers/pagination.provider';
 import { Paginated } from 'src/common/pagination/interfaces/paginated.interface';
-import { WorksheetCreateProvider } from './worksheet-create.provider';
 import { WorksheetStatusService } from 'src/master/providers/worksheet-status.service';
-import { PatchWorksheetsDto } from '../dto/patch-worksheets.dto';
-import { WorksheetUpdateManyProvider } from './worksheet-update-many.provider';
-import { WorksheetHistory } from '../entities/worksheet-history.entity';
-import { GetWorksheetHistoryDto } from '../dto/get-worksheet-history.dto';
-import { CreateHarvestsDto } from '../dto/create-harvests.dto';
-import { WorksheetHarvestManyProvider } from './worksheet-harvest-many.provider';
-import { CreateTransitsDto } from '../dto/create-transits.dto';
-import { WorksheetTransitManyProvider } from './worksheet-transit-many.provider';
-import { GetWorksheetsProvider } from './get-worksheets.provider';
+import { RestockService } from './restock/restock.service';
 
 @Injectable()
 export class WorksheetService {
@@ -33,8 +37,6 @@ export class WorksheetService {
     private readonly worksheetHistoryRespository: Repository<WorksheetHistory>,
     @InjectRepository(Harvest)
     private readonly harvestRespository: Repository<Harvest>,
-    @InjectRepository(Restock)
-    private readonly restockRespository: Repository<Restock>,
     private readonly worksheetCreatManyProvider: WorksheetCreateManyProvider,
     private readonly worksheetUpdateManyProvider: WorksheetUpdateManyProvider,
     private readonly worksheetCreatProvider: WorksheetCreateProvider,
@@ -43,6 +45,7 @@ export class WorksheetService {
     private readonly worksheetHarvestManyProvider: WorksheetHarvestManyProvider,
     private readonly worksheetTransitManyProvider: WorksheetTransitManyProvider,
     private readonly getWorksheetsProvider: GetWorksheetsProvider,
+    private readonly restockService: RestockService,
   ) {}
 
   public async getWorksheets(
@@ -174,7 +177,7 @@ export class WorksheetService {
       restock.harvestId = harvestResponse.id;
       restock.count = harvest.restockCount;
       restock.unitId = harvest.restockUnitId;
-      const restockResponse = await this.createRestock(restock);
+      const restockResponse = await this.restockService.createRestock(restock);
       response = { ...response, restock: restockResponse };
     }
 
@@ -184,11 +187,6 @@ export class WorksheetService {
     });
 
     return response;
-  }
-
-  public async createRestock(restock: CreateRestockDto) {
-    const newRestock = this.restockRespository.create(restock);
-    return await this.restockRespository.save(newRestock);
   }
 
   public async createWorksheetHarvests(createHarvestsDto: CreateHarvestsDto) {

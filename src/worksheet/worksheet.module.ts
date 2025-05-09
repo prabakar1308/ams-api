@@ -15,16 +15,18 @@ import { Harvest } from './entities/harvest.entity';
 import { Restock } from './entities/restock.entity';
 import { WorksheetHistory } from './entities/worksheet-history.entity';
 import { WorksheetUpdateManyProvider } from './providers/worksheet-update-many.provider';
-import { WorksheetHarvestManyProvider } from './providers/worksheet-harvest-many.provider';
+import { WorksheetHarvestManyProvider } from './providers/harvest/worksheet-harvest-many.provider';
 import { WorksheetTasksProvider } from './providers/worksheet-tasks.provider';
 import { Transit } from './entities/transit.entity';
-import { WorksheetTransitManyProvider } from './providers/worksheet-transit-many.provider';
+import { WorksheetTransitManyProvider } from './providers/transit/worksheet-transit-many.provider';
 import { GetWorksheetsProvider } from './providers/get-worksheets.provider';
+import { RestockService } from './providers/restock/restock.service';
 
 @Module({
   controllers: [WorksheetController],
   providers: [
     WorksheetService,
+    RestockService,
     WorksheetCreateManyProvider,
     WorksheetCreateProvider,
     WorksheetDependentsProvider,

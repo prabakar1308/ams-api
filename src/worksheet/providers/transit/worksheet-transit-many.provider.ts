@@ -5,11 +5,11 @@ import {
 } from '@nestjs/common';
 import { DataSource } from 'typeorm';
 
-import { Harvest } from '../entities/harvest.entity';
-import { CreateTransitsDto } from '../dto/create-transits.dto';
-import { Transit } from '../entities/transit.entity';
-import { PatchHarvestDto } from '../dto/patch-harvest.dto';
-import { workSheetTableStatus } from '../enums/worksheet-table-status.enum';
+import { Harvest } from '../../entities/harvest.entity';
+import { CreateTransitsDto } from '../../dto/create-transits.dto';
+import { Transit } from '../../entities/transit.entity';
+import { PatchHarvestDto } from '../../dto/patch-harvest.dto';
+import { workSheetTableStatus } from '../../enums/worksheet-table-status.enum';
 
 @Injectable()
 export class WorksheetTransitManyProvider {

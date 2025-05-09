@@ -1,6 +1,7 @@
 import {
   IsArray,
   IsDate,
+  IsInt,
   IsNotEmpty,
   IsNumber,
   IsOptional,
@@ -59,4 +60,9 @@ export class CreateWorksheetDto {
 
   @IsNumber()
   userId: number;
+
+  @IsArray()
+  @IsOptional()
+  @IsInt({ each: true })
+  restocks?: number[];
 }

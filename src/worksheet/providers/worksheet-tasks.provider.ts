@@ -128,7 +128,7 @@ export class WorksheetTasksProvider {
         const newWorksheetHistory = queryRunner.manager.create(
           WorksheetHistory,
           {
-            worksheet: worksheet,
+            worksheet: { ...worksheet, restocks: [] },
             action: patchWorksheetsDto.updateAction,
             previousValue,
             currentValue,

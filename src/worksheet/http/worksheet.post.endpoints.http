@@ -31,17 +31,19 @@ Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjUsInVzZXJJZCI6IkdNSC1BTVMtMTcxMSIsImlhdCI6MTc0NTIwODE0MCwiZXhwIjoxNzUyOTg0MTQwLCJhdWQiOiJsb2NhbGhvc3Q6MzAwMCIsImlzcyI6ImxvY2FsaG9zdDozMDAwIn0.rpUgvrO5iGls0A-_H1s2v5nir1cnJMXvgyFqqtxMnzY
 
 {
-    "ph": 7,
+    "ph": 7.7,
     "salnity": 35,
     "temperature": 32,
-    "tankTypeId": 2,
-    "tanks": [20],
+    "tankTypeId": 1,
+    "tanks": [3],
     "harvestTypeId": 1,
     "harvestHours": 18,
     "inputCount": 20,
     "inputUnitId": 6,
     "statusId": 2,
-    "userId": 3
+    "userId": 3,
+    "restocks": [6, 4]
+
 }
 // {
 //   "worksheets": [{
@@ -92,12 +94,12 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjUsInVzZXJJZ
 
 {
   "harvests": [{
-    "worksheetId": 13,
-    "count": 50,
-    "countInStock": 50,
-    "unitId": 1,
+    "worksheetId": 22,
+    "count": 70,
+    "countInStock": 70,
+    "unitId": 3,
     "measuredBy": 1,
-    "restockCount": 10,
+    "restockCount": 20,
     "restockUnitId": 3,
     "statusId": 4
   }]

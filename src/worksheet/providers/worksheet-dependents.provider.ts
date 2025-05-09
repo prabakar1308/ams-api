@@ -1,4 +1,7 @@
 import { Injectable } from '@nestjs/common';
+import { In, Repository } from 'typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
+
 import { Worksheet } from '../entities/worksheet.entity';
 import { CreateWorksheetDto } from '../dto/create-worksheet.dto';
 import { WorksheetStatusService } from 'src/master/providers/worksheet-status.service';
@@ -7,16 +10,27 @@ import { PatchWorksheetDto } from '../dto/patch-worksheet.dto';
 import { HarvestTypeService } from 'src/master/providers/harvest-type.service';
 import { TankTypeService } from 'src/master/providers/tank-type.service';
 import { UnitService } from 'src/master/providers/unit.service';
+import { Restock } from '../entities/restock.entity';
 
 @Injectable()
 export class WorksheetDependentsProvider {
   constructor(
+    @InjectRepository(Restock)
+    private readonly restockRespository: Repository<Restock>,
     private readonly worksheetStatusService: WorksheetStatusService,
     private readonly userService: UsersService,
     private readonly harvestTypeService: HarvestTypeService,
     private readonly tankTypeService: TankTypeService,
     private readonly unitService: UnitService,
   ) {}
+
+  public async findMultipleRestocks(restocks: number[]) {
+    return await this.restockRespository.find({
+      where: {
+        id: In(restocks),
+      },
+    });
+  }
 
   public async getWorksheetUser(
     worksheet: CreateWorksheetDto | PatchWorksheetDto,

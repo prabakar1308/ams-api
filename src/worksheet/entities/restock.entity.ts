@@ -18,9 +18,9 @@ export class Restock extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @OneToOne(() => Worksheet)
+  @OneToOne(() => Worksheet, (worksheet) => worksheet.id, { eager: true })
   @JoinColumn({ name: 'worksheetId' })
-  worksheetId: number;
+  worksheet: Worksheet;
 
   @OneToOne(() => Harvest)
   @JoinColumn({ name: 'harvestId' })
@@ -33,8 +33,7 @@ export class Restock extends BaseEntity {
   count: number;
 
   @ManyToOne(() => Unit, (unit) => unit.id, { eager: true })
-  @JoinColumn({ name: 'unitId' })
-  unitId: number;
+  unit: Unit;
 
   @Column({
     type: 'varchar',

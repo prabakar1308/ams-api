@@ -19,10 +19,14 @@ import { PatchWorksheetsDto } from './dto/patch-worksheets.dto';
 import { GetWorksheetHistoryDto } from './dto/get-worksheet-history.dto';
 import { CreateHarvestsDto } from './dto/create-harvests.dto';
 import { CreateTransitsDto } from './dto/create-transits.dto';
+import { RestockService } from './providers/restock/restock.service';
 
 @Controller('worksheet')
 export class WorksheetController {
-  constructor(private readonly worksheetService: WorksheetService) {}
+  constructor(
+    private readonly worksheetService: WorksheetService,
+    private readonly restockService: RestockService,
+  ) {}
 
   /** Get All Worksheets */
   @ApiOperation({
@@ -134,5 +138,11 @@ export class WorksheetController {
   @Post('create-multiple-transit')
   public createMultipleTransits(@Body() createTransitsDto: CreateTransitsDto) {
     return this.worksheetService.createMultipleTransits(createTransitsDto);
+  }
+
+  // Restock
+  @Get('get-restocks')
+  public getRestocks(@Query('status') status: string) {
+    return this.restockService.getActiveRestocks(status);
   }
 }

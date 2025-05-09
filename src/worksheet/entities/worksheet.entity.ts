@@ -9,10 +9,13 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  JoinTable,
+  ManyToMany,
   ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { Restock } from './restock.entity';
 
 @Entity({ schema: 'worksheet' })
 export class Worksheet extends BaseEntity {
@@ -79,6 +82,10 @@ export class Worksheet extends BaseEntity {
     eager: true,
   })
   user: User;
+
+  @ManyToMany(() => Restock)
+  @JoinTable()
+  restocks: Restock[];
 
   @CreateDateColumn()
   createdAt: Date;
