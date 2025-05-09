@@ -11,6 +11,7 @@ import { worksheetHistory } from '../enums/worksheet-history-actions.enum';
 import { CreateWorksheetDto } from '../dto/create-worksheet.dto';
 import { ConfigService } from '@nestjs/config';
 import { Restock } from '../entities/restock.entity';
+import { workSheetTableStatus } from '../enums/worksheet-table-status.enum';
 
 @Injectable()
 export class WorksheetCreateManyProvider {
@@ -112,6 +113,15 @@ export class WorksheetCreateManyProvider {
           },
         );
         await queryRunner.manager.save(newWorksheetHistory);
+
+        // update restock status from A to U
+        for (const restock of restocks) {
+          const updatedWorksheet = queryRunner.manager.create(Restock, {
+            ...restock,
+            status: workSheetTableStatus.IN_USE,
+          });
+          await queryRunner.manager.save(updatedWorksheet);
+        }
       }
 
       // if sucessfull, commit
