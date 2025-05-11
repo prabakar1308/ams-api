@@ -3,6 +3,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { IsArray, IsNotEmpty, IsString, ValidateNested } from 'class-validator';
 import { Type } from 'class-transformer';
 import { PatchWorksheetDto } from './patch-worksheet.dto';
+import { GetWorksheetsDto } from './get-worksheets.dto';
 
 export class PatchWorksheetsDto {
   @ApiProperty({
@@ -20,4 +21,8 @@ export class PatchWorksheetsDto {
 
   @IsString()
   updateAction?: string;
+
+  @ValidateNested({ each: true })
+  @Type(() => GetWorksheetsDto)
+  worksheetFilter?: GetWorksheetsDto;
 }

@@ -140,8 +140,9 @@ export class WorksheetService {
   }
 
   public async updateWorksheets(patchWorksheetsDto: PatchWorksheetsDto) {
-    return await this.worksheetUpdateManyProvider.updateWorksheets(
-      patchWorksheetsDto,
+    await this.worksheetUpdateManyProvider.updateWorksheets(patchWorksheetsDto);
+    return await this.getActiveWorksheets(
+      patchWorksheetsDto.worksheetFilter ?? {},
     );
   }
 

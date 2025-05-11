@@ -103,30 +103,50 @@ export class WorksheetUpdateManyProvider {
 
         // update worksheet history
 
-        let previousValue = '';
-        let currentValue = '';
+        const values: { previousValue: string; currentValue: string }[] = [];
         switch (patchWorksheetsDto.updateAction) {
           case worksheetHistory.WORKSHEET_ASSIGNEE_UPDATED:
-            previousValue = currentWorksheet.user?.userCode || '';
-            currentValue = updatedWorksheet.user?.userCode || '';
+            values.push({
+              previousValue: currentWorksheet.user?.userCode || '',
+              currentValue: updatedWorksheet.user?.userCode || '',
+            });
             break;
           case worksheetHistory.WORKSHEET_STATUS_UPDATED:
-            previousValue = currentWorksheet.status.value.toString();
-            currentValue = updatedWorksheet.status.value.toString();
+            values.push({
+              previousValue: currentWorksheet.status.value.toString(),
+              currentValue: updatedWorksheet.status.value.toString(),
+            });
+            break;
+          case worksheetHistory.WORKSHEET_STATUS_ASSIGNEE_UPDATED:
+            if (worksheet.userId) {
+              values.push({
+                previousValue: currentWorksheet.user?.userCode || '',
+                currentValue: updatedWorksheet.user?.userCode || '',
+              });
+            }
+            if (worksheet.statusId) {
+              values.push({
+                previousValue: currentWorksheet.status.value.toString(),
+                currentValue: updatedWorksheet.status.value.toString(),
+              });
+            }
             break;
           default:
             break;
         }
-        const newWorksheetHistory = queryRunner.manager.create(
-          WorksheetHistory,
-          {
-            worksheet: updatedWorksheet,
-            action: patchWorksheetsDto.updateAction,
-            previousValue,
-            currentValue,
-          },
-        );
-        await queryRunner.manager.save(newWorksheetHistory);
+        for (const value of values) {
+          const { previousValue, currentValue } = value;
+          const newWorksheetHistory = queryRunner.manager.create(
+            WorksheetHistory,
+            {
+              worksheet: updatedWorksheet,
+              action: patchWorksheetsDto.updateAction,
+              previousValue,
+              currentValue,
+            },
+          );
+          await queryRunner.manager.save(newWorksheetHistory);
+        }
       }
 
       // if sucessfull, commit
