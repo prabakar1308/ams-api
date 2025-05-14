@@ -75,7 +75,9 @@ export class WorksheetUpdateManyProvider {
             Number(worksheet.statusId) === Number(worksheetStatus.IN_STOCKING)
           ) {
             const harvestTime = new Date(
-              new Date().setHours(new Date().getHours() + 18),
+              new Date().setHours(
+                new Date().getHours() + currentWorksheet.harvestHours,
+              ),
             );
             harvestProps = {
               harvestTime: new Date(harvestTime),

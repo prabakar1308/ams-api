@@ -74,7 +74,7 @@ export class MasterController {
   /** Tank - GET, PATCH */
   @Get('tank')
   public getTanks() {
-    return this.salnityService.getSalnity();
+    return this.tankService.getTankDetails();
   }
   @Patch('tank')
   public updateTanks(@Body() patchTankDto: PatchRangeGenericDto) {

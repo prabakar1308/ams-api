@@ -16,7 +16,7 @@ export class PHService {
   }
 
   public async getPH() {
-    return await this.phRepository.find();
+    return (await this.phRepository.find()).at(0);
   }
 
   public async getPHById(id: number) {

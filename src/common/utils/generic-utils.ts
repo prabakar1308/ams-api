@@ -19,7 +19,8 @@ export function getDateDifference(
 
   let timeText = days ? `${days} days ` : '';
   let result = { text: '', status: '' };
-  timeText = `${timeText}${hours} hours ${minutes} mins`;
+  timeText = hours ? `${timeText}${hours} hours ` : timeText;
+  timeText = minutes ? `${timeText}${minutes} mins ` : timeText;
   switch (statusId) {
     case Number(worksheetStatus.READY_FOR_STOCKING):
       result = { text: `Created ${timeText} ago`, status: 'warning' };

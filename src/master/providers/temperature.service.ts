@@ -17,7 +17,14 @@ export class TemperatureService {
   }
 
   public async getTemperature() {
-    return await this.tempRepository.find();
+    const response = await this.tempRepository.find();
+    return response
+      .map((ph) => ({
+        ...ph,
+        unitName: ph.unit?.value,
+        unit: undefined,
+      }))
+      .at(0);
   }
 
   public async getTemperatureById(id: number) {
