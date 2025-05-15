@@ -16,6 +16,8 @@ import { PatchWorksheetDto } from '../../dto/patch-worksheet.dto';
 import { worksheetHistory } from '../../enums/worksheet-history-actions.enum';
 import { workSheetTableStatus } from 'src/worksheet/enums/worksheet-table-status.enum';
 import { RestockService } from '../restock/restock.service';
+import { CreateTransitDto } from 'src/worksheet/dto/create-transit.dto';
+import { Transit } from 'src/worksheet/entities/transit.entity';
 
 @Injectable()
 export class WorksheetHarvestManyProvider {
@@ -72,6 +74,19 @@ export class WorksheetHarvestManyProvider {
           });
           const restockResponse = await queryRunner.manager.save(newRestock);
           response = { ...response, restock: restockResponse };
+        }
+
+        // add transit if exists
+        if ((harvest.transitCount ?? 0) > 0) {
+          const transit = new CreateTransitDto();
+          transit.harvestId = harvestResponse.id;
+          transit.count = harvest.transitCount || 0;
+          transit.unitId = harvest.unitId;
+          transit.unitSectorId = harvest.unitSectorId || 0;
+
+          const newTransit = queryRunner.manager.create(Transit, transit);
+          const transitResponse = await queryRunner.manager.save(newTransit);
+          response = { ...response, transit: transitResponse };
         }
 
         worksheets.push({

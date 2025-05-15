@@ -43,7 +43,13 @@ export class RefreshTokensProvider {
       // generate the tokens
       const tokens = await this.generateTokenProvider.generateTokens(user);
 
-      return { ...tokens, userCode: user.userCode, userRole: user.role };
+      return {
+        ...tokens,
+        userCode: user.userCode,
+        userRole: user.role,
+        userId: user.id,
+        userName: `${user.firstName} ${user.lastName}`,
+      };
     } catch (error) {
       throw new UnauthorizedException(error);
     }

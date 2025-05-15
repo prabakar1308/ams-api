@@ -66,4 +66,20 @@ export class CreateHarvestDto {
   @IsNumber()
   @IsOptional()
   restockUnitId: number;
+
+  @ApiProperty({
+    description: 'transit count',
+    example: 80,
+  })
+  @IsNumber()
+  @IsOptional()
+  transitCount?: number;
+
+  @ApiProperty({
+    description: 'unit sector id',
+    example: 1,
+  })
+  @IsNumber()
+  @IsOptional()
+  unitSectorId?: number;
 }
