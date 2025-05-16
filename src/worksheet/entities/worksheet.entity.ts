@@ -28,6 +28,7 @@ export class Worksheet extends BaseEntity {
   @Column({
     type: 'decimal',
     precision: 2,
+    scale: 1,
     nullable: false,
   })
   ph: number;

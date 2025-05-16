@@ -18,7 +18,7 @@ export class CreateWorksheetDto {
   @IsNumber()
   statusId: number;
 
-  @IsNumber()
+  @IsNumber({ maxDecimalPlaces: 1 })
   @IsNotEmpty()
   ph: number;
 
