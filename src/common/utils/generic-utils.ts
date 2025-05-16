@@ -23,7 +23,10 @@ export function getDateDifference(
   timeText = minutes ? `${timeText}${minutes} mins ` : timeText;
   switch (statusId) {
     case Number(worksheetStatus.READY_FOR_STOCKING):
-      result = { text: `Created ${timeText} ago`, status: 'warning' };
+      result = {
+        text: timeText ? `Created ${timeText} ago` : 'Created just now.',
+        status: 'warning',
+      };
       break;
     case Number(worksheetStatus.IN_STOCKING):
       if (isPast)

@@ -47,10 +47,20 @@ export class WorksheetHarvestManyProvider {
     try {
       for (const harvest of createHarvests.harvests) {
         let response = {};
+        let status = workSheetTableStatus.ACTIVE;
+
+        if (harvest?.countInStock === 0) {
+          status = workSheetTableStatus.COMPLETED;
+        } else if (
+          (harvest?.countInStock ?? 0) > 0 &&
+          harvest?.countInStock !== harvest.count
+        ) {
+          status = workSheetTableStatus.PARTIALLY_TRANSIT;
+        }
 
         const newHarvest = queryRunner.manager.create(Harvest, {
           ...harvest,
-          status: workSheetTableStatus.ACTIVE,
+          status,
         });
         const harvestResponse = await queryRunner.manager.save(newHarvest);
         response = { ...response, harvest: harvestResponse };

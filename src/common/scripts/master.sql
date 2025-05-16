@@ -30,19 +30,19 @@ INSERT INTO master.unit
 VALUES(1, 1, nextval('master.unit_id_seq'::regclass), 'Tins', 'Tins', now(), now());
 INSERT INTO master.unit
 ("createdBy", "updatedBy", id, value, description, "createdAt", "updatedAt")
-VALUES(1, 1, nextval('master.unit_id_seq'::regclass), 'Frozen Cups', 'Frozen Cups', now(), now());
+VALUES(1, 1, nextval('master.unit_id_seq'::regclass), 'Bags', 'Bags', now(), now());
 INSERT INTO master.unit
 ("createdBy", "updatedBy", id, value, description, "createdAt", "updatedAt")
 VALUES(1, 1, nextval('master.unit_id_seq'::regclass), 'Millions', 'Millions', now(), now());
+INSERT INTO master.unit
+("createdBy", "updatedBy", id, value, description, "createdAt", "updatedAt")
+VALUES(1, 1, nextval('master.unit_id_seq'::regclass), 'Frozen Cups', 'Frozen Cups', now(), now());
 INSERT INTO master.unit
 ("createdBy", "updatedBy", id, value, description, "createdAt", "updatedAt")
 VALUES(1, 1, nextval('master.unit_id_seq'::regclass), 'Degree Celsius', 'Degree Celsius', now(), now());
 INSERT INTO master.unit
 ("createdBy", "updatedBy", id, value, description, "createdAt", "updatedAt")
 VALUES(1, 1, nextval('master.unit_id_seq'::regclass), 'PPT', 'Parts per thousand', now(), now());
-INSERT INTO master.unit
-("createdBy", "updatedBy", id, value, description, "createdAt", "updatedAt")
-VALUES(1, 1, nextval('master.unit_id_seq'::regclass), 'Bags', 'Bags', now(), now());
 
 
 ---Tank Types ---
