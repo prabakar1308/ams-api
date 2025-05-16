@@ -22,24 +22,29 @@ VALUES(1, 1, nextval('master.unit_sector_id_seq'::regclass), 'Unit-III', 'Unit I
 
 
 --- Default User -----
----- Create user using user.post.endpoints.http
+---- Login with the below credentials
+---- userName: GMH-AMS-1
+---- password: welcome123
+INSERT INTO master."user"
+("createdBy", "updatedBy", id, "userCode", "firstName", "lastName", "password", email, "mobileNumber", "role", designation, "dateOfBirth", address, "dateOfJoining", remarks, "createdAt", "updatedAt", "unitSectorId")
+VALUES(0, 0, nextval('master.user_id_seq'::regclass), 'GMH-AMS-1', 'Bala', 'Sir', '$2b$10$bcjIyTjwrH9AkCdJnpH3HuegIz2K5HWdLfzzXGxjF5KqPj6HnmbwW', 'test', '950000', 'admin', 'Manager', '1998-09-18 23:04:02.666', 'test', '2016-09-18 23:04:02.666', '', now(), now(), 1);
 
 ----Unit-----
 INSERT INTO master.unit
 ("createdBy", "updatedBy", id, value, description, "createdAt", "updatedAt")
-VALUES(1, 1, nextval('master.unit_id_seq'::regclass), 'Tins', 'Tins', now(), now());
+VALUES(1, 1, nextval('master.unit_id_seq'::regclass), 'Tins', '', now(), now());
 INSERT INTO master.unit
 ("createdBy", "updatedBy", id, value, description, "createdAt", "updatedAt")
-VALUES(1, 1, nextval('master.unit_id_seq'::regclass), 'Bags', 'Bags', now(), now());
+VALUES(1, 1, nextval('master.unit_id_seq'::regclass), 'Bags', '5 kgs', now(), now());
 INSERT INTO master.unit
 ("createdBy", "updatedBy", id, value, description, "createdAt", "updatedAt")
-VALUES(1, 1, nextval('master.unit_id_seq'::regclass), 'Millions', 'Millions', now(), now());
+VALUES(1, 1, nextval('master.unit_id_seq'::regclass), 'Millions', '', now(), now());
 INSERT INTO master.unit
 ("createdBy", "updatedBy", id, value, description, "createdAt", "updatedAt")
-VALUES(1, 1, nextval('master.unit_id_seq'::regclass), 'Frozen Cups', 'Frozen Cups', now(), now());
+VALUES(1, 1, nextval('master.unit_id_seq'::regclass), 'Frozen Cups', '', now(), now());
 INSERT INTO master.unit
 ("createdBy", "updatedBy", id, value, description, "createdAt", "updatedAt")
-VALUES(1, 1, nextval('master.unit_id_seq'::regclass), 'Degree Celsius', 'Degree Celsius', now(), now());
+VALUES(1, 1, nextval('master.unit_id_seq'::regclass), '°C', 'Degree Celsius', now(), now());
 INSERT INTO master.unit
 ("createdBy", "updatedBy", id, value, description, "createdAt", "updatedAt")
 VALUES(1, 1, nextval('master.unit_id_seq'::regclass), 'PPT', 'Parts per thousand', now(), now());
@@ -93,8 +98,8 @@ VALUES(nextval('master.worksheet_status_id_seq'::regclass), 'Free/Open', 'Indica
 
 ---- Temperature -----
 INSERT INTO master.temperature
-(id, min, max, "unitId", "createdAt", "updatedAt", "createdBy", "updatedBy")
-VALUES(nextval('master.temperature_id_seq'::regclass), 25, 35, 1, now(), now(), 1, 1);
+(id, min, max, "defaultValue", "unitId", "createdAt", "updatedAt", "createdBy", "updatedBy", "step")
+VALUES(nextval('master.temperature_id_seq'::regclass), 25, 35, 30, 5, now(), now(), 1, 1, 1);
 
 
 ---- Tank -----
@@ -104,11 +109,11 @@ VALUES(nextval('master.tank_id_seq'::regclass), 1, 25, NULL, now(), now(), 1, 1)
 
 ---- PH -----
 INSERT INTO master.ph
-(id, min, max, "unitId", "createdAt", "updatedAt", "createdBy", "updatedBy")
-VALUES(nextval('master.ph_id_seq'::regclass), 7.5, 8.5, NULL, now(), now(), 0, 0);
+(id, min, max, "defaultValue", "unitId", "createdAt", "updatedAt", "createdBy", "updatedBy", "step")
+VALUES(nextval('master.ph_id_seq'::regclass), 7.5, 8.5, 7.8, NULL, now(), now(), 1, 1, 0.1);
 
 ---- Salinity -----
 INSERT INTO master.salnity
-(id, min, max, "unitId", "createdAt", "updatedAt", "createdBy", "updatedBy")
-VALUES(nextval('master.salnity_id_seq'::regclass), 25, 30, 5, now(), now(), 0, 0);
+(id, min, max, "defaultValue", "unitId", "createdAt", "updatedAt", "createdBy", "updatedBy", "step")
+VALUES(nextval('master.salnity_id_seq'::regclass), 25, 35, 28, 6, now(), now(), 1, 1, 1);
 
