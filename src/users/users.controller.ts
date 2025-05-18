@@ -13,10 +13,12 @@ import { PatchUserDto } from './dto/patch-user.dto';
 import { UsersService } from './providers/users.service';
 import { ApiOperation, ApiQuery } from '@nestjs/swagger';
 import { GetUsersDto } from './dto/get-users.dto';
+import { AuthType } from 'src/auth/enums/auth-type.enum';
+import { Auth } from 'src/auth/decorator/auth.decorator';
 
 @Controller('users')
 export class UsersController {
-  constructor(private readonly usersService: UsersService) {}
+  constructor(private readonly usersService: UsersService) { }
 
   @Get()
   @ApiOperation({
@@ -34,6 +36,7 @@ export class UsersController {
     return this.usersService.findAll(getUsersDto);
   }
 
+  @Auth(AuthType.None)
   @Post()
   @UseInterceptors(ClassSerializerInterceptor)
   public createUsers(@Body() createUserDto: CreateUserDto) {

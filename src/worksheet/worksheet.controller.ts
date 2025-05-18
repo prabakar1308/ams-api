@@ -26,7 +26,7 @@ export class WorksheetController {
   constructor(
     private readonly worksheetService: WorksheetService,
     private readonly restockService: RestockService,
-  ) {}
+  ) { }
 
   /** Get All Worksheets */
   @ApiOperation({

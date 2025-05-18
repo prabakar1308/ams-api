@@ -49,6 +49,10 @@ INSERT INTO master.unit
 ("createdBy", "updatedBy", id, value, description, "createdAt", "updatedAt")
 VALUES(1, 1, nextval('master.unit_id_seq'::regclass), 'PPT', 'Parts per thousand', now(), now());
 
+---- Worksheet Unit -----
+INSERT INTO master.worksheet_unit
+("createdBy", "updatedBy", id, value, brand, specs, "createdAt", "updatedAt")
+VALUES(1, 1, 1, 'Tins', 'Inve', '', now(), now());
 
 ---Tank Types ---
 

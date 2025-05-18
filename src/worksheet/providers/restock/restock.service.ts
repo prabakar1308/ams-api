@@ -3,19 +3,19 @@ import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Restock } from 'src/worksheet/entities/restock.entity';
 import { CreateRestockDto } from 'src/worksheet/dto/create-restock.dto';
-import { UnitService } from 'src/master/providers/unit.service';
 import { WorksheetService } from '../worksheet.service';
 import { ActiveRestock } from 'src/worksheet/interfaces/restock.interface';
+import { WorksheetUnitService } from 'src/master/providers/worksheet-unit.service';
 
 @Injectable()
 export class RestockService {
   constructor(
     @InjectRepository(Restock)
     private readonly restockRespository: Repository<Restock>,
-    private readonly unitService: UnitService,
+    private readonly unitService: WorksheetUnitService,
     @Inject(forwardRef(() => WorksheetService))
     private readonly worksheetService: WorksheetService,
-  ) {}
+  ) { }
 
   public async getActiveRestocks(status: string): Promise<ActiveRestock[]> {
     const restocks = await this.restockRespository.findBy({
@@ -61,7 +61,9 @@ export class RestockService {
   public async getRestockUnit(restock: CreateRestockDto) {
     let unit: Restock['unit'] | null = null;
     if (restock.unitId) {
-      const fetchedUnit = await this.unitService.getUnitById(restock.unitId);
+      const fetchedUnit = await this.unitService.getWorksheetUnitById(
+        restock.unitId,
+      );
 
       if (!fetchedUnit) {
         throw new Error('Unit Id not found');

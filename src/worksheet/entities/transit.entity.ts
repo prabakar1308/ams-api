@@ -10,7 +10,7 @@ import {
 import { BaseEntity } from 'src/common/entities/base.entity';
 import { Harvest } from './harvest.entity';
 import { UnitSector } from 'src/master/entities/unit-sector.entity';
-import { Unit } from 'src/master/entities/unit.entity';
+import { WorksheetUnit } from 'src/master/entities/worksheet-unit';
 
 @Entity({ schema: 'worksheet' })
 export class Transit extends BaseEntity {
@@ -31,7 +31,7 @@ export class Transit extends BaseEntity {
   })
   count: number;
 
-  @ManyToOne(() => Unit, (unit) => unit.id, { eager: true })
+  @ManyToOne(() => WorksheetUnit, (unit) => unit.id, { eager: true })
   @JoinColumn({ name: 'unitId' })
   unitId: number;
 
