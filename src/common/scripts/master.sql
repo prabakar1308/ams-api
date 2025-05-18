@@ -50,9 +50,19 @@ INSERT INTO master.unit
 VALUES(1, 1, nextval('master.unit_id_seq'::regclass), 'PPT', 'Parts per thousand', now(), now());
 
 ---- Worksheet Unit -----
+
 INSERT INTO master.worksheet_unit
 ("createdBy", "updatedBy", id, value, brand, specs, "createdAt", "updatedAt")
-VALUES(1, 1, 1, 'Tins', 'Inve', '', now(), now());
+VALUES(1, 1, 1, 'Millions', '', '', '2025-05-17 23:08:19.979', '2025-05-17 23:08:19.979');
+INSERT INTO master.worksheet_unit
+("createdBy", "updatedBy", id, value, brand, specs, "createdAt", "updatedAt")
+VALUES(1, 1, 2, 'Frozen Cups', NULL, NULL, '2025-05-18 13:03:25.357', '2025-05-18 13:03:25.357');
+INSERT INTO master.worksheet_unit
+("createdBy", "updatedBy", id, value, brand, specs, "createdAt", "updatedAt")
+VALUES(1, 1, 3, 'Tins', 'Inve', NULL, '2025-05-18 13:06:30.932', '2025-05-18 13:06:30.932');
+INSERT INTO master.worksheet_unit
+("createdBy", "updatedBy", id, value, brand, specs, "createdAt", "updatedAt")
+VALUES(1, 1, 4, 'Bags', 'Ria', '5 kgs', '2025-05-18 07:31:58.480', '2025-05-18 07:31:58.480');
 
 ---Tank Types ---
 
