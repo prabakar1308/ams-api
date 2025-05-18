@@ -57,10 +57,12 @@ export class WorksheetTransitManyProvider {
             (harvest?.countInStock ?? 0) - transit.count;
           patchHarvest.status = workSheetTableStatus.PARTIALLY_TRANSIT;
         }
-        const updatedHarvest = queryRunner.manager.create(
-          Harvest,
-          patchHarvest,
-        );
+
+        const updatedHarvest = queryRunner.manager.create(Harvest, {
+          ...patchHarvest,
+          measuredBy: harvest.measuredBy,
+          unit: harvest.unit,
+        });
         const updatedHarvestResponse =
           await queryRunner.manager.save(updatedHarvest);
         response = { ...response, updatedHarvest: updatedHarvestResponse };

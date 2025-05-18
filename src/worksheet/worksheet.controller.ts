@@ -13,20 +13,21 @@ import { ApiOperation } from '@nestjs/swagger';
 import { CreateWorksheetDto } from './dto/create-worksheet.dto';
 import { PatchWorksheetDto } from './dto/patch-worksheet.dto';
 import { WorksheetService } from './providers/worksheet.service';
-import { CreateHarvestDto } from './dto/create-harvest.dto';
+// import { CreateHarvestDto } from './dto/create-harvest.dto';
 import { GetWorksheetsDto } from './dto/get-worksheets.dto';
 import { PatchWorksheetsDto } from './dto/patch-worksheets.dto';
 import { GetWorksheetHistoryDto } from './dto/get-worksheet-history.dto';
 import { CreateHarvestsDto } from './dto/create-harvests.dto';
 import { CreateTransitsDto } from './dto/create-transits.dto';
 import { RestockService } from './providers/restock/restock.service';
+import { GetHarvestsDto } from './dto/get-harvests.dto';
 
 @Controller('worksheet')
 export class WorksheetController {
   constructor(
     private readonly worksheetService: WorksheetService,
     private readonly restockService: RestockService,
-  ) { }
+  ) {}
 
   /** Get All Worksheets */
   @ApiOperation({
@@ -115,14 +116,19 @@ export class WorksheetController {
     return this.worksheetService.softDeleteWorksheet(id);
   }
 
-  /** Create Harvest */
-  @ApiOperation({
-    summary: 'Creates a new harvest',
-  })
-  @Post('create-harvest')
-  public createHarvest(@Body() createHarvestDto: CreateHarvestDto) {
-    return this.worksheetService.createHarvest(createHarvestDto);
+  @Post('get-harvests')
+  public getHarvests(@Body() body: GetHarvestsDto) {
+    return this.worksheetService.getHarvests(body);
   }
+
+  /** Create Harvest */
+  // @ApiOperation({
+  //   summary: 'Creates a new harvest',
+  // })
+  // @Post('create-harvest')
+  // public createHarvest(@Body() createHarvestDto: CreateHarvestDto) {
+  //   return this.worksheetService.createHarvest(createHarvestDto);
+  // }
 
   @ApiOperation({
     summary: 'Creates multiple new harvest',

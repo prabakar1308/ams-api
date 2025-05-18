@@ -11,7 +11,6 @@ import {
 import { Worksheet } from './worksheet.entity';
 import { User } from 'src/users/user.entity';
 import { BaseEntity } from 'src/common/entities/base.entity';
-import { Unit } from 'src/master/entities/unit.entity';
 import { WorksheetUnit } from 'src/master/entities/worksheet-unit';
 
 @Entity({ schema: 'worksheet' })
@@ -37,12 +36,10 @@ export class Harvest extends BaseEntity {
   countInStock: number;
 
   @ManyToOne(() => WorksheetUnit, (unit) => unit.id, { eager: true })
-  @JoinColumn({ name: 'unitId' })
-  unitId: number;
+  unit: WorksheetUnit;
 
   @ManyToOne(() => User, (user) => user.id, { eager: true })
-  @JoinColumn({ name: 'measuredBy' })
-  measuredBy: number;
+  measuredBy: User;
 
   @Column({
     type: 'varchar',

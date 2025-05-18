@@ -18,6 +18,8 @@ import { workSheetTableStatus } from 'src/worksheet/enums/worksheet-table-status
 import { RestockService } from '../restock/restock.service';
 import { CreateTransitDto } from 'src/worksheet/dto/create-transit.dto';
 import { Transit } from 'src/worksheet/entities/transit.entity';
+import { UsersService } from 'src/users/providers/users.service';
+import { WorksheetUnitService } from 'src/master/providers/worksheet-unit.service';
 
 @Injectable()
 export class WorksheetHarvestManyProvider {
@@ -27,6 +29,8 @@ export class WorksheetHarvestManyProvider {
     private readonly worksheetUpdateManyProvider: WorksheetUpdateManyProvider,
     @Inject(forwardRef(() => RestockService))
     private readonly restockService: RestockService,
+    private readonly userService: UsersService,
+    private readonly unitService: WorksheetUnitService,
   ) {}
 
   public async createWorksheetHarvests(createHarvests: CreateHarvestsDto) {
@@ -58,8 +62,18 @@ export class WorksheetHarvestManyProvider {
           status = workSheetTableStatus.PARTIALLY_TRANSIT;
         }
 
+        const measuredBy = await this.userService.findOneById(
+          harvest.measuredBy,
+        );
+
+        const unit = await this.unitService.getWorksheetUnitById(
+          harvest.unitId,
+        );
+
         const newHarvest = queryRunner.manager.create(Harvest, {
           ...harvest,
+          measuredBy: measuredBy || undefined,
+          unit: unit || undefined,
           status,
         });
         const harvestResponse = await queryRunner.manager.save(newHarvest);

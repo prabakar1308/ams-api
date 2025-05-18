@@ -3,8 +3,8 @@ import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 
 import { CreateWorksheetDto } from '../dto/create-worksheet.dto';
-import { CreateHarvestDto } from '../dto/create-harvest.dto';
-import { CreateRestockDto } from '../dto/create-restock.dto';
+// import { CreateHarvestDto } from '../dto/create-harvest.dto';
+// import { CreateRestockDto } from '../dto/create-restock.dto';
 import { PatchWorksheetDto } from '../dto/patch-worksheet.dto';
 import { PatchWorksheetsDto } from '../dto/patch-worksheets.dto';
 import { GetWorksheetsDto } from '../dto/get-worksheets.dto';
@@ -27,6 +27,8 @@ import { PaginationProvider } from 'src/common/pagination/providers/pagination.p
 import { Paginated } from 'src/common/pagination/interfaces/paginated.interface';
 import { WorksheetStatusService } from 'src/master/providers/worksheet-status.service';
 import { RestockService } from './restock/restock.service';
+import { GetHarvestsDto } from '../dto/get-harvests.dto';
+import { GetHarvestsProvider } from './harvest/get-harvests.provider';
 
 @Injectable()
 export class WorksheetService {
@@ -45,6 +47,7 @@ export class WorksheetService {
     private readonly worksheetHarvestManyProvider: WorksheetHarvestManyProvider,
     private readonly worksheetTransitManyProvider: WorksheetTransitManyProvider,
     private readonly getWorksheetsProvider: GetWorksheetsProvider,
+    private readonly getHarvestsProvider: GetHarvestsProvider,
     private readonly restockService: RestockService,
   ) {}
 
@@ -166,29 +169,33 @@ export class WorksheetService {
     return await this.worksheetRespository.softDelete(id);
   }
 
-  public async createHarvest(harvest: CreateHarvestDto) {
-    let response = {};
-    const newHarvest = this.harvestRespository.create(harvest);
-    const harvestResponse = await this.harvestRespository.save(newHarvest);
-    response = { ...response, harvest: harvestResponse };
-    // If restock count is greater than 0, create a new restock entry
-    if (harvest.restockCount > 0) {
-      const restock = new CreateRestockDto();
-      restock.worksheetId = newHarvest.worksheetId;
-      restock.harvestId = harvestResponse.id;
-      restock.count = harvest.restockCount;
-      restock.unitId = harvest.restockUnitId;
-      const restockResponse = await this.restockService.createRestock(restock);
-      response = { ...response, restock: restockResponse };
-    }
-
-    await this.updateWorksheet({
-      id: harvest.worksheetId,
-      statusId: harvest.statusId,
-    });
-
-    return response;
+  public async getHarvests(getHarvestsDto: GetHarvestsDto) {
+    return await this.getHarvestsProvider.getActiveHarvests(getHarvestsDto);
   }
+
+  // public async createHarvest(harvest: CreateHarvestDto) {
+  //   let response = {};
+  //   const newHarvest = this.harvestRespository.create(harvest);
+  //   const harvestResponse = await this.harvestRespository.save(newHarvest);
+  //   response = { ...response, harvest: harvestResponse };
+  //   // If restock count is greater than 0, create a new restock entry
+  //   if (harvest.restockCount > 0) {
+  //     const restock = new CreateRestockDto();
+  //     restock.worksheetId = newHarvest.worksheetId;
+  //     restock.harvestId = harvestResponse.id;
+  //     restock.count = harvest.restockCount;
+  //     restock.unitId = harvest.restockUnitId;
+  //     const restockResponse = await this.restockService.createRestock(restock);
+  //     response = { ...response, restock: restockResponse };
+  //   }
+
+  //   await this.updateWorksheet({
+  //     id: harvest.worksheetId,
+  //     statusId: harvest.statusId,
+  //   });
+
+  //   return response;
+  // }
 
   public async createWorksheetHarvests(createHarvestsDto: CreateHarvestsDto) {
     return await this.worksheetHarvestManyProvider.createWorksheetHarvests(

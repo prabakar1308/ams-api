@@ -24,7 +24,7 @@ export class GetWorksheetsProvider {
     private readonly tankService: TankService,
     private readonly tankTypeService: TankTypeService,
     private readonly configService: ConfigService,
-  ) { }
+  ) {}
 
   public async getActiveWorksheets(getWorksheetStatusDto: GetWorksheetsDto) {
     const tankDetails = await this.tankService.getTankDetails();
@@ -33,8 +33,8 @@ export class GetWorksheetsProvider {
     );
     const worksheets = tankType
       ? await this.worksheetRespository.findBy({
-        tankType: { id: tankType.id },
-      })
+          tankType: { id: tankType.id },
+        })
       : [];
     const worksheetCompletedStatusId = +this.configService.get(
       'WORKSHEET_COMPLETED_STATUS',
@@ -60,12 +60,12 @@ export class GetWorksheetsProvider {
     if (getWorksheetStatusDto.statusId) {
       activeWorksheets =
         getWorksheetStatusDto.statusId ===
-          (worksheetStatus.OPEN as typeof getWorksheetStatusDto.statusId)
+        (worksheetStatus.OPEN as typeof getWorksheetStatusDto.statusId)
           ? activeWorksheets.filter(({ worksheet }) => worksheet === null)
           : activeWorksheets.filter(
-            ({ worksheet }) =>
-              worksheet?.status.id === getWorksheetStatusDto.statusId,
-          );
+              ({ worksheet }) =>
+                worksheet?.status.id === getWorksheetStatusDto.statusId,
+            );
     }
     if (getWorksheetStatusDto.userId) {
       activeWorksheets = activeWorksheets.filter(
@@ -99,8 +99,8 @@ export class GetWorksheetsProvider {
 
       const dateInput =
         status &&
-          status.id &&
-          Number(status.id) === Number(worksheetStatus.READY_FOR_STOCKING)
+        status.id &&
+        Number(status.id) === Number(worksheetStatus.READY_FOR_STOCKING)
           ? createdAt
           : harvestTime;
 
@@ -142,7 +142,7 @@ export class GetWorksheetsProvider {
   private getUnitValue(unit: WorksheetUnit | undefined) {
     let unitName = '';
     if (unit) {
-      unitName = `${unit.value} - ${unit.brand}`;
+      unitName = unit.brand ? `${unit.value} - ${unit.brand}` : unit.value;
       if (unit.specs) unitName = `${unitName} (${unit.specs})`;
     }
     return unitName;
