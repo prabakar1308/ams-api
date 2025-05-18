@@ -18,7 +18,7 @@ export class Harvest extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @OneToOne(() => Worksheet)
+  @OneToOne(() => Worksheet, (worksheet) => worksheet.id, { eager: true })
   @JoinColumn({ name: 'worksheetId' })
   worksheetId: number;
 

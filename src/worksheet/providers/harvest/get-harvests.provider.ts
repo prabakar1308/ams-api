@@ -5,16 +5,20 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { WorksheetUnit } from 'src/master/entities/worksheet-unit';
 import { GetHarvestsDto } from 'src/worksheet/dto/get-harvests.dto';
 import { Harvest } from 'src/worksheet/entities/harvest.entity';
+import { Worksheet } from 'src/worksheet/entities/worksheet.entity';
 
 @Injectable()
 export class GetHarvestsProvider {
   constructor(
     @InjectRepository(Harvest)
     private readonly harvestRepository: Repository<Harvest>,
+    @InjectRepository(Worksheet)
+    private readonly worksheetRepository: Repository<Worksheet>,
   ) {}
 
   public async getActiveHarvests(getHarvestsDto: GetHarvestsDto) {
     console.log('getActiveHarvests', getHarvestsDto);
+
     const harvests = await this.harvestRepository.find({
       where: {
         unit: { id: getHarvestsDto.unitId },
@@ -24,16 +28,35 @@ export class GetHarvestsProvider {
 
     console.log('getActiveHarvests', harvests.length);
 
-    return harvests.map((harvest) => {
-      return {
-        ...harvest,
-        unit: { id: harvest.unit.id, value: this.getUnitValue(harvest.unit) },
-        measuredBy: {
-          id: harvest.measuredBy.id,
-          value: `${harvest.measuredBy.firstName} ${harvest.measuredBy.lastName}`,
-        },
-      };
-    });
+    return await Promise.all(
+      harvests.map(async (harvest) => {
+        const worksheet = await this.worksheetRepository.findOne({
+          where: { id: harvest.worksheetId },
+          relations: ['tankType', 'harvestType'],
+        });
+        console.log(worksheet);
+
+        const { tankType, harvestType, tankNumber, id } = worksheet || {};
+        return {
+          ...harvest,
+          unit: { id: harvest.unit.id, value: this.getUnitValue(harvest.unit) },
+          measuredBy: {
+            id: harvest.measuredBy.id,
+            value: `${harvest.measuredBy.firstName} ${harvest.measuredBy.lastName}`,
+          },
+          worksheet: {
+            tankNumber,
+            id,
+            tankType: tankType
+              ? { id: tankType.id, value: tankType.value }
+              : undefined,
+            harvestType: harvestType
+              ? { id: harvestType.id, value: harvestType.value }
+              : undefined,
+          },
+        };
+      }),
+    );
   }
 
   private getUnitValue(unit: WorksheetUnit | undefined) {
