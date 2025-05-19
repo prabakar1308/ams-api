@@ -72,10 +72,15 @@ export class WorksheetHarvestManyProvider {
           harvest.unitId,
         );
 
+        const worksheet = await queryRunner.manager.findOneBy(Worksheet, {
+          id: harvest.worksheetId,
+        });
+
         const newHarvest = queryRunner.manager.create(Harvest, {
           ...harvest,
           measuredBy: measuredBy || undefined,
           unit: unit || undefined,
+          worksheet: worksheet || undefined,
           status,
         });
         const harvestResponse = await queryRunner.manager.save(newHarvest);
@@ -83,7 +88,7 @@ export class WorksheetHarvestManyProvider {
 
         if (harvest.restockCount > 0) {
           const restock = new CreateRestockDto();
-          restock.worksheetId = newHarvest.worksheetId;
+          restock.worksheetId = newHarvest.worksheet.id;
           restock.harvestId = harvestResponse.id;
           restock.count = harvest.restockCount;
           restock.unitId = harvest.restockUnitId;
@@ -97,6 +102,7 @@ export class WorksheetHarvestManyProvider {
             ...restock,
             unit: unit || undefined,
             worksheet: worksheet || undefined,
+            harvest: harvestResponse,
           });
           const restockResponse = await queryRunner.manager.save(newRestock);
           response = { ...response, restock: restockResponse };

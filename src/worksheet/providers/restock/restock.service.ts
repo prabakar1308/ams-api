@@ -7,6 +7,8 @@ import { CreateRestockDto } from 'src/worksheet/dto/create-restock.dto';
 import { ActiveRestock } from 'src/worksheet/interfaces/restock.interface';
 import { WorksheetUnitService } from 'src/master/providers/worksheet-unit.service';
 import { WorksheetService } from '../worksheet.service';
+import { UsersService } from 'src/users/providers/users.service';
+import { getUnitValue } from 'src/worksheet/utils';
 
 @Injectable()
 export class RestockService {
@@ -16,29 +18,51 @@ export class RestockService {
     private readonly unitService: WorksheetUnitService,
     @Inject(forwardRef(() => WorksheetService))
     private readonly worksheetService: WorksheetService,
+    private readonly userService: UsersService,
   ) {}
 
   public async getActiveRestocks(status: string): Promise<ActiveRestock[]> {
     const restocks = await this.restockRespository.findBy({
       status,
     });
-    return restocks.map((restock) => {
-      const { worksheet, status, unit, count, id, createdBy, createdAt } =
-        restock;
-      return {
-        id,
-        createdAt,
-        createdBy,
-        status,
-        count,
-        unit: unit ? unit.value : '',
-        unitId: unit ? unit.id : 0,
-        worksheet: {
-          tankType: worksheet ? worksheet.tankType.value : '',
-          tankNumber: worksheet ? worksheet.tankNumber : 0,
-        },
-      };
-    });
+
+    // Use Promise.all to resolve all asynchronous operations
+    return await Promise.all(
+      restocks.map(async (restock) => {
+        const {
+          worksheet,
+          harvest,
+          status,
+          unit,
+          count,
+          id,
+          createdBy,
+          createdAt,
+        } = restock;
+
+        const userName = await this.userService.getUserNameById(createdBy);
+        return {
+          id,
+          createdAt,
+          createdBy: userName,
+          status,
+          count,
+          unit: unit ? unit.value : '',
+          unitId: unit ? unit.id : 0,
+          harvest: harvest
+            ? `${harvest.count} ${getUnitValue(harvest.unit)}`
+            : '',
+          worksheet: {
+            tankType: worksheet ? worksheet.tankType.value : '',
+            tankNumber: worksheet ? worksheet.tankNumber : 0,
+            harvestType: worksheet ? worksheet.harvestType.value : '',
+            inputValue: worksheet
+              ? `${worksheet.inputCount} ${getUnitValue(worksheet.inputUnit)}`
+              : '',
+          },
+        };
+      }),
+    );
   }
 
   public async getRestockWorksheet(restock: CreateRestockDto) {

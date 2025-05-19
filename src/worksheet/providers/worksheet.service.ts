@@ -29,6 +29,8 @@ import { WorksheetStatusService } from 'src/master/providers/worksheet-status.se
 import { RestockService } from './restock/restock.service';
 import { GetHarvestsDto } from '../dto/get-harvests.dto';
 import { GetHarvestsProvider } from './harvest/get-harvests.provider';
+import { GetTransitsDto } from '../dto/get-transits.dto';
+import { GetTransitsProvider } from './transit/get-transits.provider';
 
 @Injectable()
 export class WorksheetService {
@@ -48,6 +50,7 @@ export class WorksheetService {
     private readonly worksheetTransitManyProvider: WorksheetTransitManyProvider,
     private readonly getWorksheetsProvider: GetWorksheetsProvider,
     private readonly getHarvestsProvider: GetHarvestsProvider,
+    private readonly getTransitsProvider: GetTransitsProvider,
     private readonly restockService: RestockService,
   ) {}
 
@@ -201,6 +204,10 @@ export class WorksheetService {
     return await this.worksheetHarvestManyProvider.createWorksheetHarvests(
       createHarvestsDto,
     );
+  }
+
+  public async getTransits(getTransitsDto: GetTransitsDto) {
+    return await this.getTransitsProvider.getCurrentTransits(getTransitsDto);
   }
 
   public async createMultipleTransits(createTransitsDto: CreateTransitsDto) {

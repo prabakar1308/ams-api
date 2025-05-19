@@ -10,12 +10,16 @@ import { Transit } from '../../entities/transit.entity';
 import { CreateTransitsDto } from '../../dto/create-transits.dto';
 import { PatchHarvestDto } from '../../dto/patch-harvest.dto';
 import { workSheetTableStatus } from '../../enums/worksheet-table-status.enum';
+import { WorksheetUnitService } from 'src/master/providers/worksheet-unit.service';
+import { UnitSectorService } from 'src/master/providers/unit-sector.service';
 
 @Injectable()
 export class WorksheetTransitManyProvider {
   constructor(
     // inject datasource
     private readonly datasource: DataSource,
+    private unitService: WorksheetUnitService,
+    private readonly unitSectorService: UnitSectorService,
   ) {}
 
   public async createMultipleTransits(createTransits: CreateTransitsDto) {
@@ -47,7 +51,20 @@ export class WorksheetTransitManyProvider {
       }
 
       for (const transit of createTransits.transits) {
-        const newTransit = queryRunner.manager.create(Transit, transit);
+        const unit = await this.unitService.getWorksheetUnitById(
+          transit.unitId,
+        );
+
+        const unitSector = await this.unitSectorService.getUnitSectorById(
+          transit.unitSectorId,
+        );
+
+        const newTransit = queryRunner.manager.create(Transit, {
+          ...transit,
+          unit: unit || undefined,
+          harvest,
+          unitSector: unitSector || undefined,
+        });
         const transitResponse = await queryRunner.manager.save(newTransit);
         transitCount += transit.count;
 

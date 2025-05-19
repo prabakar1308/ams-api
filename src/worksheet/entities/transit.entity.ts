@@ -19,11 +19,11 @@ export class Transit extends BaseEntity {
 
   @ManyToOne(() => Harvest, (harvest) => harvest.id, { eager: true })
   @JoinColumn({ name: 'harvestId' })
-  harvestId: number;
+  harvest: Harvest;
 
   @ManyToOne(() => UnitSector, (unitSector) => unitSector.id, { eager: true })
   @JoinColumn({ name: 'unitSectorId' })
-  unitSectorId: number;
+  unitSector: UnitSector;
 
   @Column({
     type: 'integer',
@@ -33,7 +33,7 @@ export class Transit extends BaseEntity {
 
   @ManyToOne(() => WorksheetUnit, (unit) => unit.id, { eager: true })
   @JoinColumn({ name: 'unitId' })
-  unitId: number;
+  unit: WorksheetUnit;
 
   @CreateDateColumn()
   createdAt: Date;

@@ -21,6 +21,7 @@ import { CreateHarvestsDto } from './dto/create-harvests.dto';
 import { CreateTransitsDto } from './dto/create-transits.dto';
 import { RestockService } from './providers/restock/restock.service';
 import { GetHarvestsDto } from './dto/get-harvests.dto';
+import { GetTransitsDto } from './dto/get-transits.dto';
 
 @Controller('worksheet')
 export class WorksheetController {
@@ -136,6 +137,11 @@ export class WorksheetController {
   @Post('create-multiple-harvest')
   public createHarvests(@Body() createHarvestsDto: CreateHarvestsDto) {
     return this.worksheetService.createWorksheetHarvests(createHarvestsDto);
+  }
+
+  @Post('get-transits')
+  public getTransits(@Body() body: GetTransitsDto) {
+    return this.worksheetService.getTransits(body);
   }
 
   @ApiOperation({

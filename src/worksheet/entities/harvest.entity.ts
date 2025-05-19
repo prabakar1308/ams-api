@@ -20,7 +20,7 @@ export class Harvest extends BaseEntity {
 
   @OneToOne(() => Worksheet, (worksheet) => worksheet.id, { eager: true })
   @JoinColumn({ name: 'worksheetId' })
-  worksheetId: number;
+  worksheet: Worksheet;
 
   @Column({
     type: 'integer',

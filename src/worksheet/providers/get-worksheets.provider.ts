@@ -7,7 +7,6 @@ import { TankService } from 'src/master/providers/tank.service';
 import { TankTypeService } from 'src/master/providers/tank-type.service';
 import { worksheetStatus } from 'src/dashboard/enums/worksheet-status.enum';
 import { getDateDifference } from 'src/common/utils/generic-utils';
-import { WorksheetUnit } from 'src/master/entities/worksheet-unit';
 import {
   ActiveWorksheet,
   WorksheetParameters,
@@ -15,6 +14,7 @@ import {
 } from '../interfaces/active-worksheet.interface';
 import { GetWorksheetsDto } from '../dto/get-worksheets.dto';
 import { Worksheet } from '../entities/worksheet.entity';
+import { getUnitValue } from '../utils';
 
 @Injectable()
 export class GetWorksheetsProvider {
@@ -105,7 +105,7 @@ export class GetWorksheetsProvider {
           : harvestTime;
 
       const parameters: WorksheetParameters[] = [];
-      const inputValue = `${inputCount} ${this.getUnitValue(inputUnit)}`;
+      const inputValue = `${inputCount} ${getUnitValue(inputUnit)}`;
 
       parameters.push({ label: 'Input', value: inputValue });
       if (ph) parameters.push({ label: 'PH', value: ph.toString() });
@@ -137,14 +137,5 @@ export class GetWorksheetsProvider {
         parameters,
       };
     });
-  }
-
-  private getUnitValue(unit: WorksheetUnit | undefined) {
-    let unitName = '';
-    if (unit) {
-      unitName = unit.brand ? `${unit.value} - ${unit.brand}` : unit.value;
-      if (unit.specs) unitName = `${unitName} (${unit.specs})`;
-    }
-    return unitName;
   }
 }
