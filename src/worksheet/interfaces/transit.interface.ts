@@ -4,6 +4,7 @@ export interface TransitResponse {
   createdBy: string;
   harvestCount: string;
   transitCount: string;
+  staffInCharge?: string;
   unitSector: {
     name?: string;
     location?: string;

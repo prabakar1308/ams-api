@@ -35,6 +35,13 @@ export class Transit extends BaseEntity {
   @JoinColumn({ name: 'unitId' })
   unit: WorksheetUnit;
 
+  @Column({
+    type: 'varchar',
+    length: 255,
+    nullable: true,
+  })
+  staffInCharge: string;
+
   @CreateDateColumn()
   createdAt: Date;
 

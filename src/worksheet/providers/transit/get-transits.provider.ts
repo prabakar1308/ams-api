@@ -39,8 +39,16 @@ export class GetTransitsProvider {
     // Transform the transits into the desired format
     return await Promise.all(
       transits.map(async (transit) => {
-        const { harvest, createdAt, id, count, unit, unitSector, createdBy } =
-          transit;
+        const {
+          harvest,
+          createdAt,
+          id,
+          count,
+          unit,
+          unitSector,
+          createdBy,
+          staffInCharge,
+        } = transit;
 
         const userName = await this.userService.getUserNameById(createdBy);
 
@@ -48,6 +56,7 @@ export class GetTransitsProvider {
           id,
           createdAt,
           createdBy: userName,
+          staffInCharge,
           harvestCount: harvest
             ? `${harvest.count} ${getUnitValue(harvest.unit)}`
             : 'NA',
