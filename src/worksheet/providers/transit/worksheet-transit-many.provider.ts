@@ -6,8 +6,8 @@ import {
 import { DataSource } from 'typeorm';
 
 import { Harvest } from '../../entities/harvest.entity';
-import { CreateTransitsDto } from '../../dto/create-transits.dto';
 import { Transit } from '../../entities/transit.entity';
+import { CreateTransitsDto } from '../../dto/create-transits.dto';
 import { PatchHarvestDto } from '../../dto/patch-harvest.dto';
 import { workSheetTableStatus } from '../../enums/worksheet-table-status.enum';
 
@@ -19,7 +19,10 @@ export class WorksheetTransitManyProvider {
   ) {}
 
   public async createMultipleTransits(createTransits: CreateTransitsDto) {
-    const results: Array<{ transit?: Transit; updatedHarvest?: Harvest }> = [];
+    // const results: Array<{ transit?: Transit; updatedHarvest?: Harvest }> = [];
+    const results: { transit: Transit[]; updatedHarvest?: Harvest } = {
+      transit: [],
+    };
     // create query runner instance
     const queryRunner = this.datasource.createQueryRunner();
 
@@ -31,44 +34,47 @@ export class WorksheetTransitManyProvider {
     } catch {
       throw new RequestTimeoutException('Could not connect to the database.');
     }
-    try {
-      for (const transit of createTransits.transits) {
-        let response = {};
 
+    try {
+      let transitCount = 0;
+
+      const harvest = await queryRunner.manager.findOneBy(Harvest, {
+        id: createTransits.harvestId,
+      });
+
+      if (!harvest) {
+        throw new Error('Harvest not found');
+      }
+
+      for (const transit of createTransits.transits) {
         const newTransit = queryRunner.manager.create(Transit, transit);
         const transitResponse = await queryRunner.manager.save(newTransit);
-        response = { ...response, transit: transitResponse };
+        transitCount += transit.count;
 
-        const harvest = await queryRunner.manager.findOneBy(Harvest, {
-          id: transit.harvestId,
-        });
-
-        if (!harvest) {
-          throw new Error('Harvest not found');
-        }
-
-        const patchHarvest = new PatchHarvestDto();
-        patchHarvest.id = harvest.id;
-        if (harvest?.countInStock === transit.count) {
-          patchHarvest.countInStock = 0;
-          patchHarvest.status = workSheetTableStatus.COMPLETED;
-        } else if ((harvest?.countInStock ?? 0) > transit.count) {
-          patchHarvest.countInStock =
-            (harvest?.countInStock ?? 0) - transit.count;
-          patchHarvest.status = workSheetTableStatus.PARTIALLY_TRANSIT;
-        }
-
-        const updatedHarvest = queryRunner.manager.create(Harvest, {
-          ...patchHarvest,
-          measuredBy: harvest.measuredBy,
-          unit: harvest.unit,
-        });
-        const updatedHarvestResponse =
-          await queryRunner.manager.save(updatedHarvest);
-        response = { ...response, updatedHarvest: updatedHarvestResponse };
-
-        results.push(response);
+        // Ensure the response matches the Transit type
+        results.transit.push(transitResponse);
       }
+
+      // update harvest status
+      const patchHarvest = new PatchHarvestDto();
+      patchHarvest.id = harvest.id;
+      if (harvest?.countInStock === transitCount) {
+        patchHarvest.countInStock = 0;
+        patchHarvest.status = workSheetTableStatus.COMPLETED;
+      } else if ((harvest?.countInStock ?? 0) > transitCount) {
+        patchHarvest.countInStock = (harvest?.countInStock ?? 0) - transitCount;
+        patchHarvest.status = workSheetTableStatus.PARTIALLY_TRANSIT;
+      }
+
+      const updatedHarvest = queryRunner.manager.create(Harvest, {
+        ...patchHarvest,
+        measuredBy: harvest.measuredBy,
+        unit: harvest.unit,
+      });
+      const updatedHarvestResponse =
+        await queryRunner.manager.save(updatedHarvest);
+
+      results.updatedHarvest = updatedHarvestResponse;
 
       // if sucessfull, commit
       await queryRunner.commitTransaction();

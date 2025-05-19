@@ -17,8 +17,6 @@ export class GetHarvestsProvider {
   ) {}
 
   public async getActiveHarvests(getHarvestsDto: GetHarvestsDto) {
-    console.log('getActiveHarvests', getHarvestsDto);
-
     const harvests = await this.harvestRepository.find({
       where: {
         unit: { id: getHarvestsDto.unitId },
@@ -26,15 +24,12 @@ export class GetHarvestsProvider {
       },
     });
 
-    console.log('getActiveHarvests', harvests.length);
-
     return await Promise.all(
       harvests.map(async (harvest) => {
         const worksheet = await this.worksheetRepository.findOne({
           where: { id: harvest.worksheetId },
           relations: ['tankType', 'harvestType'],
         });
-        console.log(worksheet);
 
         const { tankType, harvestType, tankNumber, id } = worksheet || {};
         return {

@@ -1,11 +1,12 @@
 import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
+
 import { Restock } from 'src/worksheet/entities/restock.entity';
 import { CreateRestockDto } from 'src/worksheet/dto/create-restock.dto';
-import { WorksheetService } from '../worksheet.service';
 import { ActiveRestock } from 'src/worksheet/interfaces/restock.interface';
 import { WorksheetUnitService } from 'src/master/providers/worksheet-unit.service';
+import { WorksheetService } from '../worksheet.service';
 
 @Injectable()
 export class RestockService {
@@ -15,13 +16,12 @@ export class RestockService {
     private readonly unitService: WorksheetUnitService,
     @Inject(forwardRef(() => WorksheetService))
     private readonly worksheetService: WorksheetService,
-  ) { }
+  ) {}
 
   public async getActiveRestocks(status: string): Promise<ActiveRestock[]> {
     const restocks = await this.restockRespository.findBy({
       status,
     });
-    console.log(restocks.length, status);
     return restocks.map((restock) => {
       const { worksheet, status, unit, count, id, createdBy, createdAt } =
         restock;

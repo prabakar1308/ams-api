@@ -118,13 +118,19 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjUsInVzZXJJZ
 
 POST http://localhost:3000/api/worksheet/create-multiple-transit
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjUsInVzZXJJZCI6IkdNSC1BTVMtMTcxMSIsImlhdCI6MTc0NTIwODE0MCwiZXhwIjoxNzUyOTg0MTQwLCJhdWQiOiJsb2NhbGhvc3Q6MzAwMCIsImlzcyI6ImxvY2FsaG9zdDozMDAwIn0.rpUgvrO5iGls0A-_H1s2v5nir1cnJMXvgyFqqtxMnzY
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjUsInVzZXJDb2RlIjoiR01ILUFNUy0xNzExIiwiaWF0IjoxNzQ3NjI3MTU4LCJleHAiOjE3NTI4ODY3NTgsImF1ZCI6ImxvY2FsaG9zdDozMDAwIiwiaXNzIjoibG9jYWxob3N0OjMwMDAifQ.-Y1_cLTugFGmNvvx9q75ZrnRLX4zmZN-osHrfjhcmRY
 
 {
   "transits": [{
-    "harvestId": 6,
+    "harvestId": 12,
     "unitSectorId": 1,
     "count": 20,
     "unitId": 1
-  }]
+  }, {
+    "harvestId": 12,
+    "unitSectorId": 2,
+    "count": 20,
+    "unitId": 1
+  }],
+  "harvestId": 12
 }
