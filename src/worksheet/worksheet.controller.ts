@@ -21,7 +21,7 @@ import { CreateHarvestsDto } from './dto/create-harvests.dto';
 import { CreateTransitsDto } from './dto/create-transits.dto';
 import { RestockService } from './providers/restock/restock.service';
 import { GetHarvestsDto } from './dto/get-harvests.dto';
-import { GetTransitsDto } from './dto/get-transits.dto';
+import { GetReportQueryDto } from './dto/get-report-query.dto';
 
 @Controller('worksheet')
 export class WorksheetController {
@@ -140,8 +140,18 @@ export class WorksheetController {
   }
 
   @Post('get-transits')
-  public getTransits(@Body() body: GetTransitsDto) {
+  public getTransits(@Body() body: GetReportQueryDto) {
     return this.worksheetService.getTransits(body);
+  }
+
+  @Post('get-transits-count')
+  public getTransitsCount(@Body() body: GetReportQueryDto) {
+    return this.worksheetService.getTransitCountTotal(body);
+  }
+
+  @Post('get-transits-by-unit-sector')
+  public getTransitsByUnitSector(@Body() body: GetReportQueryDto) {
+    return this.worksheetService.getTransitsByUnitSector(body);
   }
 
   @ApiOperation({

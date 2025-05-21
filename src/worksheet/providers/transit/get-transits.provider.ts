@@ -6,9 +6,10 @@ import { Harvest } from 'src/worksheet/entities/harvest.entity';
 import { Worksheet } from 'src/worksheet/entities/worksheet.entity';
 import { Transit } from 'src/worksheet/entities/transit.entity';
 import { getUnitValue } from 'src/worksheet/utils';
-import { GetTransitsDto } from 'src/worksheet/dto/get-transits.dto';
+import { GetReportQueryDto } from 'src/worksheet/dto/get-report-query.dto';
 import { UsersService } from 'src/users/providers/users.service';
 import { TransitResponse } from 'src/worksheet/interfaces/transit.interface';
+import { WorksheetUnit } from 'src/worksheet/enums/worksheet-units.enum';
 
 @Injectable()
 export class GetTransitsProvider {
@@ -23,9 +24,9 @@ export class GetTransitsProvider {
   ) {}
 
   public async getCurrentTransits(
-    getTransitsDto: GetTransitsDto,
+    getTransitsReportDto: GetReportQueryDto,
   ): Promise<TransitResponse[]> {
-    const days = getTransitsDto.days || 1;
+    const days = getTransitsReportDto.days || 1;
     const dateThreshold = new Date();
     dateThreshold.setHours(0, 0, 0, 0);
     dateThreshold.setDate(dateThreshold.getDate() - days);
@@ -68,5 +69,151 @@ export class GetTransitsProvider {
         };
       }),
     );
+  }
+
+  public async getTransitsTotalCount(
+    getTransitsReportDto: GetReportQueryDto,
+  ): Promise<number> {
+    const days = getTransitsReportDto.days || 1;
+    const unitId = getTransitsReportDto.unitId || 0;
+
+    // Calculate the date threshold and set time to 12:00 AM
+    const dateThreshold = new Date();
+    dateThreshold.setHours(0, 0, 0, 0);
+    dateThreshold.setDate(dateThreshold.getDate() - days);
+
+    // Fetch transits and calculate the total count
+    const transits = await this.transitRepository.find({
+      where: {
+        createdAt: MoreThanOrEqual(dateThreshold),
+        ...(unitId ? { unit: { id: unitId } } : {}),
+      },
+    });
+
+    // Calculate the total count
+    const totalCount = transits.reduce(
+      (sum, transit) => sum + (transit.count || 0),
+      0,
+    );
+
+    return totalCount;
+  }
+
+  public async getTransitsGroupedByUnitSectorAndShift(
+    getTransitsReportDto: GetReportQueryDto,
+  ): Promise<
+    {
+      unitSector: { name: string; location: string };
+      totalTransitCount: string;
+      millions: number;
+      frozenCups: number;
+      shifts: {
+        dayShift: TransitResponse[];
+        nightShift: TransitResponse[];
+      };
+    }[]
+  > {
+    const days = getTransitsReportDto.days || 1;
+    const unitId = getTransitsReportDto.unitId || 0;
+
+    // Calculate the date threshold and set time to 12:00 AM
+    const dateThreshold = new Date();
+    dateThreshold.setHours(0, 0, 0, 0);
+    dateThreshold.setDate(dateThreshold.getDate() - days);
+
+    // Fetch transits created within the last 'days'
+    const transits = await this.transitRepository.find({
+      where: {
+        createdAt: MoreThanOrEqual(dateThreshold),
+        ...(unitId ? { unit: { id: unitId } } : {}),
+      },
+    });
+
+    // Group transits by unitSector
+    const groupedTransits = await transits.reduce(
+      async (accPromise, transit) => {
+        const acc = await accPromise;
+        const { unitSector, createdAt } = transit;
+
+        if (!unitSector) {
+          return acc; // Skip if unitSector is not defined
+        }
+
+        const sectorKey = unitSector.id; //`${unitSector.name}-${unitSector.location}`;
+
+        if (!acc[sectorKey]) {
+          acc[sectorKey] = {
+            unitSector: {
+              name: unitSector.name,
+              location: unitSector.location || '',
+            },
+            totalTransitCount: 0,
+            millions: 0,
+            frozenCups: 0,
+            shifts: {
+              dayShift: [],
+              nightShift: [],
+            },
+          };
+        }
+
+        const transitCount = transit.count || 0;
+
+        acc[sectorKey].totalTransitCount += transitCount;
+
+        if (transit.unit.id === Number(WorksheetUnit.MILLIONS))
+          acc[sectorKey].millions += transitCount;
+        else if (transit.unit.id === Number(WorksheetUnit.FROZEN_CUPS))
+          acc[sectorKey].frozenCups += transitCount;
+
+        // Determine if the transit belongs to the day shift or night shift
+        const hours = createdAt.getHours();
+        const shift = hours >= 6 && hours < 18 ? 'dayShift' : 'nightShift';
+
+        const userName = await this.userService.getUserNameById(
+          transit.createdBy,
+        );
+
+        acc[sectorKey].shifts[shift].push({
+          id: transit.id,
+          createdAt: transit.createdAt,
+          createdBy: userName,
+          staffInCharge: transit.staffInCharge,
+          harvestCount: transit.harvest
+            ? `${transit.harvest.count} ${getUnitValue(transit.harvest.unit)}`
+            : 'NA',
+          transitCount: transit.count
+            ? `${transit.count} ${getUnitValue(transit.unit)}`
+            : 'NA',
+          unitSector: {
+            name: unitSector.name,
+            location: unitSector.location,
+          },
+        });
+
+        return acc;
+      },
+      Promise.resolve(
+        {} as Record<
+          string,
+          {
+            unitSector: { name: string; location: string };
+            totalTransitCount: number;
+            millions: number;
+            frozenCups: number;
+            shifts: {
+              dayShift: TransitResponse[];
+              nightShift: TransitResponse[];
+            };
+          }
+        >,
+      ),
+    );
+
+    // Convert grouped object to an array and format totalTransitCount
+    return Object.values(groupedTransits).map((group) => ({
+      ...group,
+      totalTransitCount: `${group.totalTransitCount} units`,
+    }));
   }
 }

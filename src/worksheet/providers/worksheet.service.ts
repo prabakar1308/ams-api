@@ -29,7 +29,7 @@ import { WorksheetStatusService } from 'src/master/providers/worksheet-status.se
 import { RestockService } from './restock/restock.service';
 import { GetHarvestsDto } from '../dto/get-harvests.dto';
 import { GetHarvestsProvider } from './harvest/get-harvests.provider';
-import { GetTransitsDto } from '../dto/get-transits.dto';
+import { GetReportQueryDto } from '../dto/get-report-query.dto';
 import { GetTransitsProvider } from './transit/get-transits.provider';
 
 @Injectable()
@@ -76,6 +76,12 @@ export class WorksheetService {
   public async getActiveWorksheets(getWorksheetStatusDto: GetWorksheetsDto) {
     return await this.getWorksheetsProvider.getActiveWorksheets(
       getWorksheetStatusDto,
+    );
+  }
+
+  public async getActiveWorksheetsByTankType(tankTypeId: number) {
+    return await this.getWorksheetsProvider.getActiveWorksheetsByTankType(
+      tankTypeId,
     );
   }
 
@@ -206,8 +212,24 @@ export class WorksheetService {
     );
   }
 
-  public async getTransits(getTransitsDto: GetTransitsDto) {
-    return await this.getTransitsProvider.getCurrentTransits(getTransitsDto);
+  public async getTransits(getTransitsReportDto: GetReportQueryDto) {
+    return await this.getTransitsProvider.getCurrentTransits(
+      getTransitsReportDto,
+    );
+  }
+
+  public async getTransitCountTotal(getTransitsReportDto: GetReportQueryDto) {
+    return await this.getTransitsProvider.getTransitsTotalCount(
+      getTransitsReportDto,
+    );
+  }
+
+  public async getTransitsByUnitSector(
+    getTransitsReportDto: GetReportQueryDto,
+  ) {
+    return await this.getTransitsProvider.getTransitsGroupedByUnitSectorAndShift(
+      getTransitsReportDto,
+    );
   }
 
   public async createMultipleTransits(createTransitsDto: CreateTransitsDto) {

@@ -122,6 +122,24 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjUsInVzZXJJZ
     "days": 3
 }
 
+POST http://localhost:3000/api/worksheet/get-transits-count
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjUsInVzZXJJZCI6IkdNSC1BTVMtMTcxMSIsImlhdCI6MTc0NTIwODE0MCwiZXhwIjoxNzUyOTg0MTQwLCJhdWQiOiJsb2NhbGhvc3Q6MzAwMCIsImlzcyI6ImxvY2FsaG9zdDozMDAwIn0.rpUgvrO5iGls0A-_H1s2v5nir1cnJMXvgyFqqtxMnzY
+
+{
+    "days": 6,
+    "unitId": 1
+}
+
+POST http://localhost:3000/api/worksheet/get-transits-by-unit-sector
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjUsInVzZXJJZCI6IkdNSC1BTVMtMTcxMSIsImlhdCI6MTc0NTIwODE0MCwiZXhwIjoxNzUyOTg0MTQwLCJhdWQiOiJsb2NhbGhvc3Q6MzAwMCIsImlzcyI6ImxvY2FsaG9zdDozMDAwIn0.rpUgvrO5iGls0A-_H1s2v5nir1cnJMXvgyFqqtxMnzY
+
+{
+    "days": 6,
+    "unitId": 2
+}
+
 
 POST http://localhost:3000/api/worksheet/create-multiple-transit
 Content-Type: application/json
@@ -129,17 +147,17 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjUsInVzZ
 
 {
   "transits": [{
-    "harvestId": 12,
+    "harvestId": 15,
     "unitSectorId": 1,
-    "count": 20,
+    "count": 40,
     "unitId": 1,
   "staffInCharge": ""
   }, {
-    "harvestId": 12,
+    "harvestId": 15,
     "unitSectorId": 2,
-    "count": 20,
+    "count": 10,
     "unitId": 1,
   "staffInCharge": ""
   }],
-  "harvestId": 12
+  "harvestId": 15
 }

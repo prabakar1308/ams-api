@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { Repository } from 'typeorm';
+import { Not, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 
 import { TankService } from 'src/master/providers/tank.service';
@@ -137,5 +137,23 @@ export class GetWorksheetsProvider {
         parameters,
       };
     });
+  }
+
+  public async getActiveWorksheetsByTankType(
+    tankTypeId: number,
+  ): Promise<Worksheet[]> {
+    const worksheetCompletedStatusId = +this.configService.get(
+      'WORKSHEET_COMPLETED_STATUS',
+    );
+
+    // Fetch worksheets where tankType matches and status is not completed
+    const worksheets = await this.worksheetRespository.find({
+      where: {
+        tankType: { id: tankTypeId },
+        status: { id: Not(worksheetCompletedStatusId) },
+      },
+    });
+
+    return worksheets;
   }
 }

@@ -2,13 +2,17 @@ import { IntersectionType } from '@nestjs/swagger';
 import { IsInt, IsOptional } from 'class-validator';
 import { PaginationQueryDto } from 'src/common/pagination/dtos/pagination-query.dto';
 
-class GetTranistsBaseDto {
+class GetReportQueryBaseDto {
   @IsInt()
   @IsOptional()
   days?: number;
+
+  @IsInt()
+  @IsOptional()
+  unitId?: number;
 }
 
-export class GetTransitsDto extends IntersectionType(
-  GetTranistsBaseDto,
+export class GetReportQueryDto extends IntersectionType(
+  GetReportQueryBaseDto,
   PaginationQueryDto,
 ) {}
