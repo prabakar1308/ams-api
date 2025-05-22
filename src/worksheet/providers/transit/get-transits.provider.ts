@@ -71,6 +71,7 @@ export class GetTransitsProvider {
     );
   }
 
+  // For Dashboard Count
   public async getTransitsTotalCount(
     getTransitsReportDto: GetReportQueryDto,
   ): Promise<number> {

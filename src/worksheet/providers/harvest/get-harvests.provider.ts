@@ -6,6 +6,7 @@ import { GetHarvestsDto } from 'src/worksheet/dto/get-harvests.dto';
 import { Harvest } from 'src/worksheet/entities/harvest.entity';
 import { Worksheet } from 'src/worksheet/entities/worksheet.entity';
 import { getUnitValue } from 'src/worksheet/utils';
+import { workSheetTableStatus } from 'src/worksheet/enums/worksheet-table-status.enum';
 
 @Injectable()
 export class GetHarvestsProvider {
@@ -16,11 +17,42 @@ export class GetHarvestsProvider {
     private readonly worksheetRepository: Repository<Worksheet>,
   ) {}
 
+  // For Dashboard Count
+  public async getTotalCountInStockOfActiveHarvests(
+    getHarvestsDto: GetHarvestsDto,
+  ): Promise<number> {
+    // Fetch active harvests based on the filters
+    const harvests = await this.harvestRepository.find({
+      where: {
+        unit: { id: getHarvestsDto.unitId },
+        status: In(
+          getHarvestsDto.statusIds || [
+            workSheetTableStatus.ACTIVE,
+            workSheetTableStatus.PARTIALLY_TRANSIT,
+          ],
+        ),
+      },
+    });
+
+    // Calculate the total value of countInStock
+    const totalCountInStock = harvests.reduce(
+      (sum, harvest) => sum + (harvest.countInStock || 0),
+      0,
+    );
+
+    return totalCountInStock;
+  }
+
   public async getActiveHarvests(getHarvestsDto: GetHarvestsDto) {
     const harvests = await this.harvestRepository.find({
       where: {
         unit: { id: getHarvestsDto.unitId },
-        status: In(getHarvestsDto.statusIds || []),
+        status: In(
+          getHarvestsDto.statusIds || [
+            workSheetTableStatus.ACTIVE,
+            workSheetTableStatus.PARTIALLY_TRANSIT,
+          ],
+        ),
       },
     });
 

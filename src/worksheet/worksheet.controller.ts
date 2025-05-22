@@ -59,6 +59,13 @@ export class WorksheetController {
     return this.worksheetService.getWorksheetHistory(query);
   }
 
+  @Get('get-worksheets-instock-count')
+  public getWorksheetsInStockCount(
+    @Query('tankTypeId', ParseIntPipe) tankTypeId: number,
+  ) {
+    return this.worksheetService.getWorksheetsInStockCount(tankTypeId);
+  }
+
   /** Create Worksheet */
   @ApiOperation({
     summary: 'Creates a new worksheet and assigned to user',
@@ -117,6 +124,11 @@ export class WorksheetController {
     return this.worksheetService.softDeleteWorksheet(id);
   }
 
+  @Post('get-harvests-count')
+  public getHarvestsCount(@Body() body: GetHarvestsDto) {
+    return this.worksheetService.getHarvestsCount(body);
+  }
+
   @Post('get-harvests')
   public getHarvests(@Body() body: GetHarvestsDto) {
     return this.worksheetService.getHarvests(body);
@@ -166,5 +178,11 @@ export class WorksheetController {
   @Get('get-restocks')
   public getRestocks(@Query('status') status: string) {
     return this.restockService.getActiveRestocks(status);
+  }
+
+  // Restock
+  @Get('get-restocks-count')
+  public getRestocksCount(@Query('status') status: string) {
+    return this.restockService.getTotalCountOfActiveRestocks(status);
   }
 }

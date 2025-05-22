@@ -73,6 +73,12 @@ export class WorksheetService {
     // });
   }
 
+  public async getWorksheetsInStockCount(tankTypeId: number) {
+    return await this.getWorksheetsProvider.getWorksheetsInStockingGroupedByInputUnit(
+      tankTypeId,
+    );
+  }
+
   public async getActiveWorksheets(getWorksheetStatusDto: GetWorksheetsDto) {
     return await this.getWorksheetsProvider.getActiveWorksheets(
       getWorksheetStatusDto,
@@ -176,6 +182,12 @@ export class WorksheetService {
       throw new Error('Worksheet not found');
     }
     return await this.worksheetRespository.softDelete(id);
+  }
+
+  public async getHarvestsCount(getHarvestsDto: GetHarvestsDto) {
+    return await this.getHarvestsProvider.getTotalCountInStockOfActiveHarvests(
+      getHarvestsDto,
+    );
   }
 
   public async getHarvests(getHarvestsDto: GetHarvestsDto) {

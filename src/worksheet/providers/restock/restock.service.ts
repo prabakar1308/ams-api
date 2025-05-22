@@ -21,6 +21,22 @@ export class RestockService {
     private readonly userService: UsersService,
   ) {}
 
+  // For Dashboard Count
+  public async getTotalCountOfActiveRestocks(status: string): Promise<number> {
+    // Fetch active restocks based on the status filter
+    const restocks = await this.restockRespository.find({
+      where: { status },
+    });
+
+    // Calculate the total value of count
+    const totalCount = restocks.reduce(
+      (sum, restock) => sum + (restock.count || 0),
+      0,
+    );
+
+    return totalCount;
+  }
+
   public async getActiveRestocks(status: string): Promise<ActiveRestock[]> {
     const restocks = await this.restockRespository.findBy({
       status,

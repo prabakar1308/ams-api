@@ -156,4 +156,47 @@ export class GetWorksheetsProvider {
 
     return worksheets;
   }
+
+  public async getWorksheetsInStockingGroupedByInputUnit(
+    tankTypeId: number,
+  ): Promise<
+    { inputUnitId: number; inputUnitName: string; totalInputCount: number }[]
+  > {
+    // Fetch worksheets with In Stocking status
+    const worksheets = await this.worksheetRespository.find({
+      where: {
+        tankType: { id: tankTypeId },
+        status: { id: worksheetStatus.IN_STOCKING },
+      },
+      // relations: ['inputUnit'], // Include inputUnit relation to access unit details
+    });
+
+    // Group by inputUnitId and calculate total inputCount
+    const groupedData = worksheets.reduce(
+      (acc, worksheet) => {
+        const inputUnitId = worksheet.inputUnit?.id;
+        const inputUnitName = worksheet.inputUnit?.value || 'Unknown Unit';
+        const inputCount = worksheet.inputCount || 0;
+
+        if (!inputUnitId) {
+          return acc; // Skip if inputUnitId is not defined
+        }
+
+        if (!acc[inputUnitId]) {
+          acc[inputUnitId] = { inputUnitId, inputUnitName, totalInputCount: 0 };
+        }
+
+        acc[inputUnitId].totalInputCount += inputCount;
+
+        return acc;
+      },
+      {} as Record<
+        number,
+        { inputUnitId: number; inputUnitName: string; totalInputCount: number }
+      >,
+    );
+
+    // Convert grouped data into an array
+    return Object.values(groupedData);
+  }
 }
