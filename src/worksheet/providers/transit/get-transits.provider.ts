@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { MoreThanOrEqual, Repository } from 'typeorm';
+import { MoreThanOrEqual, Repository, Between } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 
 import { Harvest } from 'src/worksheet/entities/harvest.entity';
@@ -109,24 +109,33 @@ export class GetTransitsProvider {
       millions: number;
       frozenCups: number;
       shifts: {
-        dayShift: TransitResponse[];
-        nightShift: TransitResponse[];
+        dayShift: { totalTransitCount: number; transits: TransitResponse[] };
+        nightShift: { totalTransitCount: number; transits: TransitResponse[] };
       };
     }[]
   > {
-    const days = getTransitsReportDto.days || 1;
-    const unitId = getTransitsReportDto.unitId || 0;
+    const { startDate, endDate, unitId } = getTransitsReportDto;
 
-    // Calculate the date threshold and set time to 12:00 AM
-    const dateThreshold = new Date();
-    dateThreshold.setHours(0, 0, 0, 0);
-    dateThreshold.setDate(dateThreshold.getDate() - days);
+    if (!startDate || !endDate) {
+      throw new Error('Both startDate and endDate must be provided');
+    }
 
-    // Fetch transits created within the last 'days'
+    // Parse the startDate and endDate
+    const start = new Date(startDate);
+    start.setHours(0, 0, 0, 0);
+
+    const end = new Date(endDate);
+    end.setHours(23, 59, 59, 999);
+    console.log(startDate, start, endDate, end);
+
+    // Fetch transits created within the date range
     const transits = await this.transitRepository.find({
       where: {
-        createdAt: MoreThanOrEqual(dateThreshold),
+        createdAt: Between(start, end),
         ...(unitId ? { unit: { id: unitId } } : {}),
+      },
+      order: {
+        createdAt: 'DESC',
       },
     });
 
@@ -140,7 +149,7 @@ export class GetTransitsProvider {
           return acc; // Skip if unitSector is not defined
         }
 
-        const sectorKey = unitSector.id; //`${unitSector.name}-${unitSector.location}`;
+        const sectorKey = unitSector.id;
 
         if (!acc[sectorKey]) {
           acc[sectorKey] = {
@@ -152,8 +161,8 @@ export class GetTransitsProvider {
             millions: 0,
             frozenCups: 0,
             shifts: {
-              dayShift: [],
-              nightShift: [],
+              dayShift: { totalTransitCount: 0, transits: [] },
+              nightShift: { totalTransitCount: 0, transits: [] },
             },
           };
         }
@@ -175,7 +184,7 @@ export class GetTransitsProvider {
           transit.createdBy,
         );
 
-        acc[sectorKey].shifts[shift].push({
+        acc[sectorKey].shifts[shift].transits.push({
           id: transit.id,
           createdAt: transit.createdAt,
           createdBy: userName,
@@ -190,7 +199,20 @@ export class GetTransitsProvider {
             name: unitSector.name,
             location: unitSector.location,
           },
+          worksheet: transit.harvest
+            ? {
+                tankType: transit.harvest.worksheet
+                  ? transit.harvest.worksheet.tankType.value
+                  : '',
+                tankNumber: transit.harvest.worksheet
+                  ? transit.harvest.worksheet.tankNumber
+                  : 0,
+              }
+            : undefined,
         });
+
+        // Increment the count for the respective shift
+        acc[sectorKey].shifts[shift].totalTransitCount += transitCount;
 
         return acc;
       },
@@ -203,8 +225,14 @@ export class GetTransitsProvider {
             millions: number;
             frozenCups: number;
             shifts: {
-              dayShift: TransitResponse[];
-              nightShift: TransitResponse[];
+              dayShift: {
+                totalTransitCount: number;
+                transits: TransitResponse[];
+              };
+              nightShift: {
+                totalTransitCount: number;
+                transits: TransitResponse[];
+              };
             };
           }
         >,

@@ -175,7 +175,7 @@ export class GetWorksheetsProvider {
     const groupedData = worksheets.reduce(
       (acc, worksheet) => {
         const inputUnitId = worksheet.inputUnit?.id;
-        const inputUnitName = worksheet.inputUnit?.value || 'Unknown Unit';
+        const inputUnitName = getUnitValue(worksheet.inputUnit);
         const inputCount = worksheet.inputCount || 0;
 
         if (!inputUnitId) {

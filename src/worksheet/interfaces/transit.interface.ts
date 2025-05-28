@@ -9,4 +9,8 @@ export interface TransitResponse {
     name?: string;
     location?: string;
   };
+  worksheet?: {
+    tankNumber: number;
+    tankType: string;
+  };
 }
