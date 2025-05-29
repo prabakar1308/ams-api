@@ -11,16 +11,16 @@ import {
 import { Worksheet } from './worksheet.entity';
 import { User } from 'src/users/user.entity';
 import { BaseEntity } from 'src/common/entities/base.entity';
-import { Unit } from 'src/master/entities/unit.entity';
+import { WorksheetUnit } from 'src/master/entities/worksheet-unit';
 
 @Entity({ schema: 'worksheet' })
 export class Harvest extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @OneToOne(() => Worksheet)
+  @OneToOne(() => Worksheet, (worksheet) => worksheet.id, { eager: true })
   @JoinColumn({ name: 'worksheetId' })
-  worksheetId: number;
+  worksheet: Worksheet;
 
   @Column({
     type: 'integer',
@@ -35,13 +35,11 @@ export class Harvest extends BaseEntity {
   })
   countInStock: number;
 
-  @ManyToOne(() => Unit, (unit) => unit.id, { eager: true })
-  @JoinColumn({ name: 'unitId' })
-  unitId: number;
+  @ManyToOne(() => WorksheetUnit, (unit) => unit.id, { eager: true })
+  unit: WorksheetUnit;
 
   @ManyToOne(() => User, (user) => user.id, { eager: true })
-  @JoinColumn({ name: 'measuredBy' })
-  measuredBy: number;
+  measuredBy: User;
 
   @Column({
     type: 'varchar',

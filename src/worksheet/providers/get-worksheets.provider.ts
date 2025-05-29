@@ -1,11 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { Repository } from 'typeorm';
+import { Not, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 
 import { TankService } from 'src/master/providers/tank.service';
 import { TankTypeService } from 'src/master/providers/tank-type.service';
 import { worksheetStatus } from 'src/dashboard/enums/worksheet-status.enum';
+import { getDateDifference } from 'src/common/utils/generic-utils';
 import {
   ActiveWorksheet,
   WorksheetParameters,
@@ -13,8 +14,7 @@ import {
 } from '../interfaces/active-worksheet.interface';
 import { GetWorksheetsDto } from '../dto/get-worksheets.dto';
 import { Worksheet } from '../entities/worksheet.entity';
-import { Unit } from 'src/master/entities/unit.entity';
-import { getDateDifference } from 'src/common/utils/generic-utils';
+import { getUnitValue } from '../utils';
 
 @Injectable()
 export class GetWorksheetsProvider {
@@ -105,7 +105,7 @@ export class GetWorksheetsProvider {
           : harvestTime;
 
       const parameters: WorksheetParameters[] = [];
-      const inputValue = `${inputCount} ${this.getUnitValue(inputUnit)}`;
+      const inputValue = `${inputCount} ${getUnitValue(inputUnit)}`;
 
       parameters.push({ label: 'Input', value: inputValue });
       if (ph) parameters.push({ label: 'PH', value: ph.toString() });
@@ -139,12 +139,64 @@ export class GetWorksheetsProvider {
     });
   }
 
-  private getUnitValue(unit: Unit | undefined) {
-    let unitName = '';
-    if (unit) {
-      unitName = unit.value;
-      if (unit.description) unitName = `${unitName} (${unit.description})`;
-    }
-    return unitName;
+  public async getActiveWorksheetsByTankType(
+    tankTypeId: number,
+  ): Promise<Worksheet[]> {
+    const worksheetCompletedStatusId = +this.configService.get(
+      'WORKSHEET_COMPLETED_STATUS',
+    );
+
+    // Fetch worksheets where tankType matches and status is not completed
+    const worksheets = await this.worksheetRespository.find({
+      where: {
+        tankType: { id: tankTypeId },
+        status: { id: Not(worksheetCompletedStatusId) },
+      },
+    });
+
+    return worksheets;
+  }
+
+  public async getWorksheetsInStockingGroupedByInputUnit(
+    tankTypeId: number,
+  ): Promise<
+    { inputUnitId: number; inputUnitName: string; totalInputCount: number }[]
+  > {
+    // Fetch worksheets with In Stocking status
+    const worksheets = await this.worksheetRespository.find({
+      where: {
+        tankType: { id: tankTypeId },
+        status: { id: worksheetStatus.IN_STOCKING },
+      },
+      // relations: ['inputUnit'], // Include inputUnit relation to access unit details
+    });
+
+    // Group by inputUnitId and calculate total inputCount
+    const groupedData = worksheets.reduce(
+      (acc, worksheet) => {
+        const inputUnitId = worksheet.inputUnit?.id;
+        const inputUnitName = getUnitValue(worksheet.inputUnit);
+        const inputCount = worksheet.inputCount || 0;
+
+        if (!inputUnitId) {
+          return acc; // Skip if inputUnitId is not defined
+        }
+
+        if (!acc[inputUnitId]) {
+          acc[inputUnitId] = { inputUnitId, inputUnitName, totalInputCount: 0 };
+        }
+
+        acc[inputUnitId].totalInputCount += inputCount;
+
+        return acc;
+      },
+      {} as Record<
+        number,
+        { inputUnitId: number; inputUnitName: string; totalInputCount: number }
+      >,
+    );
+
+    // Convert grouped data into an array
+    return Object.values(groupedData);
   }
 }

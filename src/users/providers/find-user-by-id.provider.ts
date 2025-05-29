@@ -32,4 +32,24 @@ export class FindUserByIdProvider {
 
     return user;
   }
+
+  public async getUserNameById(userId: number): Promise<string> {
+    let user: User | null;
+
+    try {
+      // Find the user by ID
+      user = await this.usersRepository.findOneBy({ id: userId });
+    } catch (error) {
+      throw new RequestTimeoutException(error, {
+        description: 'Could not fetch user',
+      });
+    }
+
+    if (!user) {
+      throw new UnauthorizedException('User does not exist');
+    }
+
+    // Return the user's name
+    return `${user.firstName} ${user.lastName}`;
+  }
 }

@@ -5,19 +5,23 @@ import {
   Injectable,
   RequestTimeoutException,
 } from '@nestjs/common';
-import { Worksheet } from '../../entities/worksheet.entity';
 import { DataSource } from 'typeorm';
-import { CreateHarvestsDto } from '../../dto/create-harvests.dto';
-import { Harvest } from '../../entities/harvest.entity';
-import { CreateRestockDto } from '../../dto/create-restock.dto';
-import { Restock } from '../../entities/restock.entity';
-import { WorksheetUpdateManyProvider } from '../worksheet-update-many.provider';
-import { PatchWorksheetDto } from '../../dto/patch-worksheet.dto';
-import { worksheetHistory } from '../../enums/worksheet-history-actions.enum';
-import { workSheetTableStatus } from 'src/worksheet/enums/worksheet-table-status.enum';
-import { RestockService } from '../restock/restock.service';
+
 import { CreateTransitDto } from 'src/worksheet/dto/create-transit.dto';
 import { Transit } from 'src/worksheet/entities/transit.entity';
+import { UsersService } from 'src/users/providers/users.service';
+import { WorksheetUnitService } from 'src/master/providers/worksheet-unit.service';
+import { workSheetTableStatus } from 'src/worksheet/enums/worksheet-table-status.enum';
+
+import { Worksheet } from '../../entities/worksheet.entity';
+import { Harvest } from '../../entities/harvest.entity';
+import { Restock } from '../../entities/restock.entity';
+import { CreateHarvestsDto } from '../../dto/create-harvests.dto';
+import { CreateRestockDto } from '../../dto/create-restock.dto';
+import { PatchWorksheetDto } from '../../dto/patch-worksheet.dto';
+import { WorksheetUpdateManyProvider } from '../worksheet-update-many.provider';
+import { worksheetHistory } from '../../enums/worksheet-history-actions.enum';
+import { RestockService } from '../restock/restock.service';
 
 @Injectable()
 export class WorksheetHarvestManyProvider {
@@ -27,6 +31,8 @@ export class WorksheetHarvestManyProvider {
     private readonly worksheetUpdateManyProvider: WorksheetUpdateManyProvider,
     @Inject(forwardRef(() => RestockService))
     private readonly restockService: RestockService,
+    private readonly userService: UsersService,
+    private readonly unitService: WorksheetUnitService,
   ) {}
 
   public async createWorksheetHarvests(createHarvests: CreateHarvestsDto) {
@@ -58,8 +64,23 @@ export class WorksheetHarvestManyProvider {
           status = workSheetTableStatus.PARTIALLY_TRANSIT;
         }
 
+        const measuredBy = await this.userService.findOneById(
+          harvest.measuredBy,
+        );
+
+        const unit = await this.unitService.getWorksheetUnitById(
+          harvest.unitId,
+        );
+
+        const worksheet = await queryRunner.manager.findOneBy(Worksheet, {
+          id: harvest.worksheetId,
+        });
+
         const newHarvest = queryRunner.manager.create(Harvest, {
           ...harvest,
+          measuredBy: measuredBy || undefined,
+          unit: unit || undefined,
+          worksheet: worksheet || undefined,
           status,
         });
         const harvestResponse = await queryRunner.manager.save(newHarvest);
@@ -67,7 +88,7 @@ export class WorksheetHarvestManyProvider {
 
         if (harvest.restockCount > 0) {
           const restock = new CreateRestockDto();
-          restock.worksheetId = newHarvest.worksheetId;
+          restock.worksheetId = newHarvest.worksheet.id;
           restock.harvestId = harvestResponse.id;
           restock.count = harvest.restockCount;
           restock.unitId = harvest.restockUnitId;
@@ -81,6 +102,7 @@ export class WorksheetHarvestManyProvider {
             ...restock,
             unit: unit || undefined,
             worksheet: worksheet || undefined,
+            harvest: harvestResponse,
           });
           const restockResponse = await queryRunner.manager.save(newRestock);
           response = { ...response, restock: restockResponse };

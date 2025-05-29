@@ -11,7 +11,7 @@ import {
 import { Worksheet } from './worksheet.entity';
 import { Harvest } from './harvest.entity';
 import { BaseEntity } from 'src/common/entities/base.entity';
-import { Unit } from 'src/master/entities/unit.entity';
+import { WorksheetUnit } from 'src/master/entities/worksheet-unit';
 
 @Entity({ schema: 'worksheet' })
 export class Restock extends BaseEntity {
@@ -22,9 +22,9 @@ export class Restock extends BaseEntity {
   @JoinColumn({ name: 'worksheetId' })
   worksheet: Worksheet;
 
-  @OneToOne(() => Harvest)
+  @OneToOne(() => Harvest, (harvest) => harvest.id, { eager: true })
   @JoinColumn({ name: 'harvestId' })
-  harvestId: number;
+  harvest: Harvest;
 
   @Column({
     type: 'integer',
@@ -32,8 +32,8 @@ export class Restock extends BaseEntity {
   })
   count: number;
 
-  @ManyToOne(() => Unit, (unit) => unit.id, { eager: true })
-  unit: Unit;
+  @ManyToOne(() => WorksheetUnit, (unit) => unit.id, { eager: true })
+  unit: WorksheetUnit;
 
   @Column({
     type: 'varchar',

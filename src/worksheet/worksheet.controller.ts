@@ -13,13 +13,15 @@ import { ApiOperation } from '@nestjs/swagger';
 import { CreateWorksheetDto } from './dto/create-worksheet.dto';
 import { PatchWorksheetDto } from './dto/patch-worksheet.dto';
 import { WorksheetService } from './providers/worksheet.service';
-import { CreateHarvestDto } from './dto/create-harvest.dto';
+// import { CreateHarvestDto } from './dto/create-harvest.dto';
 import { GetWorksheetsDto } from './dto/get-worksheets.dto';
 import { PatchWorksheetsDto } from './dto/patch-worksheets.dto';
 import { GetWorksheetHistoryDto } from './dto/get-worksheet-history.dto';
 import { CreateHarvestsDto } from './dto/create-harvests.dto';
 import { CreateTransitsDto } from './dto/create-transits.dto';
 import { RestockService } from './providers/restock/restock.service';
+import { GetHarvestsDto } from './dto/get-harvests.dto';
+import { GetReportQueryDto } from './dto/get-report-query.dto';
 
 @Controller('worksheet')
 export class WorksheetController {
@@ -55,6 +57,13 @@ export class WorksheetController {
   @Get('get-worksheet-history')
   public getWorksheetHistory(@Query() query: GetWorksheetHistoryDto) {
     return this.worksheetService.getWorksheetHistory(query);
+  }
+
+  @Get('get-worksheets-instock-count')
+  public getWorksheetsInStockCount(
+    @Query('tankTypeId', ParseIntPipe) tankTypeId: number,
+  ) {
+    return this.worksheetService.getWorksheetsInStockCount(tankTypeId);
   }
 
   /** Create Worksheet */
@@ -115,14 +124,24 @@ export class WorksheetController {
     return this.worksheetService.softDeleteWorksheet(id);
   }
 
-  /** Create Harvest */
-  @ApiOperation({
-    summary: 'Creates a new harvest',
-  })
-  @Post('create-harvest')
-  public createHarvest(@Body() createHarvestDto: CreateHarvestDto) {
-    return this.worksheetService.createHarvest(createHarvestDto);
+  @Post('get-harvests-count')
+  public getHarvestsCount(@Body() body: GetHarvestsDto) {
+    return this.worksheetService.getHarvestsCount(body);
   }
+
+  @Post('get-harvests')
+  public getHarvests(@Body() body: GetHarvestsDto) {
+    return this.worksheetService.getHarvests(body);
+  }
+
+  /** Create Harvest */
+  // @ApiOperation({
+  //   summary: 'Creates a new harvest',
+  // })
+  // @Post('create-harvest')
+  // public createHarvest(@Body() createHarvestDto: CreateHarvestDto) {
+  //   return this.worksheetService.createHarvest(createHarvestDto);
+  // }
 
   @ApiOperation({
     summary: 'Creates multiple new harvest',
@@ -130,6 +149,21 @@ export class WorksheetController {
   @Post('create-multiple-harvest')
   public createHarvests(@Body() createHarvestsDto: CreateHarvestsDto) {
     return this.worksheetService.createWorksheetHarvests(createHarvestsDto);
+  }
+
+  @Post('get-transits')
+  public getTransits(@Body() body: GetReportQueryDto) {
+    return this.worksheetService.getTransits(body);
+  }
+
+  @Post('get-transits-count')
+  public getTransitsCount(@Body() body: GetReportQueryDto) {
+    return this.worksheetService.getTransitCountTotal(body);
+  }
+
+  @Post('get-transits-by-unit-sector')
+  public getTransitsByUnitSector(@Body() body: GetReportQueryDto) {
+    return this.worksheetService.getTransitsByUnitSector(body);
   }
 
   @ApiOperation({
@@ -144,5 +178,11 @@ export class WorksheetController {
   @Get('get-restocks')
   public getRestocks(@Query('status') status: string) {
     return this.restockService.getActiveRestocks(status);
+  }
+
+  // Restock
+  @Get('get-restocks-count')
+  public getRestocksCount(@Query('status') status: string) {
+    return this.restockService.getTotalCountOfActiveRestocks(status);
   }
 }

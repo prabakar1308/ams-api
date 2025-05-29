@@ -88,6 +88,24 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjUsInVzZXJJZ
     "statusId": 4
 }
 
+POST http://localhost:3000/api/worksheet/get-harvests-count
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjUsInVzZXJJZCI6IkdNSC1BTVMtMTcxMSIsImlhdCI6MTc0NTIwODE0MCwiZXhwIjoxNzUyOTg0MTQwLCJhdWQiOiJsb2NhbGhvc3Q6MzAwMCIsImlzcyI6ImxvY2FsaG9zdDozMDAwIn0.rpUgvrO5iGls0A-_H1s2v5nir1cnJMXvgyFqqtxMnzY
+
+{
+    "unitId": 1,
+    "statusIds": ["A", "P"]
+}
+
+POST http://localhost:3000/api/worksheet/get-harvests
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjUsInVzZXJJZCI6IkdNSC1BTVMtMTcxMSIsImlhdCI6MTc0NTIwODE0MCwiZXhwIjoxNzUyOTg0MTQwLCJhdWQiOiJsb2NhbGhvc3Q6MzAwMCIsImlzcyI6ImxvY2FsaG9zdDozMDAwIn0.rpUgvrO5iGls0A-_H1s2v5nir1cnJMXvgyFqqtxMnzY
+
+{
+    "unitId": 2,
+    "statusIds": ["A", "P"]
+}
+
 POST http://localhost:3000/api/worksheet/create-multiple-harvest
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjUsInVzZXJJZCI6IkdNSC1BTVMtMTcxMSIsImlhdCI6MTc0NTIwODE0MCwiZXhwIjoxNzUyOTg0MTQwLCJhdWQiOiJsb2NhbGhvc3Q6MzAwMCIsImlzcyI6ImxvY2FsaG9zdDozMDAwIn0.rpUgvrO5iGls0A-_H1s2v5nir1cnJMXvgyFqqtxMnzY
@@ -105,17 +123,52 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjUsInVzZXJJZ
   }]
 }
 
-
-
-POST http://localhost:3000/api/worksheet/create-multiple-transit
+POST http://localhost:3000/api/worksheet/get-transits
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjUsInVzZXJJZCI6IkdNSC1BTVMtMTcxMSIsImlhdCI6MTc0NTIwODE0MCwiZXhwIjoxNzUyOTg0MTQwLCJhdWQiOiJsb2NhbGhvc3Q6MzAwMCIsImlzcyI6ImxvY2FsaG9zdDozMDAwIn0.rpUgvrO5iGls0A-_H1s2v5nir1cnJMXvgyFqqtxMnzY
 
 {
+    "days": 12
+}
+
+POST http://localhost:3000/api/worksheet/get-transits-count
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjUsInVzZXJJZCI6IkdNSC1BTVMtMTcxMSIsImlhdCI6MTc0NTIwODE0MCwiZXhwIjoxNzUyOTg0MTQwLCJhdWQiOiJsb2NhbGhvc3Q6MzAwMCIsImlzcyI6ImxvY2FsaG9zdDozMDAwIn0.rpUgvrO5iGls0A-_H1s2v5nir1cnJMXvgyFqqtxMnzY
+
+{
+    "days": 6,
+    "unitId": 2
+}
+
+POST http://localhost:3000/api/worksheet/get-transits-by-unit-sector
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjUsInVzZXJJZCI6IkdNSC1BTVMtMTcxMSIsImlhdCI6MTc0NTIwODE0MCwiZXhwIjoxNzUyOTg0MTQwLCJhdWQiOiJsb2NhbGhvc3Q6MzAwMCIsImlzcyI6ImxvY2FsaG9zdDozMDAwIn0.rpUgvrO5iGls0A-_H1s2v5nir1cnJMXvgyFqqtxMnzY
+
+{
+    "days": 20,
+    "unitId": 1,
+    "startDate": "2025-05-16",
+    "endDate": "2025-05-16"
+}
+
+
+POST http://localhost:3000/api/worksheet/create-multiple-transit
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjUsInVzZXJDb2RlIjoiR01ILUFNUy0xNzExIiwiaWF0IjoxNzQ3NjI3MTU4LCJleHAiOjE3NTI4ODY3NTgsImF1ZCI6ImxvY2FsaG9zdDozMDAwIiwiaXNzIjoibG9jYWxob3N0OjMwMDAifQ.-Y1_cLTugFGmNvvx9q75ZrnRLX4zmZN-osHrfjhcmRY
+
+{
   "transits": [{
-    "harvestId": 6,
+    "harvestId": 15,
     "unitSectorId": 1,
-    "count": 20,
-    "unitId": 1
-  }]
+    "count": 40,
+    "unitId": 1,
+  "staffInCharge": ""
+  }, {
+    "harvestId": 15,
+    "unitSectorId": 2,
+    "count": 10,
+    "unitId": 1,
+  "staffInCharge": ""
+  }],
+  "harvestId": 15
 }

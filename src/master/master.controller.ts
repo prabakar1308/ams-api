@@ -16,6 +16,7 @@ import { PatchUnitDto } from './dto/patch-unit.dto';
 import { UnitSectorService } from './providers/unit-sector.service';
 import { CreateUnitSectorDto } from './dto/create-unit-sector.dto';
 import { PatchUnitSectorDto } from './dto/patch-unit-sector.dto';
+import { WorksheetUnitService } from './providers/worksheet-unit.service';
 
 @Controller('master')
 export class MasterController {
@@ -29,7 +30,8 @@ export class MasterController {
     private readonly temperatureService: TemperatureService,
     private readonly unitService: UnitService,
     private readonly unitSectorService: UnitSectorService,
-  ) {}
+    private readonly worksheetUnitService: WorksheetUnitService,
+  ) { }
 
   /** Harvest Type - GET, PATCH */
   @Get('harvest-type')
@@ -136,5 +138,10 @@ export class MasterController {
     return this.worksheetStatusService.updateWorksheetStatus(
       patchWorksheetStatusDto,
     );
+  }
+
+  @Get('worksheet-unit')
+  public getWorksheetUnits() {
+    return this.worksheetUnitService.getWorksheetUnits();
   }
 }

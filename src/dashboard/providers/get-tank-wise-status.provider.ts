@@ -37,10 +37,8 @@ export class GetTankWiseStatusProvider {
     //   getWorksheetStatusDto.userId[0],
     // );
     const tankDetails = await this.tankService.getTankDetails();
-    const worksheets = await this.worksheetService.getWorksheets({
-      limit: 25,
-      page: 1,
-    });
+    const worksheets =
+      await this.worksheetService.getActiveWorksheetsByTankType(tankTypeId);
     const worksheetCompletedStatusId = +this.configService.get(
       'WORKSHEET_COMPLETED_STATUS',
     );
@@ -49,7 +47,7 @@ export class GetTankWiseStatusProvider {
     if (tankDetails) {
       const { min, max } = tankDetails;
       for (let index = +min; index <= max; index++) {
-        const filteredWorksheet = worksheets.data.filter(
+        const filteredWorksheet = worksheets.filter(
           (sheet) =>
             sheet.tankNumber === index &&
             sheet.tankType.id === tankTypeId &&
@@ -66,7 +64,6 @@ export class GetTankWiseStatusProvider {
         });
       }
     }
-
     return this.groupAndSum(tankStatuses);
   }
 
@@ -75,10 +72,8 @@ export class GetTankWiseStatusProvider {
     //   getWorksheetStatusDto.userId[0],
     // );
     const tankDetails = await this.tankService.getTankDetails();
-    const worksheets = await this.worksheetService.getWorksheets({
-      limit: 25,
-      page: 1,
-    });
+    const worksheets =
+      await this.worksheetService.getActiveWorksheetsByTankType(tankTypeId);
     const worksheetCompletedStatusId = +this.configService.get(
       'WORKSHEET_COMPLETED_STATUS',
     );
@@ -87,7 +82,7 @@ export class GetTankWiseStatusProvider {
     if (tankDetails) {
       const { min, max } = tankDetails;
       for (let index = +min; index <= max; index++) {
-        const filteredWorksheet = worksheets.data.filter(
+        const filteredWorksheet = worksheets.filter(
           (sheet) =>
             sheet.tankNumber === index &&
             sheet.tankType?.id === tankTypeId &&

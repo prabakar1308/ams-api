@@ -1,44 +1,84 @@
 import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
+
 import { Restock } from 'src/worksheet/entities/restock.entity';
 import { CreateRestockDto } from 'src/worksheet/dto/create-restock.dto';
-import { UnitService } from 'src/master/providers/unit.service';
-import { WorksheetService } from '../worksheet.service';
 import { ActiveRestock } from 'src/worksheet/interfaces/restock.interface';
+import { WorksheetUnitService } from 'src/master/providers/worksheet-unit.service';
+import { WorksheetService } from '../worksheet.service';
+import { UsersService } from 'src/users/providers/users.service';
+import { getUnitValue } from 'src/worksheet/utils';
 
 @Injectable()
 export class RestockService {
   constructor(
     @InjectRepository(Restock)
     private readonly restockRespository: Repository<Restock>,
-    private readonly unitService: UnitService,
+    private readonly unitService: WorksheetUnitService,
     @Inject(forwardRef(() => WorksheetService))
     private readonly worksheetService: WorksheetService,
+    private readonly userService: UsersService,
   ) {}
+
+  // For Dashboard Count
+  public async getTotalCountOfActiveRestocks(status: string): Promise<number> {
+    // Fetch active restocks based on the status filter
+    const restocks = await this.restockRespository.find({
+      where: { status },
+    });
+
+    // Calculate the total value of count
+    const totalCount = restocks.reduce(
+      (sum, restock) => sum + (restock.count || 0),
+      0,
+    );
+
+    return totalCount;
+  }
 
   public async getActiveRestocks(status: string): Promise<ActiveRestock[]> {
     const restocks = await this.restockRespository.findBy({
       status,
     });
-    console.log(restocks.length, status);
-    return restocks.map((restock) => {
-      const { worksheet, status, unit, count, id, createdBy, createdAt } =
-        restock;
-      return {
-        id,
-        createdAt,
-        createdBy,
-        status,
-        count,
-        unit: unit ? unit.value : '',
-        unitId: unit ? unit.id : 0,
-        worksheet: {
-          tankType: worksheet ? worksheet.tankType.value : '',
-          tankNumber: worksheet ? worksheet.tankNumber : 0,
-        },
-      };
-    });
+
+    // Use Promise.all to resolve all asynchronous operations
+    return await Promise.all(
+      restocks.map(async (restock) => {
+        const {
+          worksheet,
+          harvest,
+          status,
+          unit,
+          count,
+          id,
+          createdBy,
+          createdAt,
+        } = restock;
+
+        const userName = await this.userService.getUserNameById(createdBy);
+        return {
+          id,
+          createdAt,
+          createdBy: userName,
+          status,
+          count,
+          unit: unit ? unit.value : '',
+          unitId: unit ? unit.id : 0,
+          harvest: harvest
+            ? `${harvest.count} ${getUnitValue(harvest.unit)}`
+            : '',
+          worksheet: {
+            tankType: worksheet ? worksheet.tankType.value : '',
+            tankNumber: worksheet ? worksheet.tankNumber : 0,
+            harvestType: worksheet ? worksheet.harvestType.value : '',
+            inputValue: worksheet
+              ? `${worksheet.inputCount} ${getUnitValue(worksheet.inputUnit)}`
+              : '',
+          },
+        };
+      }),
+    );
   }
 
   public async getRestockWorksheet(restock: CreateRestockDto) {
@@ -61,7 +101,9 @@ export class RestockService {
   public async getRestockUnit(restock: CreateRestockDto) {
     let unit: Restock['unit'] | null = null;
     if (restock.unitId) {
-      const fetchedUnit = await this.unitService.getUnitById(restock.unitId);
+      const fetchedUnit = await this.unitService.getWorksheetUnitById(
+        restock.unitId,
+      );
 
       if (!fetchedUnit) {
         throw new Error('Unit Id not found');

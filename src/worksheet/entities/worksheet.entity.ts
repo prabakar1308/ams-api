@@ -1,7 +1,6 @@
 import { BaseEntity } from 'src/common/entities/base.entity';
 import { HarvestType } from 'src/master/entities/harvest-type.entity';
 import { TankType } from 'src/master/entities/tank-type.entity';
-import { Unit } from 'src/master/entities/unit.entity';
 import { WorksheetStatus } from 'src/master/entities/worksheet-status.entity';
 import { User } from 'src/users/user.entity';
 import {
@@ -16,6 +15,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { Restock } from './restock.entity';
+import { WorksheetUnit } from 'src/master/entities/worksheet-unit';
 
 @Entity({ schema: 'worksheet' })
 export class Worksheet extends BaseEntity {
@@ -76,8 +76,8 @@ export class Worksheet extends BaseEntity {
   })
   inputCount: number;
 
-  @ManyToOne(() => Unit, (unit) => unit.id, { eager: true })
-  inputUnit: Unit;
+  @ManyToOne(() => WorksheetUnit, (unit) => unit.id, { eager: true })
+  inputUnit: WorksheetUnit;
 
   @ManyToOne(() => User, (user) => user.id, {
     eager: true,
