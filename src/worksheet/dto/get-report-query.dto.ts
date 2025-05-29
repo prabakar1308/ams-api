@@ -14,10 +14,12 @@ class GetReportQueryBaseDto {
 
   @Type(() => Date)
   @IsDate()
+  @IsOptional()
   startDate?: Date;
 
   @Type(() => Date)
   @IsDate()
+  @IsOptional()
   endDate?: Date;
 }
 
