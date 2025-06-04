@@ -11,7 +11,7 @@ import {
 import { Worksheet } from './worksheet.entity';
 import { User } from 'src/users/user.entity';
 import { BaseEntity } from 'src/common/entities/base.entity';
-import { WorksheetUnit } from 'src/master/entities/worksheet-unit';
+import { WorksheetUnit } from 'src/master/entities/worksheet-unit.entity';
 
 @Entity({ schema: 'worksheet' })
 export class Harvest extends BaseEntity {

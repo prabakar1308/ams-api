@@ -29,8 +29,6 @@ export class WorksheetTasksProvider {
   async updateWorksheetStatus() {
     // Get the current time
     const currentTime = new Date();
-    // Convert currentTime to ISO format for compatibility
-    const isoCurrentTime = currentTime.toISOString();
 
     try {
       // Filter worksheets with a In Stocking status and harvestTime greater than the current time
@@ -40,7 +38,7 @@ export class WorksheetTasksProvider {
           status: worksheetStatus.IN_STOCKING,
         })
         .andWhere('worksheet.harvestTime < :currentTime', {
-          currentTime: isoCurrentTime,
+          currentTime,
         })
         .getMany();
 

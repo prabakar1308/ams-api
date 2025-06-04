@@ -1,4 +1,4 @@
-import { WorksheetUnit } from 'src/master/entities/worksheet-unit';
+import { WorksheetUnit } from 'src/master/entities/worksheet-unit.entity';
 
 export function getUnitValue(unit: WorksheetUnit | undefined) {
   let unitName = '';

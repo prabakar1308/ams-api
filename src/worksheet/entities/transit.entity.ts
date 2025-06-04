@@ -10,7 +10,7 @@ import {
 import { BaseEntity } from 'src/common/entities/base.entity';
 import { Harvest } from './harvest.entity';
 import { UnitSector } from 'src/master/entities/unit-sector.entity';
-import { WorksheetUnit } from 'src/master/entities/worksheet-unit';
+import { WorksheetUnit } from 'src/master/entities/worksheet-unit.entity';
 
 @Entity({ schema: 'worksheet' })
 export class Transit extends BaseEntity {

@@ -31,7 +31,7 @@ export class MasterController {
     private readonly unitService: UnitService,
     private readonly unitSectorService: UnitSectorService,
     private readonly worksheetUnitService: WorksheetUnitService,
-  ) { }
+  ) {}
 
   /** Harvest Type - GET, PATCH */
   @Get('harvest-type')

@@ -15,7 +15,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { Restock } from './restock.entity';
-import { WorksheetUnit } from 'src/master/entities/worksheet-unit';
+import { WorksheetUnit } from 'src/master/entities/worksheet-unit.entity';
 
 @Entity({ schema: 'worksheet' })
 export class Worksheet extends BaseEntity {
