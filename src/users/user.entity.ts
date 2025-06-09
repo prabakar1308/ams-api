@@ -6,6 +6,7 @@ import { Worksheet } from 'src/worksheet/entities/worksheet.entity';
 import {
   Column,
   CreateDateColumn,
+  DeleteDateColumn,
   Entity,
   JoinColumn,
   ManyToOne,
@@ -93,4 +94,7 @@ export class User extends BaseEntity {
 
   @UpdateDateColumn()
   updatedAt: Date;
+
+  @DeleteDateColumn()
+  deletedAt: Date;
 }

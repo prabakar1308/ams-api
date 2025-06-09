@@ -2,7 +2,9 @@ import {
   Body,
   ClassSerializerInterceptor,
   Controller,
+  Delete,
   Get,
+  ParseIntPipe,
   Patch,
   Post,
   Query,
@@ -18,7 +20,7 @@ import { Auth } from 'src/auth/decorator/auth.decorator';
 
 @Controller('users')
 export class UsersController {
-  constructor(private readonly usersService: UsersService) { }
+  constructor(private readonly usersService: UsersService) {}
 
   @Get()
   @ApiOperation({
@@ -47,5 +49,13 @@ export class UsersController {
   @UseInterceptors(ClassSerializerInterceptor)
   public patchUser(@Body() patchUserDto: PatchUserDto) {
     return this.usersService.updateUser(patchUserDto);
+  }
+
+  @ApiOperation({
+    summary: 'Soft-Delete a worksheet',
+  })
+  @Delete('delete-user')
+  public softDeleteUser(@Query('id', ParseIntPipe) id: number) {
+    return this.usersService.deleteUser(id);
   }
 }

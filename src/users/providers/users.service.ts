@@ -51,4 +51,8 @@ export class UsersService {
   public async getUserNameById(userId: number): Promise<string> {
     return await this.findUserById.getUserNameById(userId);
   }
+
+  public async deleteUser(id: number) {
+    return await this.userRepository.softDelete(id);
+  }
 }

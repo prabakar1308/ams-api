@@ -30,6 +30,9 @@ export class CreateUserDto {
   @IsEnum(UserRole)
   role: string;
 
+  @IsString({ message: 'Email must be a string' })
+  email: string;
+
   @IsString({ message: 'Designation must be a string' })
   designation: string;
 
