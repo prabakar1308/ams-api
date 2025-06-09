@@ -74,6 +74,14 @@ export class GetWorksheetsProvider {
       );
     }
 
+    if (getWorksheetStatusDto.harvestTypeId) {
+      activeWorksheets = activeWorksheets.filter(
+        ({ worksheet }) =>
+          worksheet?.harvestType &&
+          worksheet.harvestType.id === getWorksheetStatusDto.harvestTypeId,
+      );
+    }
+
     return this.formatWorksheetData(activeWorksheets);
   }
 

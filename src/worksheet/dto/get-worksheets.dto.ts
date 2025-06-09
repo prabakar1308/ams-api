@@ -14,6 +14,10 @@ class GetWorksheetsBaseDto {
   @IsInt()
   @IsOptional()
   userId?: number;
+
+  @IsInt()
+  @IsOptional()
+  harvestTypeId?: number;
 }
 
 export class GetWorksheetsDto extends IntersectionType(
