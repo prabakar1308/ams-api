@@ -26,11 +26,11 @@ import { WorksheetTransitManyProvider } from './transit/worksheet-transit-many.p
 import { PaginationProvider } from 'src/common/pagination/providers/pagination.provider';
 import { Paginated } from 'src/common/pagination/interfaces/paginated.interface';
 import { WorksheetStatusService } from 'src/master/providers/worksheet-status.service';
-import { RestockService } from './restock/restock.service';
 import { GetHarvestsDto } from '../dto/get-harvests.dto';
 import { GetHarvestsProvider } from './harvest/get-harvests.provider';
 import { GetReportQueryDto } from '../dto/get-report-query.dto';
 import { GetTransitsProvider } from './transit/get-transits.provider';
+import { WorksheetReportsProvider } from './worksheet-reports.provider';
 
 @Injectable()
 export class WorksheetService {
@@ -51,7 +51,7 @@ export class WorksheetService {
     private readonly getWorksheetsProvider: GetWorksheetsProvider,
     private readonly getHarvestsProvider: GetHarvestsProvider,
     private readonly getTransitsProvider: GetTransitsProvider,
-    private readonly restockService: RestockService,
+    private readonly worksheetReportsProvider: WorksheetReportsProvider,
   ) {}
 
   public async getWorksheets(
@@ -247,6 +247,14 @@ export class WorksheetService {
   public async createMultipleTransits(createTransitsDto: CreateTransitsDto) {
     return await this.worksheetTransitManyProvider.createMultipleTransits(
       createTransitsDto,
+    );
+  }
+
+  public async getWorksheetInputReport(
+    getTransitsReportDto: GetReportQueryDto,
+  ) {
+    return await this.worksheetReportsProvider.getInputUnitsReport(
+      getTransitsReportDto,
     );
   }
 }

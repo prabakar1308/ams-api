@@ -107,7 +107,9 @@ export class WorksheetDependentsProvider {
     return harvestType;
   }
 
-  public async getWorksheetInputUnit(worksheet: CreateWorksheetDto) {
+  public async getWorksheetInputUnit(
+    worksheet: CreateWorksheetDto | PatchWorksheetDto,
+  ) {
     let inputUnit: Worksheet['inputUnit'] | null = null;
     if (worksheet.inputUnitId) {
       const fetchedUnit = await this.unitService.getWorksheetUnitById(

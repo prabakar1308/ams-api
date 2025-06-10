@@ -124,6 +124,11 @@ export class WorksheetController {
     return this.worksheetService.softDeleteWorksheet(id);
   }
 
+  @Post('get-worksheet-input-report')
+  public getWorksheetInputReport(@Body() body: GetReportQueryDto) {
+    return this.worksheetService.getWorksheetInputReport(body);
+  }
+
   @Post('get-harvests-count')
   public getHarvestsCount(@Body() body: GetHarvestsDto) {
     return this.worksheetService.getHarvestsCount(body);

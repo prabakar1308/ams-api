@@ -56,6 +56,13 @@ export class GetHarvestsProvider {
       },
     });
 
+    // Sort by tankType value (or id if value is not available)
+    harvests.sort((a, b) => {
+      const aType = a.worksheet?.tankType?.value || '';
+      const bType = b.worksheet?.tankType?.value || '';
+      return bType.localeCompare(aType);
+    });
+
     return await Promise.all(
       harvests.map(async (harvest) => {
         const worksheet = await this.worksheetRepository.findOne({

@@ -35,6 +35,10 @@ export class GetTransitsProvider {
       where: {
         createdAt: MoreThanOrEqual(dateThreshold),
       },
+      order: {
+        unitSector: { name: 'ASC' },
+        createdAt: 'DESC', // Order by latest first
+      },
     });
 
     // Transform the transits into the desired format
