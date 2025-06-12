@@ -1,10 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { Between, Repository } from 'typeorm';
+import { Between, In, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 
-import { TankService } from 'src/master/providers/tank.service';
-import { TankTypeService } from 'src/master/providers/tank-type.service';
 import { Worksheet } from '../entities/worksheet.entity';
 import { GetReportQueryDto } from '../dto/get-report-query.dto';
 
@@ -13,8 +11,6 @@ export class WorksheetReportsProvider {
   constructor(
     @InjectRepository(Worksheet)
     private readonly worksheetRespository: Repository<Worksheet>,
-    private readonly tankService: TankService,
-    private readonly tankTypeService: TankTypeService,
     private readonly configService: ConfigService,
   ) {}
 
@@ -30,9 +26,14 @@ export class WorksheetReportsProvider {
     const end = new Date(endDate);
     end.setHours(23, 59, 59, 999);
 
+    const worksheetCompletedStatusId = +this.configService.get(
+      'WORKSHEET_COMPLETED_STATUS',
+    );
+
     const worksheets = await this.worksheetRespository.find({
       where: {
         createdAt: Between(start, end),
+        status: { id: In([worksheetCompletedStatusId]) },
       },
       relations: ['inputUnit', 'tankType'],
     });
