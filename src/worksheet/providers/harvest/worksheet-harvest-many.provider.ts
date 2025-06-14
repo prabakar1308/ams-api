@@ -12,6 +12,7 @@ import { Transit } from 'src/worksheet/entities/transit.entity';
 import { UsersService } from 'src/users/providers/users.service';
 import { WorksheetUnitService } from 'src/master/providers/worksheet-unit.service';
 import { workSheetTableStatus } from 'src/worksheet/enums/worksheet-table-status.enum';
+import { WorksheetHarvestType } from 'src/worksheet/enums/worksheet-harvest-type.enum';
 
 import { Worksheet } from '../../entities/worksheet.entity';
 import { Harvest } from '../../entities/harvest.entity';
@@ -106,6 +107,20 @@ export class WorksheetHarvestManyProvider {
           });
           const restockResponse = await queryRunner.manager.save(newRestock);
           response = { ...response, restock: restockResponse };
+        } else if (
+          worksheet?.harvestType?.id === WorksheetHarvestType.RESTOCKING
+        ) {
+          // Find the related restock and update its status to COMPLETED
+          const restockToUpdate = await queryRunner.manager.findOne(Restock, {
+            where: {
+              worksheet: { id: worksheet.id },
+              harvest: { id: harvestResponse.id },
+            },
+          });
+          if (restockToUpdate) {
+            restockToUpdate.status = workSheetTableStatus.COMPLETED;
+            await queryRunner.manager.save(restockToUpdate);
+          }
         }
 
         // add transit if exists

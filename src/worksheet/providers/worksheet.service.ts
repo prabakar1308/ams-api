@@ -257,4 +257,8 @@ export class WorksheetService {
       getTransitsReportDto,
     );
   }
+
+  public async getCurrentInputUnitsReport() {
+    return await this.worksheetReportsProvider.getCurrentInputUnitsReport();
+  }
 }
