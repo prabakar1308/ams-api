@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { MoreThanOrEqual, Repository, Between } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
+import { toZonedTime } from 'date-fns-tz';
 
 import { Harvest } from 'src/worksheet/entities/harvest.entity';
 import { Worksheet } from 'src/worksheet/entities/worksheet.entity';
@@ -181,8 +182,12 @@ export class GetTransitsProvider {
           acc[sectorKey].frozenCups += transitCount;
 
         // Determine if the transit belongs to the day shift or night shift
-        const hours = createdAt.getHours();
+        const timeZone = 'Asia/Kolkata';
+        const localDate = toZonedTime(createdAt, timeZone);
+        const hours = localDate.getHours();
         const shift = hours >= 6 && hours < 18 ? 'dayShift' : 'nightShift';
+        // const hours = createdAt.getHours();
+        // const shift = hours >= 6 && hours < 18 ? 'dayShift' : 'nightShift';
 
         const userName = await this.userService.getUserNameById(
           transit.createdBy,
