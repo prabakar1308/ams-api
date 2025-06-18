@@ -55,4 +55,24 @@ export class UsersService {
   public async deleteUser(id: number) {
     return await this.userRepository.softDelete(id);
   }
+
+  public async generateUserCode(): Promise<string> {
+    // Find the last user by ID (assuming higher ID = latest)
+    const lastUser = await this.userRepository.findOne({
+      where: {},
+      order: { id: 'DESC' },
+      select: ['id', 'userCode'],
+    });
+
+    let nextNumber = 1;
+    if (lastUser && lastUser.userCode) {
+      // Extract the numeric part from the last userCode (e.g., "USR0005" -> 5)
+      const match = lastUser.userCode.match(/\d+$/);
+      if (match) {
+        nextNumber = parseInt(match[0], 10) + 1;
+      }
+    }
+
+    return `GMH-AMS-${nextNumber}`;
+  }
 }

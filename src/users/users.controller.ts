@@ -58,4 +58,12 @@ export class UsersController {
   public softDeleteUser(@Query('id', ParseIntPipe) id: number) {
     return this.usersService.deleteUser(id);
   }
+
+  @ApiOperation({
+    summary: 'Generate a new user code based on the last user',
+  })
+  @Get('generate-user-code')
+  public generateUserCode() {
+    return this.usersService.generateUserCode();
+  }
 }
