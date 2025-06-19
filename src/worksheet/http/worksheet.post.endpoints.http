@@ -1,3 +1,13 @@
+POST http://localhost:3000/api/worksheet/get-active-worksheets
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjUsInVzZXJJZCI6IkdNSC1BTVMtMTcxMSIsImlhdCI6MTc0NTIwODE0MCwiZXhwIjoxNzUyOTg0MTQwLCJhdWQiOiJsb2NhbGhvc3Q6MzAwMCIsImlzcyI6ImxvY2FsaG9zdDozMDAwIn0.rpUgvrO5iGls0A-_H1s2v5nir1cnJMXvgyFqqtxMnzY
+
+{
+    "userId": 5,
+    "tankTypeId": 0,
+    "statusId": 3
+}
+
 POST http://localhost:3000/api/worksheet/create-worksheet
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjUsInVzZXJJZCI6IkdNSC1BTVMtMTcxMSIsImlhdCI6MTc0NTIwODE0MCwiZXhwIjoxNzUyOTg0MTQwLCJhdWQiOiJsb2NhbGhvc3Q6MzAwMCIsImlzcyI6ImxvY2FsaG9zdDozMDAwIn0.rpUgvrO5iGls0A-_H1s2v5nir1cnJMXvgyFqqtxMnzY
@@ -6,13 +16,12 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjUsInVzZXJJZ
     "ph": 7,
     "salnity": 35,
     "temperature": 32,
-    "tankTypeId": 1,
-    "tankNumber": 21,
+    "tankTypeId": 2,
+    "tanks": [7],
     "harvestTypeId": 1,
-    "harvestTime": "2025-08-18T17:34:02.666Z",
-    "inputSource": "bags",
+    "harvestHours": 18,
     "inputCount": 20,
-    "sourceUnitName": "kgs",
+    "inputUnitId": 6,
     "statusId": 2,
     "userId": 1
 }
@@ -22,34 +31,47 @@ Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjUsInVzZXJJZCI6IkdNSC1BTVMtMTcxMSIsImlhdCI6MTc0NTIwODE0MCwiZXhwIjoxNzUyOTg0MTQwLCJhdWQiOiJsb2NhbGhvc3Q6MzAwMCIsImlzcyI6ImxvY2FsaG9zdDozMDAwIn0.rpUgvrO5iGls0A-_H1s2v5nir1cnJMXvgyFqqtxMnzY
 
 {
-  "worksheets": [{
-    "ph": 8,
-    "salnity": 10,
-    "temperature": 30,
-    "tankTypeId": 2,
-    "tankNumber": 17,
-    "harvestTypeId": 2,
-    "harvestTime": "2025-08-18T17:34:02.666Z",
-    "inputSource": "tins",
-    "inputCount": 12,
-    "sourceUnitName": "",
-    "statusId": 1,
-    "userId": 3
-}, {
-    "ph": 8,
-    "salnity": 10,
-    "temperature": 30,
-    "tankTypeId": 2,
-    "tankNumber": 18,
-    "harvestTypeId": 2,
-    "harvestTime": "2025-08-18T17:34:02.666Z",
-    "inputSource": "tins",
-    "inputCount": 10,
-    "sourceUnitName": "",
-    "statusId": 1,
-    "userId": 3
-}]
+    "ph": 7.7,
+    "salnity": 35,
+    "temperature": 32,
+    "tankTypeId": 1,
+    "tanks": [3],
+    "harvestTypeId": 1,
+    "harvestHours": 18,
+    "inputCount": 20,
+    "inputUnitId": 6,
+    "statusId": 2,
+    "userId": 3,
+    "restocks": [6, 4]
+
 }
+// {
+//   "worksheets": [{
+//     "ph": 6,
+//     "salnity": 10,
+//     "temperature": 30,
+//     "tankTypeId": 2,
+//     "tankNumber": 3,
+//     "harvestTypeId": 1,
+//     "harvestHours": 18,
+//     "inputUnitId": 1,
+//     "inputCount": 12,
+//     "statusId": 1,
+//     "userId": 3
+// }, {
+//     "ph": 6,
+//     "salnity": 11,
+//     "temperature": 28,
+//     "tankTypeId": 2,
+//     "tankNumber": 4,
+//     "harvestTypeId": 2,
+//     "harvestHours": 18,
+//     "inputUnitId": 6,
+//     "inputCount": 5,
+//     "statusId": 1,
+//     "userId": 3
+// }]
+// }
 
 
 POST http://localhost:3000/api/worksheet/create-harvest
@@ -66,34 +88,98 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjUsInVzZXJJZ
     "statusId": 4
 }
 
+POST http://localhost:3000/api/worksheet/get-harvests-count
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjUsInVzZXJJZCI6IkdNSC1BTVMtMTcxMSIsImlhdCI6MTc0NTIwODE0MCwiZXhwIjoxNzUyOTg0MTQwLCJhdWQiOiJsb2NhbGhvc3Q6MzAwMCIsImlzcyI6ImxvY2FsaG9zdDozMDAwIn0.rpUgvrO5iGls0A-_H1s2v5nir1cnJMXvgyFqqtxMnzY
+
+{
+    "unitId": 1,
+    "statusIds": ["A", "P"]
+}
+
+POST http://localhost:3000/api/worksheet/get-harvests
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjUsInVzZXJJZCI6IkdNSC1BTVMtMTcxMSIsImlhdCI6MTc0NTIwODE0MCwiZXhwIjoxNzUyOTg0MTQwLCJhdWQiOiJsb2NhbGhvc3Q6MzAwMCIsImlzcyI6ImxvY2FsaG9zdDozMDAwIn0.rpUgvrO5iGls0A-_H1s2v5nir1cnJMXvgyFqqtxMnzY
+
+{
+    "unitId": 2,
+    "statusIds": ["A", "P"]
+}
+
 POST http://localhost:3000/api/worksheet/create-multiple-harvest
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjUsInVzZXJJZCI6IkdNSC1BTVMtMTcxMSIsImlhdCI6MTc0NTIwODE0MCwiZXhwIjoxNzUyOTg0MTQwLCJhdWQiOiJsb2NhbGhvc3Q6MzAwMCIsImlzcyI6ImxvY2FsaG9zdDozMDAwIn0.rpUgvrO5iGls0A-_H1s2v5nir1cnJMXvgyFqqtxMnzY
 
 {
   "harvests": [{
-    "worksheetId": 13,
-    "count": 50,
-    "countInStock": 50,
-    "unitId": 1,
+    "worksheetId": 22,
+    "count": 70,
+    "countInStock": 70,
+    "unitId": 3,
     "measuredBy": 1,
-    "restockCount": 10,
+    "restockCount": 20,
     "restockUnitId": 3,
     "statusId": 4
   }]
 }
 
-
-
-POST http://localhost:3000/api/worksheet/create-multiple-transit
+POST http://localhost:3000/api/worksheet/get-transits
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjUsInVzZXJJZCI6IkdNSC1BTVMtMTcxMSIsImlhdCI6MTc0NTIwODE0MCwiZXhwIjoxNzUyOTg0MTQwLCJhdWQiOiJsb2NhbGhvc3Q6MzAwMCIsImlzcyI6ImxvY2FsaG9zdDozMDAwIn0.rpUgvrO5iGls0A-_H1s2v5nir1cnJMXvgyFqqtxMnzY
 
 {
+    "days": 12
+}
+
+POST http://localhost:3000/api/worksheet/get-transits-count
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjUsInVzZXJJZCI6IkdNSC1BTVMtMTcxMSIsImlhdCI6MTc0NTIwODE0MCwiZXhwIjoxNzUyOTg0MTQwLCJhdWQiOiJsb2NhbGhvc3Q6MzAwMCIsImlzcyI6ImxvY2FsaG9zdDozMDAwIn0.rpUgvrO5iGls0A-_H1s2v5nir1cnJMXvgyFqqtxMnzY
+
+{
+    "days": 6,
+    "unitId": 2
+}
+
+POST http://localhost:3000/api/worksheet/get-transits-by-unit-sector
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjUsInVzZXJJZCI6IkdNSC1BTVMtMTcxMSIsImlhdCI6MTc0NTIwODE0MCwiZXhwIjoxNzUyOTg0MTQwLCJhdWQiOiJsb2NhbGhvc3Q6MzAwMCIsImlzcyI6ImxvY2FsaG9zdDozMDAwIn0.rpUgvrO5iGls0A-_H1s2v5nir1cnJMXvgyFqqtxMnzY
+
+{
+    "days": 20,
+    "unitId": 1,
+    "startDate": "2025-05-16",
+    "endDate": "2025-05-16"
+}
+
+
+POST http://localhost:3000/api/worksheet/create-multiple-transit
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjUsInVzZXJDb2RlIjoiR01ILUFNUy0xNzExIiwiaWF0IjoxNzQ3NjI3MTU4LCJleHAiOjE3NTI4ODY3NTgsImF1ZCI6ImxvY2FsaG9zdDozMDAwIiwiaXNzIjoibG9jYWxob3N0OjMwMDAifQ.-Y1_cLTugFGmNvvx9q75ZrnRLX4zmZN-osHrfjhcmRY
+
+{
   "transits": [{
-    "harvestId": 6,
+    "harvestId": 15,
     "unitSectorId": 1,
-    "count": 20,
-    "unitId": 1
-  }]
+    "count": 40,
+    "unitId": 1,
+  "staffInCharge": ""
+  }, {
+    "harvestId": 15,
+    "unitSectorId": 2,
+    "count": 10,
+    "unitId": 1,
+  "staffInCharge": ""
+  }],
+  "harvestId": 15
+}
+
+
+
+POST http://localhost:3000/api/worksheet/get-worksheet-input-report
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjUsInVzZXJJZCI6IkdNSC1BTVMtMTcxMSIsImlhdCI6MTc0NTIwODE0MCwiZXhwIjoxNzUyOTg0MTQwLCJhdWQiOiJsb2NhbGhvc3Q6MzAwMCIsImlzcyI6ImxvY2FsaG9zdDozMDAwIn0.rpUgvrO5iGls0A-_H1s2v5nir1cnJMXvgyFqqtxMnzY
+
+{
+    "startDate": "2025-04-25",
+    "endDate": "2025-06-16"
 }

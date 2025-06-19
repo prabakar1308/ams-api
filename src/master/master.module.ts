@@ -19,6 +19,8 @@ import { TankTypeService } from './providers/tank-type.service';
 import { TemperatureService } from './providers/temperature.service';
 import { UnitService } from './providers/unit.service';
 import { UnitSectorService } from './providers/unit-sector.service';
+import { WorksheetUnit } from './entities/worksheet-unit.entity';
+import { WorksheetUnitService } from './providers/worksheet-unit.service';
 
 @Module({
   controllers: [MasterController],
@@ -32,6 +34,7 @@ import { UnitSectorService } from './providers/unit-sector.service';
     TemperatureService,
     UnitService,
     UnitSectorService,
+    WorksheetUnitService,
   ],
   imports: [
     TypeOrmModule.forFeature([
@@ -44,6 +47,7 @@ import { UnitSectorService } from './providers/unit-sector.service';
       Salnity,
       UnitSector,
       Unit,
+      WorksheetUnit,
     ]),
   ], // Add your entities here
   exports: [
@@ -52,6 +56,8 @@ import { UnitSectorService } from './providers/unit-sector.service';
     TankService,
     TankTypeService,
     UnitSectorService,
+    UnitService,
+    WorksheetUnitService,
   ],
 })
 export class MasterModule {}

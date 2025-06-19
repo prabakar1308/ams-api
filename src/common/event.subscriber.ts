@@ -23,17 +23,18 @@ export class UserSubscriber implements EntitySubscriberInterface<BaseEntity> {
 
   beforeInsert(event: InsertEvent<BaseEntity>) {
     const user = this.cls.get<{
-      sub: number;
+      userId: number;
     }>('user');
-    event.entity.createdBy = user ? user.sub : 0;
+    console.log(user);
+    event.entity.createdBy = user ? user.userId : 0;
   }
 
   beforeUpdate(event: UpdateEvent<BaseEntity>) {
     if (event.entity) {
       const user = this.cls.get<{
-        sub: number;
+        userId: number;
       }>('user');
-      event.entity.updatedBy = user ? user.sub : 0;
+      event.entity.updatedBy = user ? user.userId : 0;
     }
   }
 }

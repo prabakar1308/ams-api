@@ -17,7 +17,12 @@ export class SalnityService {
   }
 
   public async getSalnity() {
-    return await this.salnityRepository.find();
+    const response = await this.salnityRepository.find();
+    return response.map((ph) => ({
+      ...ph,
+      unitName: ph.unit?.value,
+      unit: undefined,
+    }))[0];
   }
 
   public async getSalnityById(id: number) {

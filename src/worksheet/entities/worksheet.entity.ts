@@ -8,10 +8,14 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  JoinTable,
+  ManyToMany,
   ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { Restock } from './restock.entity';
+import { WorksheetUnit } from 'src/master/entities/worksheet-unit.entity';
 
 @Entity({ schema: 'worksheet' })
 export class Worksheet extends BaseEntity {
@@ -24,6 +28,7 @@ export class Worksheet extends BaseEntity {
   @Column({
     type: 'decimal',
     precision: 2,
+    scale: 1,
     nullable: false,
   })
   ph: number;
@@ -40,11 +45,6 @@ export class Worksheet extends BaseEntity {
   })
   temperature: number;
 
-  // @Column({
-  //   type: 'integer',
-  //   nullable: true,
-  // })
-  // tankTypeId: number;
   @ManyToOne(() => TankType, (type) => type.id, { eager: true })
   tankType: TankType;
 
@@ -54,27 +54,21 @@ export class Worksheet extends BaseEntity {
   })
   tankNumber: number;
 
-  // @Column({
-  //   type: 'integer',
-  //   nullable: true,
-  // })
-  // harvestTypeId: number;
   @ManyToOne(() => HarvestType, (type) => type.id, { eager: true })
   harvestType: HarvestType;
 
   @Column({
     type: 'timestamp',
-    default: () => 'CURRENT_TIMESTAMP',
+    // default: () => 'CURRENT_TIMESTAMP',
     nullable: true,
   })
   harvestTime: Date;
 
   @Column({
-    type: 'varchar',
-    length: 50,
+    type: 'integer',
     nullable: false,
   })
-  inputSource: string;
+  harvestHours: number;
 
   @Column({
     type: 'integer',
@@ -82,17 +76,17 @@ export class Worksheet extends BaseEntity {
   })
   inputCount: number;
 
-  @Column({
-    type: 'varchar',
-    length: 50,
-    nullable: true,
-  })
-  sourceUnitName?: string;
+  @ManyToOne(() => WorksheetUnit, (unit) => unit.id, { eager: true })
+  inputUnit: WorksheetUnit;
 
-  @ManyToOne(() => User, (user) => user.worksheets, {
-    eager: true, // to retrive with user details
+  @ManyToOne(() => User, (user) => user.id, {
+    eager: true,
   })
-  user: User | null;
+  user: User;
+
+  @ManyToMany(() => Restock)
+  @JoinTable()
+  restocks: Restock[];
 
   @CreateDateColumn()
   createdAt: Date;
@@ -102,10 +96,4 @@ export class Worksheet extends BaseEntity {
 
   @DeleteDateColumn()
   deletedAt: Date;
-
-  @Column({
-    type: 'integer',
-    nullable: false,
-  })
-  userId: number;
 }

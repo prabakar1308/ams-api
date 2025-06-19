@@ -11,20 +11,20 @@ import {
 import { Worksheet } from './worksheet.entity';
 import { Harvest } from './harvest.entity';
 import { BaseEntity } from 'src/common/entities/base.entity';
-import { Unit } from 'src/master/entities/unit.entity';
+import { WorksheetUnit } from 'src/master/entities/worksheet-unit.entity';
 
 @Entity({ schema: 'worksheet' })
 export class Restock extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @OneToOne(() => Worksheet)
+  @OneToOne(() => Worksheet, (worksheet) => worksheet.id, { eager: true })
   @JoinColumn({ name: 'worksheetId' })
-  worksheetId: number;
+  worksheet: Worksheet;
 
-  @OneToOne(() => Harvest)
+  @OneToOne(() => Harvest, (harvest) => harvest.id, { eager: true })
   @JoinColumn({ name: 'harvestId' })
-  harvestId: number;
+  harvest: Harvest;
 
   @Column({
     type: 'integer',
@@ -32,9 +32,8 @@ export class Restock extends BaseEntity {
   })
   count: number;
 
-  @ManyToOne(() => Unit, (unit) => unit.id, { eager: true })
-  @JoinColumn({ name: 'unitId' })
-  unitId: number;
+  @ManyToOne(() => WorksheetUnit, (unit) => unit.id, { eager: true })
+  unit: WorksheetUnit;
 
   @Column({
     type: 'varchar',

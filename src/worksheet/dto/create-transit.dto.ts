@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsNumber } from 'class-validator';
+import { IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
 
 export class CreateTransitDto {
   @ApiProperty({
@@ -33,4 +33,12 @@ export class CreateTransitDto {
   @IsNumber()
   @IsNotEmpty()
   unitId: number;
+
+  @ApiProperty({
+    description: `Person responsible in this unit sector`,
+    example: 'Person name',
+  })
+  @IsString()
+  @IsOptional()
+  staffInCharge?: string;
 }

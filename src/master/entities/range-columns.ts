@@ -1,7 +1,6 @@
 import {
   Column,
   CreateDateColumn,
-  JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
@@ -22,9 +21,21 @@ export abstract class RangeColumns {
   })
   max: number;
 
+  @Column({
+    type: 'numeric',
+    nullable: true,
+  })
+  defaultValue: number;
+
+  @Column({
+    type: 'numeric',
+    nullable: true,
+  })
+  step: number;
+
   @ManyToOne(() => Unit, (unit) => unit.id, { eager: true, nullable: true })
-  @JoinColumn({ name: 'unitId' })
-  unitId: number;
+  // @JoinColumn({ name: 'unitId' })
+  unit: Unit;
 
   @CreateDateColumn()
   createdAt: Date;

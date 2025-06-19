@@ -5,10 +5,15 @@ import { UsersModule } from 'src/users/users.module';
 import { MasterModule } from 'src/master/master.module';
 import { WorksheetModule } from 'src/worksheet/worksheet.module';
 import { GetWorksheetStatusProvider } from './providers/get-worksheet-status.provider';
+import { GetTankWiseStatusProvider } from './providers/get-tank-wise-status.provider';
 
 @Module({
   controllers: [DashboardController],
-  providers: [DashboardService, GetWorksheetStatusProvider],
+  providers: [
+    DashboardService,
+    GetWorksheetStatusProvider,
+    GetTankWiseStatusProvider,
+  ],
   imports: [UsersModule, MasterModule, WorksheetModule],
 })
 export class DashboardModule {}

@@ -10,6 +10,8 @@ import { WorksheetDependentsProvider } from './worksheet-dependents.provider';
 import { WorksheetHistory } from '../entities/worksheet-history.entity';
 import { PatchWorksheetsDto } from '../dto/patch-worksheets.dto';
 import { worksheetHistory } from '../enums/worksheet-history-actions.enum';
+import { worksheetStatus } from 'src/dashboard/enums/worksheet-status.enum';
+import { Restock } from '../entities/restock.entity';
 
 @Injectable()
 export class WorksheetUpdateManyProvider {
@@ -55,6 +57,7 @@ export class WorksheetUpdateManyProvider {
           user = currentUser;
         }
         let status: Worksheet['status'] = currentWorksheet.status;
+        let harvestProps = {};
         if (worksheet.statusId) {
           const currentStatus =
             await this.worksheetDependentsProvider.getWorksheetStatus(
@@ -64,47 +67,88 @@ export class WorksheetUpdateManyProvider {
             throw new ConflictException('Worksheet Status not found');
           }
           status = currentStatus;
+
+          // update harvest time when movng from ready for stocking to in stocking
+          if (
+            Number(currentWorksheet.status.id) ===
+              Number(worksheetStatus.READY_FOR_STOCKING) &&
+            Number(worksheet.statusId) === Number(worksheetStatus.IN_STOCKING)
+          ) {
+            const harvestTime = new Date(
+              new Date().setHours(
+                new Date().getHours() + currentWorksheet.harvestHours,
+              ),
+            );
+            harvestProps = {
+              harvestTime: new Date(harvestTime),
+            };
+          }
         }
 
-        // currentWorksheet = {
-        //   ...currentWorksheet,
-        //   user,
-        //   status,
-        // };
+        let restocks: Restock[] = [];
+        if (worksheet.restocks && worksheet.restocks.length) {
+          restocks =
+            await this.worksheetDependentsProvider.findMultipleRestocks(
+              worksheet.restocks,
+            );
+        }
+
         const updatedWorksheet = queryRunner.manager.create(Worksheet, {
           ...currentWorksheet,
           user,
           status,
+          ...harvestProps,
+          restocks,
         });
         const result = await queryRunner.manager.save(updatedWorksheet);
         updatedWorksheets.push(result);
 
         // update worksheet history
 
-        let previousValue = '';
-        let currentValue = '';
+        const values: { previousValue: string; currentValue: string }[] = [];
         switch (patchWorksheetsDto.updateAction) {
           case worksheetHistory.WORKSHEET_ASSIGNEE_UPDATED:
-            previousValue = currentWorksheet.user?.userCode || '';
-            currentValue = updatedWorksheet.user?.userCode || '';
+            values.push({
+              previousValue: currentWorksheet.user?.userCode || '',
+              currentValue: updatedWorksheet.user?.userCode || '',
+            });
             break;
           case worksheetHistory.WORKSHEET_STATUS_UPDATED:
-            previousValue = currentWorksheet.status.value.toString();
-            currentValue = updatedWorksheet.status.value.toString();
+            values.push({
+              previousValue: currentWorksheet.status.value.toString(),
+              currentValue: updatedWorksheet.status.value.toString(),
+            });
+            break;
+          case worksheetHistory.WORKSHEET_STATUS_ASSIGNEE_UPDATED:
+            if (worksheet.userId) {
+              values.push({
+                previousValue: currentWorksheet.user?.userCode || '',
+                currentValue: updatedWorksheet.user?.userCode || '',
+              });
+            }
+            if (worksheet.statusId) {
+              values.push({
+                previousValue: currentWorksheet.status.value.toString(),
+                currentValue: updatedWorksheet.status.value.toString(),
+              });
+            }
             break;
           default:
             break;
         }
-        const newWorksheetHistory = queryRunner.manager.create(
-          WorksheetHistory,
-          {
-            worksheet: worksheet,
-            action: patchWorksheetsDto.updateAction,
-            previousValue,
-            currentValue,
-          },
-        );
-        await queryRunner.manager.save(newWorksheetHistory);
+        for (const value of values) {
+          const { previousValue, currentValue } = value;
+          const newWorksheetHistory = queryRunner.manager.create(
+            WorksheetHistory,
+            {
+              worksheet: updatedWorksheet,
+              action: patchWorksheetsDto.updateAction,
+              previousValue,
+              currentValue,
+            },
+          );
+          await queryRunner.manager.save(newWorksheetHistory);
+        }
       }
 
       // if sucessfull, commit

@@ -1,4 +1,11 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  ParseIntPipe,
+  Post,
+} from '@nestjs/common';
 import { DashboardService } from './providers/dashboard.service';
 import { ApiOperation } from '@nestjs/swagger';
 import { GetWorksheetStatusDto } from './dto/get-worksheet-status.dto';
@@ -16,5 +23,19 @@ export class DashboardController {
     @Body() getWorksheetStatusDto: GetWorksheetStatusDto,
   ) {
     return this.dashboardService.getActiveWorksheets(getWorksheetStatusDto);
+  }
+
+  @Get('tank-wise-statuses/:tankTypeId')
+  public getTankStatuses(
+    @Param('tankTypeId', ParseIntPipe) tankTypeId: number,
+  ) {
+    return this.dashboardService.getTankWiseStatus(tankTypeId);
+  }
+
+  @Get('tank-wise-users/:tankTypeId')
+  public getUsersByTankWise(
+    @Param('tankTypeId', ParseIntPipe) tankTypeId: number,
+  ) {
+    return this.dashboardService.getUsersByTankWise(tankTypeId);
   }
 }

@@ -2,7 +2,9 @@ import {
   Body,
   ClassSerializerInterceptor,
   Controller,
+  Delete,
   Get,
+  ParseIntPipe,
   Patch,
   Post,
   Query,
@@ -13,6 +15,8 @@ import { PatchUserDto } from './dto/patch-user.dto';
 import { UsersService } from './providers/users.service';
 import { ApiOperation, ApiQuery } from '@nestjs/swagger';
 import { GetUsersDto } from './dto/get-users.dto';
+import { AuthType } from 'src/auth/enums/auth-type.enum';
+import { Auth } from 'src/auth/decorator/auth.decorator';
 
 @Controller('users')
 export class UsersController {
@@ -34,6 +38,7 @@ export class UsersController {
     return this.usersService.findAll(getUsersDto);
   }
 
+  @Auth(AuthType.None)
   @Post()
   @UseInterceptors(ClassSerializerInterceptor)
   public createUsers(@Body() createUserDto: CreateUserDto) {
@@ -44,5 +49,21 @@ export class UsersController {
   @UseInterceptors(ClassSerializerInterceptor)
   public patchUser(@Body() patchUserDto: PatchUserDto) {
     return this.usersService.updateUser(patchUserDto);
+  }
+
+  @ApiOperation({
+    summary: 'Soft-Delete a worksheet',
+  })
+  @Delete('delete-user')
+  public softDeleteUser(@Query('id', ParseIntPipe) id: number) {
+    return this.usersService.deleteUser(id);
+  }
+
+  @ApiOperation({
+    summary: 'Generate a new user code based on the last user',
+  })
+  @Get('generate-user-code')
+  public generateUserCode() {
+    return this.usersService.generateUserCode();
   }
 }
