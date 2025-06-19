@@ -27,7 +27,7 @@ export class GetTransitsProvider {
   public async getCurrentTransits(
     getTransitsReportDto: GetReportQueryDto,
   ): Promise<TransitResponse[]> {
-    const days = getTransitsReportDto.days || 1;
+    const days = getTransitsReportDto.days || 0;
     const dateThreshold = new Date();
     dateThreshold.setHours(0, 0, 0, 0);
     dateThreshold.setDate(dateThreshold.getDate() - days);
@@ -80,7 +80,7 @@ export class GetTransitsProvider {
   public async getTransitsTotalCount(
     getTransitsReportDto: GetReportQueryDto,
   ): Promise<number> {
-    const days = getTransitsReportDto.days || 1;
+    const days = getTransitsReportDto.days || 0;
     const unitId = getTransitsReportDto.unitId || 0;
 
     // Calculate the date threshold and set time to 12:00 AM
