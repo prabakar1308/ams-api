@@ -51,7 +51,7 @@ export class WorksheetController {
 
   @Get('get-worksheet/:id')
   public getWorksheet(@Param('id', ParseIntPipe) id: number) {
-    return this.worksheetService.getWorksheetById(id);
+    return this.worksheetService.getCurrentWorksheet(id);
   }
 
   @Get('get-worksheet-history')
@@ -92,7 +92,7 @@ export class WorksheetController {
   @ApiOperation({
     summary: 'Updates a worksheet',
   })
-  @Patch('update-worksheet')
+  @Patch('update-worksheet-params')
   public updateWorksheet(@Body() patchWorksheetDto: PatchWorksheetDto) {
     return this.worksheetService.updateWorksheet(patchWorksheetDto);
   }

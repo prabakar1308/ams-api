@@ -24,6 +24,7 @@ import { RestockService } from './providers/restock/restock.service';
 import { GetHarvestsProvider } from './providers/harvest/get-harvests.provider';
 import { GetTransitsProvider } from './providers/transit/get-transits.provider';
 import { WorksheetReportsProvider } from './providers/worksheet-reports.provider';
+import { WorksheetUpdateProvider } from './providers/worksheet-update.provider';
 
 @Module({
   controllers: [WorksheetController],
@@ -41,6 +42,7 @@ import { WorksheetReportsProvider } from './providers/worksheet-reports.provider
     GetHarvestsProvider,
     GetTransitsProvider,
     WorksheetReportsProvider,
+    WorksheetUpdateProvider,
   ],
   imports: [
     TypeOrmModule.forFeature([

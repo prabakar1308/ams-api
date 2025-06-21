@@ -89,7 +89,9 @@ export class WorksheetDependentsProvider {
     return tankType;
   }
 
-  public async getWorksheetHarvestType(worksheet: CreateWorksheetDto) {
+  public async getWorksheetHarvestType(
+    worksheet: CreateWorksheetDto | PatchWorksheetDto,
+  ) {
     let harvestType: Worksheet['harvestType'] | null = null;
     if (worksheet.harvestTypeId) {
       const fetchedHarvestType =

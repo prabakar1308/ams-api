@@ -1,10 +1,19 @@
 PATCH http://localhost:3000/api/worksheet/update-worksheet
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjUsInVzZXJJZCI6IkdNSC1BTVMtMTcxMSIsImlhdCI6MTc0NTIwODE0MCwiZXhwIjoxNzUyOTg0MTQwLCJhdWQiOiJsb2NhbGhvc3Q6MzAwMCIsImlzcyI6ImxvY2FsaG9zdDozMDAwIn0.rpUgvrO5iGls0A-_H1s2v5nir1cnJMXvgyFqqtxMnzY
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjUsInVzZXJDb2RlIjoiR01ILUFNUy0xNzExIiwiaWF0IjoxNzUwMzQxNjUxLCJleHAiOjE3NTU2MDEyNTEsImF1ZCI6ImxvY2FsaG9zdDozMDAwIiwiaXNzIjoibG9jYWxob3N0OjMwMDAifQ.wIt-R4-2wuXMbTNeG_VqHarH4WSAeUntHueNlpYXunY
 
 {
-    "statusId": 3,
-    "id": 8
+    "id": 84,
+    "ph": 7.7,
+    "salnity": 35,
+    "temperature": 32,
+    "harvestTypeId": 1,
+    "harvestHours": 18,
+    "inputCount": 20,
+    "inputUnitId": 4,
+    "userId": 9
+    // "restocks": [6, 4]
+
 }
 
 

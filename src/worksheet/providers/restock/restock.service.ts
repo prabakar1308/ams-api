@@ -37,9 +37,32 @@ export class RestockService {
     return totalCount;
   }
 
+  public async getWorksheetIdByRestockId(
+    restockId: number,
+  ): Promise<number | null> {
+    // Assuming the join table is named 'worksheet_restocks_restock' and columns are 'worksheetId' and 'restockId'
+    const result: { worksheetId: number | null } | undefined =
+      await this.restockRespository.manager
+        .createQueryBuilder()
+        .select('worksheet_restocks_restock."worksheetId"', 'worksheetId')
+        .from('worksheet_restocks_restock', 'worksheet_restocks_restock')
+        .where('worksheet_restocks_restock."restockId" = :restockId', {
+          restockId,
+        })
+        .getRawOne();
+
+    return result ? result.worksheetId : null;
+  }
+
   public async getActiveRestocks(status: string): Promise<ActiveRestock[]> {
-    const restocks = await this.restockRespository.findBy({
-      status,
+    // Support comma-separated status values
+    const statusList = status.split(',').map((s) => s.trim());
+
+    const restocks = await this.restockRespository.find({
+      where:
+        statusList.length > 1
+          ? statusList.map((s) => ({ status: s }))
+          : { status: statusList[0] },
     });
 
     // Use Promise.all to resolve all asynchronous operations
@@ -57,6 +80,8 @@ export class RestockService {
         } = restock;
 
         const userName = await this.userService.getUserNameById(createdBy);
+        const worksheetId = await this.getWorksheetIdByRestockId(id);
+        console.log(worksheetId, id, 'worksheetId');
         return {
           id,
           createdAt,
@@ -68,6 +93,9 @@ export class RestockService {
           harvest: harvest
             ? `${harvest.count} ${getUnitValue(harvest.unit)}`
             : '',
+          // worksheet id of where this stock is mapped as harvest type
+          worksheetId: worksheetId || undefined,
+          // Details of worksheet where this restock is created
           worksheet: {
             tankType: worksheet ? worksheet.tankType.value : '',
             tankNumber: worksheet ? worksheet.tankNumber : 0,

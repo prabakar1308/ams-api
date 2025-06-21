@@ -7,6 +7,7 @@ export interface ActiveRestock {
   unit: string;
   unitId?: number;
   harvest?: string;
+  worksheetId?: number;
   worksheet: {
     tankType?: string;
     harvestType?: string;
