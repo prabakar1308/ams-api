@@ -22,6 +22,7 @@ import { CreateTransitsDto } from './dto/create-transits.dto';
 import { RestockService } from './providers/restock/restock.service';
 import { GetHarvestsDto } from './dto/get-harvests.dto';
 import { GetReportQueryDto } from './dto/get-report-query.dto';
+import { PatchHarvestDto } from './dto/patch-harvest.dto';
 
 @Controller('worksheet')
 export class WorksheetController {
@@ -142,6 +143,16 @@ export class WorksheetController {
   @Post('get-harvests')
   public getHarvests(@Body() body: GetHarvestsDto) {
     return this.worksheetService.getHarvests(body);
+  }
+
+  @Get('get-harvest/:id')
+  public getHarvest(@Param('id', ParseIntPipe) id: number) {
+    return this.worksheetService.getHarvestById(id);
+  }
+
+  @Post('update-harvest')
+  public updateHarvest(@Body() body: PatchHarvestDto) {
+    return this.worksheetService.updateHarvest(body);
   }
 
   /** Create Harvest */

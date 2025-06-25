@@ -95,9 +95,10 @@ export class WorksheetHarvestManyProvider {
           restock.unitId = harvest.restockUnitId;
           restock.status = workSheetTableStatus.ACTIVE;
 
-          const unit = await this.restockService.getRestockUnit(restock);
-          const worksheet =
-            await this.restockService.getRestockWorksheet(restock);
+          const unit = await this.restockService.getRestockUnit(restock.unitId);
+          const worksheet = await this.restockService.getRestockWorksheet(
+            restock.worksheetId,
+          );
 
           const newRestock = queryRunner.manager.create(Restock, {
             ...restock,

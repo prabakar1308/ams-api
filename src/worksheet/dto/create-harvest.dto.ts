@@ -7,7 +7,7 @@ export class CreateHarvestDto {
     example: 1,
   })
   @IsNumber()
-  @IsNotEmpty()
+  @IsOptional()
   worksheetId: number;
 
   @ApiProperty({
@@ -48,7 +48,7 @@ export class CreateHarvestDto {
     example: 4,
   })
   @IsNumber()
-  @IsNotEmpty()
+  @IsOptional()
   statusId: number;
 
   @ApiProperty({

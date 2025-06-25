@@ -29,6 +29,8 @@ import { WorksheetReportsProvider } from './worksheet-reports.provider';
 import { WorksheetUpdateProvider } from './worksheet-update.provider';
 import { PatchWorksheetDto } from '../dto/patch-worksheet.dto';
 import { UpdateWorksheet } from '../interfaces/update-worksheet.interface';
+import { PatchHarvestDto } from '../dto/patch-harvest.dto';
+import { HarvestUpdateProvider } from './harvest/update-harvest.provider';
 
 @Injectable()
 export class WorksheetService {
@@ -48,6 +50,7 @@ export class WorksheetService {
     private readonly getHarvestsProvider: GetHarvestsProvider,
     private readonly getTransitsProvider: GetTransitsProvider,
     private readonly worksheetReportsProvider: WorksheetReportsProvider,
+    private readonly harvestUpdateProvider: HarvestUpdateProvider,
   ) {}
 
   public async getWorksheets(
@@ -222,6 +225,14 @@ export class WorksheetService {
 
   public async getHarvests(getHarvestsDto: GetHarvestsDto) {
     return await this.getHarvestsProvider.getActiveHarvests(getHarvestsDto);
+  }
+
+  public async getHarvestById(id: number) {
+    return await this.getHarvestsProvider.getHarvestById(id);
+  }
+
+  public async updateHarvest(patchHarvestDto: PatchHarvestDto) {
+    return await this.harvestUpdateProvider.updateHarvest(patchHarvestDto);
   }
 
   // public async createHarvest(harvest: CreateHarvestDto) {
