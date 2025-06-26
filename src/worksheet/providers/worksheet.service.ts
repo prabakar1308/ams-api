@@ -31,6 +31,8 @@ import { PatchWorksheetDto } from '../dto/patch-worksheet.dto';
 import { UpdateWorksheet } from '../interfaces/update-worksheet.interface';
 import { PatchHarvestDto } from '../dto/patch-harvest.dto';
 import { HarvestUpdateProvider } from './harvest/update-harvest.provider';
+import { PatchTransitDto } from '../dto/patch-transit.dto';
+import { TransitUpdateProvider } from './transit/update-transit.provider';
 
 @Injectable()
 export class WorksheetService {
@@ -51,6 +53,7 @@ export class WorksheetService {
     private readonly getTransitsProvider: GetTransitsProvider,
     private readonly worksheetReportsProvider: WorksheetReportsProvider,
     private readonly harvestUpdateProvider: HarvestUpdateProvider,
+    private readonly transitUpdateProvider: TransitUpdateProvider,
   ) {}
 
   public async getWorksheets(
@@ -289,6 +292,10 @@ export class WorksheetService {
     return await this.worksheetTransitManyProvider.createMultipleTransits(
       createTransitsDto,
     );
+  }
+
+  public async updateTransit(PatchTransitDto: PatchTransitDto) {
+    return await this.transitUpdateProvider.updateTransit(PatchTransitDto);
   }
 
   public async getWorksheetInputReport(

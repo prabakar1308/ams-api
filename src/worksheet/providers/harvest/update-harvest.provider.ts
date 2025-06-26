@@ -67,7 +67,6 @@ export class HarvestUpdateProvider {
             const worksheet = await this.restockService.getRestockWorksheet(
               harvest.worksheet.id,
             );
-            console.log(worksheet);
             await restockRepo.save({
               harvest: harvest,
               unitId: WorksheetUnit.MILLIONS,

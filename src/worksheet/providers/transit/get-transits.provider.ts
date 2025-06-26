@@ -60,6 +60,7 @@ export class GetTransitsProvider {
 
         return {
           id,
+          harvestId: harvest ? harvest.id : 0,
           createdAt,
           createdBy: userName,
           staffInCharge,
@@ -67,7 +68,11 @@ export class GetTransitsProvider {
             ? `${harvest.count} ${getUnitValue(harvest.unit)}`
             : 'NA',
           transitCount: count ? `${count} ${getUnitValue(unit)}` : 'NA',
+          count,
+          countInStock: harvest ? harvest.countInStock : 0,
+          unitName: getUnitValue(unit),
           unitSector: {
+            id: unitSector.id,
             name: unitSector.name,
             location: unitSector.location,
           },

@@ -23,6 +23,7 @@ import { RestockService } from './providers/restock/restock.service';
 import { GetHarvestsDto } from './dto/get-harvests.dto';
 import { GetReportQueryDto } from './dto/get-report-query.dto';
 import { PatchHarvestDto } from './dto/patch-harvest.dto';
+import { PatchTransitDto } from './dto/patch-transit.dto';
 
 @Controller('worksheet')
 export class WorksheetController {
@@ -193,6 +194,11 @@ export class WorksheetController {
   @Post('create-multiple-transit')
   public createMultipleTransits(@Body() createTransitsDto: CreateTransitsDto) {
     return this.worksheetService.createMultipleTransits(createTransitsDto);
+  }
+
+  @Post('update-transit')
+  public updateTransit(@Body() body: PatchTransitDto) {
+    return this.worksheetService.updateTransit(body);
   }
 
   // Restock
