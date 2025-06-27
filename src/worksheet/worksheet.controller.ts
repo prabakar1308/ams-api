@@ -178,6 +178,11 @@ export class WorksheetController {
     return this.worksheetService.getTransits(body);
   }
 
+  @Get('get-transits-by-harvest-id/:id')
+  public getTransitsByHarvestById(@Param('id', ParseIntPipe) id: number) {
+    return this.worksheetService.getTransitsByHarvestId(id);
+  }
+
   @Post('get-transits-count')
   public getTransitsCount(@Body() body: GetReportQueryDto) {
     return this.worksheetService.getTransitCountTotal(body);

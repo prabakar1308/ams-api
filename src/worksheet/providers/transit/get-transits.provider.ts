@@ -81,6 +81,57 @@ export class GetTransitsProvider {
     );
   }
 
+  public async getCurrentTransitsByHarvestId(
+    harvestId: number,
+  ): Promise<TransitResponse[]> {
+    const transits = await this.transitRepository.find({
+      where: {
+        harvest: { id: harvestId },
+      },
+      order: {
+        unitSector: { name: 'ASC' },
+        createdAt: 'DESC',
+      },
+    });
+
+    return await Promise.all(
+      transits.map(async (transit) => {
+        const {
+          harvest,
+          createdAt,
+          id,
+          count,
+          unit,
+          unitSector,
+          createdBy,
+          staffInCharge,
+        } = transit;
+
+        const userName = await this.userService.getUserNameById(createdBy);
+
+        return {
+          id,
+          harvestId: harvest ? harvest.id : 0,
+          createdAt,
+          createdBy: userName,
+          staffInCharge,
+          harvestCount: harvest
+            ? `${harvest.count} ${getUnitValue(harvest.unit)}`
+            : 'NA',
+          transitCount: count ? `${count} ${getUnitValue(unit)}` : 'NA',
+          count,
+          countInStock: harvest ? harvest.countInStock : 0,
+          unitName: getUnitValue(unit),
+          unitSector: {
+            id: unitSector.id,
+            name: unitSector.name,
+            location: unitSector.location,
+          },
+        };
+      }),
+    );
+  }
+
   // For Dashboard Count
   public async getTransitsTotalCount(
     getTransitsReportDto: GetReportQueryDto,

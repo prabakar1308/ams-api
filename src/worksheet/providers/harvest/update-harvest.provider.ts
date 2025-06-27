@@ -96,6 +96,12 @@ export class HarvestUpdateProvider {
       }
       if (patchHarvestDto.countInStock !== undefined) {
         harvest.countInStock = patchHarvestDto.countInStock;
+        // Update status to 'D' if countInStock is 0
+        if (harvest.countInStock === 0)
+          harvest.status = workSheetTableStatus.COMPLETED;
+        else if (harvest.count === harvest.countInStock)
+          harvest.status = workSheetTableStatus.ACTIVE;
+        else harvest.status = workSheetTableStatus.PARTIALLY_TRANSIT;
       }
       if (patchHarvestDto.measuredBy !== undefined) {
         const measuredBy = await this.userService.findOneById(

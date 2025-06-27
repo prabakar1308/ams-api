@@ -274,6 +274,12 @@ export class WorksheetService {
     );
   }
 
+  public async getTransitsByHarvestId(harvestId: number) {
+    return await this.getTransitsProvider.getCurrentTransitsByHarvestId(
+      harvestId,
+    );
+  }
+
   public async getTransitCountTotal(getTransitsReportDto: GetReportQueryDto) {
     return await this.getTransitsProvider.getTransitsTotalCount(
       getTransitsReportDto,
