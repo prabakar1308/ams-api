@@ -5,7 +5,7 @@ import {
   Injectable,
   RequestTimeoutException,
 } from '@nestjs/common';
-import { DataSource } from 'typeorm';
+import { DataSource, QueryRunner } from 'typeorm';
 
 import { CreateTransitDto } from 'src/worksheet/dto/create-transit.dto';
 import { Transit } from 'src/worksheet/entities/transit.entity';
@@ -112,16 +112,16 @@ export class WorksheetHarvestManyProvider {
           worksheet?.harvestType?.id === WorksheetHarvestType.RESTOCKING
         ) {
           // Find the related restock and update its status to COMPLETED
-          const restockToUpdate = await queryRunner.manager.findOne(Restock, {
-            where: {
-              worksheet: { id: worksheet.id },
-              harvest: { id: harvestResponse.id },
-            },
-          });
-          if (restockToUpdate) {
-            restockToUpdate.status = workSheetTableStatus.COMPLETED;
-            await queryRunner.manager.save(restockToUpdate);
-          }
+          // const restockToUpdate = await queryRunner.manager.findOne(Restock, {
+          //   where: {
+          //     worksheet: { id: worksheet.id },
+          //   },
+          // });
+          // if (restockToUpdate) {
+          //   restockToUpdate.status = workSheetTableStatus.COMPLETED;
+          //   await queryRunner.manager.save(restockToUpdate);
+          // }
+          await this.completeRestocksByWorksheetId(worksheet.id, queryRunner);
         }
 
         // add transit if exists
@@ -165,5 +165,38 @@ export class WorksheetHarvestManyProvider {
       await queryRunner.release();
     }
     return { results, worksheetResponse };
+  }
+
+  private async completeRestocksByWorksheetId(
+    worksheetId: number,
+    queryRunner: QueryRunner,
+  ): Promise<void> {
+    // const queryRunner = this.datasource.createQueryRunner();
+    // 1. Get restockIds from join table
+
+    const restockIdsResult: Array<{ restockId: number }> =
+      await queryRunner.manager
+        .createQueryBuilder()
+        .select('worksheet_restocks_restock."restockId"', 'restockId')
+        .from('worksheet_restocks_restock', 'worksheet_restocks_restock')
+        .where('worksheet_restocks_restock."worksheetId" = :worksheetId', {
+          worksheetId,
+        })
+        .getRawMany();
+
+    const restockIds = restockIdsResult.map((r) => r.restockId);
+
+    if (!restockIds.length) return;
+
+    // 2. Get restock entities by ids
+    const restocks = await queryRunner.manager
+      .getRepository(Restock)
+      .findByIds(restockIds);
+
+    // 3. Update status to COMPLETED
+    for (const restock of restocks) {
+      restock.status = workSheetTableStatus.COMPLETED;
+      await queryRunner.manager.save(restock);
+    }
   }
 }

@@ -11,7 +11,6 @@ import { WorksheetHistory } from '../entities/worksheet-history.entity';
 import { PatchWorksheetsDto } from '../dto/patch-worksheets.dto';
 import { worksheetHistory } from '../enums/worksheet-history-actions.enum';
 import { worksheetStatus } from 'src/dashboard/enums/worksheet-status.enum';
-import { Restock } from '../entities/restock.entity';
 
 @Injectable()
 export class WorksheetUpdateManyProvider {
@@ -85,20 +84,20 @@ export class WorksheetUpdateManyProvider {
           }
         }
 
-        let restocks: Restock[] = [];
-        if (worksheet.restocks && worksheet.restocks.length) {
-          restocks =
-            await this.worksheetDependentsProvider.findMultipleRestocks(
-              worksheet.restocks,
-            );
-        }
+        // let restocks: Restock[] = [];
+        // if (worksheet.restocks && worksheet.restocks.length) {
+        //   restocks =
+        //     await this.worksheetDependentsProvider.findMultipleRestocks(
+        //       worksheet.restocks,
+        //     );
+        // }
 
         const updatedWorksheet = queryRunner.manager.create(Worksheet, {
           ...currentWorksheet,
           user,
           status,
           ...harvestProps,
-          restocks,
+          // restocks,
         });
         const result = await queryRunner.manager.save(updatedWorksheet);
         updatedWorksheets.push(result);

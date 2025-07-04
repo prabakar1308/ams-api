@@ -59,11 +59,11 @@ export class GetHarvestsProvider {
 
     // Sort by tankType value (or id if value is not available)
     harvests.sort((a, b) => {
-      const aType = a.worksheet?.tankType?.value || '';
-      const bType = b.worksheet?.tankType?.value || '';
-      if (aType !== bType) {
-        return aType.localeCompare(bType);
-      }
+      // const aType = a.worksheet?.tankType?.value || '';
+      // const bType = b.worksheet?.tankType?.value || '';
+      // if (aType !== bType) {
+      //   return aType.localeCompare(bType);
+      // }
       const aDate = a.updatedAt ? new Date(a.updatedAt).getTime() : 0;
       const bDate = b.updatedAt ? new Date(b.updatedAt).getTime() : 0;
       return bDate - aDate; // latest first
