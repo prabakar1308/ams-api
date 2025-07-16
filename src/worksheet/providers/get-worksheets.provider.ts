@@ -170,7 +170,7 @@ export class GetWorksheetsProvider {
   ): Promise<
     { inputUnitId: number; inputUnitName: string; totalInputCount: number }[]
   > {
-    // Fetch worksheets with In Stocking status
+    // Fetch worksheets with In Culture status
     const worksheets = await this.worksheetRespository.find({
       where: {
         tankType: { id: tankTypeId },

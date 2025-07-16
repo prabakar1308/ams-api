@@ -31,7 +31,7 @@ export class WorksheetTasksProvider {
     const currentTime = new Date();
 
     try {
-      // Filter worksheets with a In Stocking status and harvestTime greater than the current time
+      // Filter worksheets with a In Culture status and harvestTime greater than the current time
       const worksheets = await this.worksheetRespository
         .createQueryBuilder('worksheet')
         .where('worksheet.status = :status', {

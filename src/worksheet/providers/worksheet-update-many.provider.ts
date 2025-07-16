@@ -67,7 +67,7 @@ export class WorksheetUpdateManyProvider {
           }
           status = currentStatus;
 
-          // update harvest time when movng from ready for stocking to in stocking
+          // update harvest time when movng from ready for stocking to In Culture
           if (
             Number(currentWorksheet.status.id) ===
               Number(worksheetStatus.READY_FOR_STOCKING) &&

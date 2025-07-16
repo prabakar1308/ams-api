@@ -49,7 +49,7 @@ VALUES(1, 1, nextval('master.unit_sector_id_seq'::regclass), 'Unit 9 Bio Farm', 
 ---- password: welcome123
 INSERT INTO master."user"
 ("createdBy", "updatedBy", id, "userCode", "firstName", "lastName", "password", email, "mobileNumber", "role", designation, "dateOfBirth", address, "dateOfJoining", remarks, "createdAt", "updatedAt", "unitSectorId")
-VALUES(0, 0, nextval('master.user_id_seq'::regclass), 'GMH-AMS-1', 'AMS', 'Admin', '$2b$10$bcjIyTjwrH9AkCdJnpH3HuegIz2K5HWdLfzzXGxjF5KqPj6HnmbwW', 'test', '950000', 'admin', 'Manager', '1998-09-18 23:04:02.666', 'test', '2016-09-18 23:04:02.666', '', now(), now(), 1);
+VALUES(0, 0, nextval('master.user_id_seq'::regclass), 'GMH-AMS-1', 'AMS', 'Admin', '$2b$10$bcjIyTjwrH9AkCdJnpH3HuegIz2K5HWdLfzzXGxjF5KqPj6HnmbwW', 'test', '950000', 'super_admin', 'Manager', '1998-09-18 23:04:02.666', 'test', '2016-09-18 23:04:02.666', '', now(), now(), 1);
 
 ----Unit-----
 INSERT INTO master.unit
@@ -121,7 +121,7 @@ INSERT INTO master.worksheet_status
 VALUES(nextval('master.worksheet_status_id_seq'::regclass), 'Ready For Stocking', 'Indicates the tank is ready for stocking', now(), now(), 1, 1);
 INSERT INTO master.worksheet_status
 (id, value, description, "createdAt", "updatedAt", "createdBy", "updatedBy")
-VALUES(nextval('master.worksheet_status_id_seq'::regclass), 'In Stocking', 'Indicates the tank is in stocking', now(), now(), 1, 1);
+VALUES(nextval('master.worksheet_status_id_seq'::regclass), 'In Culture', 'Indicates the tank is In Culture', now(), now(), 1, 1);
 INSERT INTO master.worksheet_status
 (id, value, description, "createdAt", "updatedAt", "createdBy", "updatedBy")
 VALUES(nextval('master.worksheet_status_id_seq'::regclass), 'Ready For Harvest', 'Indicates the tank is ready for harvest', now(), now(), 1, 1);
