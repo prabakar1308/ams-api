@@ -7,3 +7,14 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjUsInVzZXJJZ
     "min": 1,
     "max": 25
 }
+
+PATCH http://localhost:3000/api/master/worksheet-unit
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTc1MzI4MjI4NSwiZXhwIjoxNzU4NTQxODg1LCJhdWQiOiJsb2NhbGhvc3Q6MzAwMCIsImlzcyI6ImxvY2FsaG9zdDozMDAwIn0.Vm-_HByVUxwulRAjrFR3bWoS8cL9xK8CYVjDtZGNPA8
+
+{
+    "id": 6,
+  "value": "Unit New",
+  "brand": "Brand A",
+  "specs": "10kgs"
+}

@@ -17,6 +17,8 @@ import { UnitSectorService } from './providers/unit-sector.service';
 import { CreateUnitSectorDto } from './dto/create-unit-sector.dto';
 import { PatchUnitSectorDto } from './dto/patch-unit-sector.dto';
 import { WorksheetUnitService } from './providers/worksheet-unit.service';
+import { CreateWorksheetUnitDto } from './dto/create-worksheet-unit.dto';
+import { PatchWorksheetUnitDto } from './dto/patch-worksheet-unit.dto';
 
 @Controller('master')
 export class MasterController {
@@ -143,5 +145,20 @@ export class MasterController {
   @Get('worksheet-unit')
   public getWorksheetUnits() {
     return this.worksheetUnitService.getWorksheetUnits();
+  }
+
+  @Post('worksheet-unit')
+  public createWorksheetUnit(
+    @Body() createWorksheetUnitDto: CreateWorksheetUnitDto,
+  ) {
+    return this.worksheetUnitService.createWorksheetUnit(
+      createWorksheetUnitDto,
+    );
+  }
+  @Patch('worksheet-unit')
+  public updateWorksheetUnit(
+    @Body() patchWorksheetUnitDto: PatchWorksheetUnitDto,
+  ) {
+    return this.worksheetUnitService.updateWorksheetUnit(patchWorksheetUnitDto);
   }
 }
