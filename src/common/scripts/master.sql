@@ -117,20 +117,20 @@ VALUES(nextval('master.harvest_type_id_seq'::regclass), 'Restocking', 'Harvest b
 
 ---- Worksheet Status ----
 INSERT INTO master.worksheet_status
-(id, value, description, "createdAt", "updatedAt", "createdBy", "updatedBy")
-VALUES(nextval('master.worksheet_status_id_seq'::regclass), 'Ready For Stocking', 'Indicates the tank is ready for stocking', now(), now(), 1, 1);
+(id, value, "shortName", description, "createdAt", "updatedAt", "createdBy", "updatedBy")
+VALUES(nextval('master.worksheet_status_id_seq'::regclass), 'Ready For Stocking', 'rfs', 'Indicates the tank is ready for stocking', now(), now(), 1, 1);
 INSERT INTO master.worksheet_status
-(id, value, description, "createdAt", "updatedAt", "createdBy", "updatedBy")
-VALUES(nextval('master.worksheet_status_id_seq'::regclass), 'In Culture', 'Indicates the tank is In Culture', now(), now(), 1, 1);
+(id, value, "shortName", description, "createdAt", "updatedAt", "createdBy", "updatedBy")
+VALUES(nextval('master.worksheet_status_id_seq'::regclass), 'In Culture', 'ic', 'Indicates the tank is In Culture', now(), now(), 1, 1);
 INSERT INTO master.worksheet_status
-(id, value, description, "createdAt", "updatedAt", "createdBy", "updatedBy")
-VALUES(nextval('master.worksheet_status_id_seq'::regclass), 'Ready For Harvest', 'Indicates the tank is ready for harvest', now(), now(), 1, 1);
+(id, value, "shortName", description, "createdAt", "updatedAt", "createdBy", "updatedBy")
+VALUES(nextval('master.worksheet_status_id_seq'::regclass), 'Ready For Harvest', 'rfh', 'Indicates the tank is ready for harvest', now(), now(), 1, 1);
 INSERT INTO master.worksheet_status
-(id, value, description, "createdAt", "updatedAt", "createdBy", "updatedBy")
-VALUES(nextval('master.worksheet_status_id_seq'::regclass), 'Completed', 'Indicates the tank harvest is completed', now(), now(), 1, 1);
+(id, value, "shortName", description, "createdAt", "updatedAt", "createdBy", "updatedBy")
+VALUES(nextval('master.worksheet_status_id_seq'::regclass), 'Completed', 'complete', 'Indicates the tank harvest is completed', now(), now(), 1, 1);
 INSERT INTO master.worksheet_status
-(id, value, description, "createdAt", "updatedAt", "createdBy", "updatedBy")
-VALUES(nextval('master.worksheet_status_id_seq'::regclass), 'Free/Open', 'Indicates the tank is free', now(), now(), 1, 1);
+(id, value, "shortName", description, "createdAt", "updatedAt", "createdBy", "updatedBy")
+VALUES(nextval('master.worksheet_status_id_seq'::regclass), 'Empty', 'empty', 'Indicates the tank is free', now(), now(), 1, 1);
 
 
 ---- Temperature -----

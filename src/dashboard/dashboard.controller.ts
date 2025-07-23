@@ -38,4 +38,11 @@ export class DashboardController {
   ) {
     return this.dashboardService.getUsersByTankWise(tankTypeId);
   }
+
+  @Get('tank-list-with-status/:tankTypeId')
+  public getTankListWithStatus(
+    @Param('tankTypeId', ParseIntPipe) tankTypeId: number,
+  ) {
+    return this.dashboardService.getTankListWithStatus(tankTypeId);
+  }
 }

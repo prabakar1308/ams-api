@@ -25,4 +25,10 @@ export class DashboardService {
   public async getUsersByTankWise(tankTypeId: number) {
     return await this.getTankWiseStatusProvider.getUsersByTankWise(tankTypeId);
   }
+
+  public async getTankListWithStatus(tankTypeId: number) {
+    return await this.getTankWiseStatusProvider.getTankListWithStatus(
+      tankTypeId,
+    );
+  }
 }
