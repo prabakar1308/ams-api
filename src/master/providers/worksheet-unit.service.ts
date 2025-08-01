@@ -34,4 +34,8 @@ export class WorksheetUnitService {
     const unit = this.worksheetUnitRepository.create(PatchWorksheetUnitDto);
     return await this.worksheetUnitRepository.save(unit);
   }
+
+  public async deleteWorksheetUnit(id: number) {
+    return await this.worksheetUnitRepository.softDelete(id);
+  }
 }

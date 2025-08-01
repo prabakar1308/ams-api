@@ -1,4 +1,13 @@
-import { Body, Controller, Get, Patch, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  ParseIntPipe,
+  Patch,
+  Post,
+  Query,
+} from '@nestjs/common';
 import { WorksheetStatusService } from './providers/worksheet-status.service';
 import { PatchGenericDto } from './dto/patch-base-generic.dto';
 import { PatchRangeGenericDto } from './dto/patch-range-generic.dto';
@@ -155,10 +164,16 @@ export class MasterController {
       createWorksheetUnitDto,
     );
   }
+
   @Patch('worksheet-unit')
   public updateWorksheetUnit(
     @Body() patchWorksheetUnitDto: PatchWorksheetUnitDto,
   ) {
     return this.worksheetUnitService.updateWorksheetUnit(patchWorksheetUnitDto);
+  }
+
+  @Delete('worksheet-unit')
+  public softDeleteWorksheetUnit(@Query('id', ParseIntPipe) id: number) {
+    return this.worksheetUnitService.deleteWorksheetUnit(id);
   }
 }
