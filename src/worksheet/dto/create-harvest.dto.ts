@@ -1,5 +1,11 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsDate, IsNotEmpty, IsNumber, IsOptional } from 'class-validator';
+import {
+  IsDate,
+  IsNotEmpty,
+  IsNumber,
+  IsOptional,
+  IsString,
+} from 'class-validator';
 
 export class CreateHarvestDto {
   @ApiProperty({
@@ -86,4 +92,8 @@ export class CreateHarvestDto {
   @IsDate()
   @IsOptional()
   generatedAt: Date;
+
+  @IsString()
+  @IsOptional()
+  remarks: string;
 }
