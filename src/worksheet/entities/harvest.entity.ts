@@ -47,6 +47,20 @@ export class Harvest extends BaseEntity {
   })
   status: string;
 
+  @Column({
+    type: 'varchar',
+    length: 500,
+    nullable: true,
+  })
+  remarks: string;
+
+  @Column({
+    type: 'timestamp',
+    nullable: true,
+    default: () => 'CURRENT_TIMESTAMP',
+  })
+  generatedAt: Date;
+
   @CreateDateColumn()
   createdAt: Date;
 

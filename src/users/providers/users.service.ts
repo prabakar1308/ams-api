@@ -30,6 +30,10 @@ export class UsersService {
     return await this.updateUserProvider.updateUser(patchUserDto);
   }
 
+  public async resetPassword(userId: string, newPassword: string) {
+    return await this.updateUserProvider.resetPassword(userId, newPassword);
+  }
+
   public async findOneByUserCode(userCode: string) {
     return await this.findUserById.findOneByUserCode(userCode);
   }

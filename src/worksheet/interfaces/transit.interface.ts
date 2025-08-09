@@ -1,7 +1,8 @@
 export interface TransitResponse {
   id: number;
   harvestId?: number;
-  createdAt: Date;
+  createdAt?: Date;
+  generatedAt: Date;
   createdBy: string;
   harvestCount: string;
   transitCount: string;

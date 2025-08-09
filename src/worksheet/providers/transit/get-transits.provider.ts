@@ -3,8 +3,6 @@ import { MoreThanOrEqual, Repository, Between } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { toZonedTime } from 'date-fns-tz';
 
-import { Harvest } from 'src/worksheet/entities/harvest.entity';
-import { Worksheet } from 'src/worksheet/entities/worksheet.entity';
 import { Transit } from 'src/worksheet/entities/transit.entity';
 import { getUnitValue } from 'src/worksheet/utils';
 import { GetReportQueryDto } from 'src/worksheet/dto/get-report-query.dto';
@@ -17,10 +15,6 @@ export class GetTransitsProvider {
   constructor(
     @InjectRepository(Transit)
     private readonly transitRepository: Repository<Transit>,
-    @InjectRepository(Harvest)
-    private readonly harvestRepository: Repository<Harvest>,
-    @InjectRepository(Worksheet)
-    private readonly worksheetRepository: Repository<Worksheet>,
     private readonly userService: UsersService,
   ) {}
 
@@ -34,11 +28,11 @@ export class GetTransitsProvider {
 
     const transits = await this.transitRepository.find({
       where: {
-        createdAt: MoreThanOrEqual(dateThreshold),
+        generatedAt: MoreThanOrEqual(dateThreshold),
       },
       order: {
         unitSector: { name: 'ASC' },
-        createdAt: 'DESC', // Order by latest first
+        generatedAt: 'DESC', // Order by latest first
       },
     });
 
@@ -47,7 +41,7 @@ export class GetTransitsProvider {
       transits.map(async (transit) => {
         const {
           harvest,
-          createdAt,
+          generatedAt,
           id,
           count,
           unit,
@@ -61,7 +55,7 @@ export class GetTransitsProvider {
         return {
           id,
           harvestId: harvest ? harvest.id : 0,
-          createdAt,
+          generatedAt,
           createdBy: userName,
           staffInCharge,
           harvestCount: harvest
@@ -90,7 +84,7 @@ export class GetTransitsProvider {
       },
       order: {
         unitSector: { name: 'ASC' },
-        createdAt: 'DESC',
+        generatedAt: 'DESC',
       },
     });
 
@@ -98,7 +92,7 @@ export class GetTransitsProvider {
       transits.map(async (transit) => {
         const {
           harvest,
-          createdAt,
+          generatedAt,
           id,
           count,
           unit,
@@ -112,7 +106,7 @@ export class GetTransitsProvider {
         return {
           id,
           harvestId: harvest ? harvest.id : 0,
-          createdAt,
+          generatedAt,
           createdBy: userName,
           staffInCharge,
           harvestCount: harvest
@@ -147,7 +141,7 @@ export class GetTransitsProvider {
     // Fetch transits and calculate the total count
     const transits = await this.transitRepository.find({
       where: {
-        createdAt: MoreThanOrEqual(dateThreshold),
+        generatedAt: MoreThanOrEqual(dateThreshold),
         ...(unitId ? { unit: { id: unitId } } : {}),
       },
     });
@@ -192,11 +186,11 @@ export class GetTransitsProvider {
     // Fetch transits created within the date range
     const transits = await this.transitRepository.find({
       where: {
-        createdAt: Between(start, end),
+        generatedAt: Between(start, end),
         ...(unitId ? { unit: { id: unitId } } : {}),
       },
       order: {
-        createdAt: 'DESC',
+        generatedAt: 'DESC',
       },
     });
 
@@ -204,7 +198,7 @@ export class GetTransitsProvider {
     const groupedTransits = await transits.reduce(
       async (accPromise, transit) => {
         const acc = await accPromise;
-        const { unitSector, createdAt } = transit;
+        const { unitSector, generatedAt } = transit;
 
         if (!unitSector) {
           return acc; // Skip if unitSector is not defined
@@ -239,10 +233,10 @@ export class GetTransitsProvider {
 
         // Determine if the transit belongs to the day shift or night shift
         const timeZone = 'Asia/Kolkata';
-        const localDate = toZonedTime(createdAt, timeZone);
+        const localDate = toZonedTime(generatedAt, timeZone);
         const hours = localDate.getHours();
         const shift = hours >= 6 && hours < 18 ? 'dayShift' : 'nightShift';
-        // const hours = createdAt.getHours();
+        // const hours = generatedAt.getHours();
         // const shift = hours >= 6 && hours < 18 ? 'dayShift' : 'nightShift';
 
         const userName = await this.userService.getUserNameById(
@@ -251,7 +245,7 @@ export class GetTransitsProvider {
 
         acc[sectorKey].shifts[shift].transits.push({
           id: transit.id,
-          createdAt: transit.createdAt,
+          generatedAt: transit.generatedAt,
           createdBy: userName,
           staffInCharge: transit.staffInCharge,
           harvestCount: transit.harvest

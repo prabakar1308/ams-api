@@ -93,6 +93,7 @@ export class WorksheetHarvestManyProvider {
           restock.harvestId = harvestResponse.id;
           restock.count = harvest.restockCount;
           restock.unitId = harvest.restockUnitId;
+          restock.generatedAt = harvest.generatedAt;
           restock.status = workSheetTableStatus.ACTIVE;
 
           const unit = await this.restockService.getRestockUnit(restock.unitId);

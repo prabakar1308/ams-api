@@ -42,6 +42,13 @@ export class Transit extends BaseEntity {
   })
   staffInCharge: string;
 
+  @Column({
+    type: 'timestamp',
+    nullable: true,
+    default: () => 'CURRENT_TIMESTAMP',
+  })
+  generatedAt: Date;
+
   @CreateDateColumn()
   createdAt: Date;
 

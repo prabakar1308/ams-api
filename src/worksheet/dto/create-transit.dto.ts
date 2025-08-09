@@ -1,5 +1,11 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
+import {
+  IsDate,
+  IsNotEmpty,
+  IsNumber,
+  IsOptional,
+  IsString,
+} from 'class-validator';
 
 export class CreateTransitDto {
   @ApiProperty({
@@ -41,4 +47,8 @@ export class CreateTransitDto {
   @IsString()
   @IsOptional()
   staffInCharge?: string;
+
+  @IsDate()
+  @IsOptional()
+  generatedAt: Date;
 }

@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsNumber } from 'class-validator';
+import { IsDate, IsNotEmpty, IsNumber, IsOptional } from 'class-validator';
 
 export class CreateRestockDto {
   @ApiProperty({
@@ -42,4 +42,8 @@ export class CreateRestockDto {
   @IsNumber()
   @IsNotEmpty()
   unitId: number;
+
+  @IsDate()
+  @IsOptional()
+  generatedAt: Date;
 }

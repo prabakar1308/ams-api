@@ -65,4 +65,8 @@ export class CreateWorksheetDto {
   @IsOptional()
   @IsInt({ each: true })
   restocks?: number[];
+
+  @IsDate()
+  @IsOptional()
+  generatedAt: Date;
 }

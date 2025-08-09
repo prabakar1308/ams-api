@@ -64,8 +64,8 @@ export class GetHarvestsProvider {
       // if (aType !== bType) {
       //   return aType.localeCompare(bType);
       // }
-      const aDate = a.updatedAt ? new Date(a.updatedAt).getTime() : 0;
-      const bDate = b.updatedAt ? new Date(b.updatedAt).getTime() : 0;
+      const aDate = a.generatedAt ? new Date(a.generatedAt).getTime() : 0;
+      const bDate = b.generatedAt ? new Date(b.generatedAt).getTime() : 0;
       return bDate - aDate; // latest first
     });
 

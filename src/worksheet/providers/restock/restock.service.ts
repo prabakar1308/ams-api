@@ -76,7 +76,7 @@ export class RestockService {
           count,
           id,
           createdBy,
-          createdAt,
+          generatedAt,
         } = restock;
 
         const userName = await this.userService.getUserNameById(createdBy);
@@ -84,7 +84,7 @@ export class RestockService {
         console.log(worksheetId, id, 'worksheetId');
         return {
           id,
-          createdAt,
+          generatedAt,
           createdBy: userName,
           status,
           count,

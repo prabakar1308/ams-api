@@ -1,6 +1,6 @@
 export interface ActiveRestock {
   id: number;
-  createdAt: Date;
+  generatedAt: Date;
   createdBy: string;
   status: string;
   count: number;

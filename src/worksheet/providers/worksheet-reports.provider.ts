@@ -32,7 +32,7 @@ export class WorksheetReportsProvider {
 
     const worksheets = await this.worksheetRespository.find({
       where: {
-        createdAt: Between(start, end),
+        generatedAt: Between(start, end),
         status: { id: In([worksheetCompletedStatusId]) },
       },
       relations: ['inputUnit', 'tankType'],

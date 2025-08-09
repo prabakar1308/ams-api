@@ -99,7 +99,7 @@ export class GetWorksheetsProvider {
         inputUnit,
         harvestTime,
         harvestHours,
-        createdAt,
+        generatedAt,
         ph,
         salnity,
         temperature,
@@ -109,7 +109,7 @@ export class GetWorksheetsProvider {
         status &&
         status.id &&
         Number(status.id) === Number(worksheetStatus.READY_FOR_STOCKING)
-          ? createdAt
+          ? generatedAt
           : harvestTime;
 
       const parameters: WorksheetParameters[] = [];

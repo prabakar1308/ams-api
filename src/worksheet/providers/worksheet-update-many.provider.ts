@@ -73,9 +73,12 @@ export class WorksheetUpdateManyProvider {
               Number(worksheetStatus.READY_FOR_STOCKING) &&
             Number(worksheet.statusId) === Number(worksheetStatus.IN_STOCKING)
           ) {
+            const generatedDate = currentWorksheet.generatedAt
+              ? new Date(currentWorksheet.generatedAt)
+              : new Date();
             const harvestTime = new Date(
-              new Date().setHours(
-                new Date().getHours() + currentWorksheet.harvestHours,
+              generatedDate.setHours(
+                generatedDate.getHours() + currentWorksheet.harvestHours,
               ),
             );
             harvestProps = {

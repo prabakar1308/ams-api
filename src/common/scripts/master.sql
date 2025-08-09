@@ -85,7 +85,10 @@ INSERT INTO master.worksheet_unit
 VALUES(1, 1, nextval('master.unit_id_seq'::regclass), 'Tins', 'Inve', NULL, '2025-05-18 13:06:30.932', '2025-05-18 13:06:30.932');
 INSERT INTO master.worksheet_unit
 ("createdBy", "updatedBy", id, value, brand, specs, "createdAt", "updatedAt")
-VALUES(1, 1, nextval('master.unit_id_seq'::regclass), 'Bags', 'Ria', '5 kgs', '2025-05-18 07:31:58.480', '2025-05-18 07:31:58.480');
+VALUES(1, 1, nextval('master.unit_id_seq'::regclass), 'Tins', 'Sha', NULL, '2025-05-18 13:06:30.932', '2025-05-18 13:06:30.932');
+INSERT INTO master.worksheet_unit
+("createdBy", "updatedBy", id, value, brand, specs, "createdAt", "updatedAt")
+VALUES(1, 1, nextval('master.unit_id_seq'::regclass), 'Bags', 'Arsal', '5 kgs', '2025-05-18 07:31:58.480', '2025-05-18 07:31:58.480');
 
 ---Tank Types ---
 
@@ -136,7 +139,7 @@ VALUES(nextval('master.worksheet_status_id_seq'::regclass), 'Empty', 'empty', 'I
 ---- Temperature -----
 INSERT INTO master.temperature
 (id, min, max, "defaultValue", "unitId", "createdAt", "updatedAt", "createdBy", "updatedBy", "step")
-VALUES(nextval('master.temperature_id_seq'::regclass), 25, 35, 30, 1, now(), now(), 1, 1, 1);
+VALUES(nextval('master.temperature_id_seq'::regclass), 20, 35, 30, 1, now(), now(), 1, 1, 1);
 
 
 ---- Tank -----
@@ -147,7 +150,7 @@ VALUES(nextval('master.tank_id_seq'::regclass), 1, 25, NULL, now(), now(), 1, 1)
 ---- PH -----
 INSERT INTO master.ph
 (id, min, max, "defaultValue", "unitId", "createdAt", "updatedAt", "createdBy", "updatedBy", "step")
-VALUES(nextval('master.ph_id_seq'::regclass), 7.5, 8.5, 7.8, NULL, now(), now(), 1, 1, 0.1);
+VALUES(nextval('master.ph_id_seq'::regclass), 7.5, 9.5, 7.8, NULL, now(), now(), 1, 1, 0.1);
 
 ---- Salinity -----
 INSERT INTO master.salnity
