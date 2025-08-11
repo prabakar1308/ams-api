@@ -23,6 +23,7 @@ export class DataResponseInterceptor implements NestInterceptor {
         apiVersion: this.configService.get<string>('appConfig.apiVersion'),
       })),
       catchError((err: unknown) => {
+        console.log('Error:', err);
         const status = err instanceof HttpException ? err.getStatus() : 500;
         const errorResponse = {
           status,

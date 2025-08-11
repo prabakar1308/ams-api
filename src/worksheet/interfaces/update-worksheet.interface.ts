@@ -12,4 +12,5 @@ export interface UpdateWorksheet {
   statusId?: number;
   id?: number;
   restocks?: number[];
+  generatedAt?: Date;
 }

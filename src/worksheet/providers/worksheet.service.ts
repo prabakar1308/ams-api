@@ -135,6 +135,7 @@ export class WorksheetService {
         userId: worksheet.user.id,
         tankNumber: worksheet.tankNumber,
         tankTypeId: worksheet.tankType.id,
+        generatedAt: worksheet.generatedAt,
         restocks: worksheet.restocks.map((restock) => restock.id),
       };
     }
