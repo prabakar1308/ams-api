@@ -25,7 +25,6 @@ export class UserSubscriber implements EntitySubscriberInterface<BaseEntity> {
     const user = this.cls.get<{
       userId: number;
     }>('user');
-    console.log(user);
     event.entity.createdBy = user ? user.userId : 0;
   }
 

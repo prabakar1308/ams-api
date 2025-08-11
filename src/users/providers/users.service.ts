@@ -45,6 +45,7 @@ export class UsersService {
         page: getUsersDto.page,
       },
       this.userRepository,
+      'createdAt',
     );
   }
 

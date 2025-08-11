@@ -142,6 +142,7 @@ export class GetWorksheetsProvider {
         inputSource: inputCount ? inputValue : '',
         harvestHours,
         timeDifference: getDateDifference(dateInput, status ? status.id : 0),
+        generatedAt,
         parameters,
       };
     });

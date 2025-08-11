@@ -2,7 +2,7 @@
 import {
   IsDate,
   IsEnum,
-  IsInt,
+  // IsInt,
   IsMobilePhone,
   IsOptional,
   IsString,
@@ -36,8 +36,8 @@ export class CreateUserDto {
   @IsString({ message: 'Designation must be a string' })
   designation: string;
 
-  @IsInt({ message: 'Unit Sector Id must be a number' })
-  unitSectorId: number;
+  // @IsInt({ message: 'Unit Sector Id must be a number' })
+  // unitSectorId: number;
 
   @IsMobilePhone(
     'en-IN',

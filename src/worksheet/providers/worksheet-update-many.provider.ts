@@ -55,6 +55,11 @@ export class WorksheetUpdateManyProvider {
           }
           user = currentUser;
         }
+
+        let generatedAt: Date = currentWorksheet.generatedAt;
+        if (worksheet.generatedAt) {
+          generatedAt = new Date(worksheet.generatedAt);
+        }
         let status: Worksheet['status'] = currentWorksheet.status;
         let harvestProps = {};
         if (worksheet.statusId) {
@@ -73,8 +78,8 @@ export class WorksheetUpdateManyProvider {
               Number(worksheetStatus.READY_FOR_STOCKING) &&
             Number(worksheet.statusId) === Number(worksheetStatus.IN_STOCKING)
           ) {
-            const generatedDate = currentWorksheet.generatedAt
-              ? new Date(currentWorksheet.generatedAt)
+            const generatedDate = generatedAt
+              ? new Date(generatedAt)
               : new Date();
             const harvestTime = new Date(
               generatedDate.setHours(
@@ -99,6 +104,7 @@ export class WorksheetUpdateManyProvider {
           ...currentWorksheet,
           user,
           status,
+          generatedAt,
           ...harvestProps,
           // restocks,
         });
