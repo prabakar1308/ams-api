@@ -117,6 +117,10 @@ export class HarvestUpdateProvider {
         harvest.unit = unit || harvest.unit;
       }
 
+      if (patchHarvestDto.generatedAt !== undefined) {
+        harvest.generatedAt = patchHarvestDto.generatedAt;
+      }
+
       const updatedHarvest = await queryRunner.manager.save(harvest);
       await queryRunner.commitTransaction();
       return updatedHarvest;

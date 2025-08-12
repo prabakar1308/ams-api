@@ -42,7 +42,8 @@ export class WorksheetController {
   }
 
   @Post('get-active-worksheets')
-  public getActiveWorksheet(@Body() body: GetWorksheetsDto) {
+  public async getActiveWorksheet(@Body() body: GetWorksheetsDto) {
+    await this.worksheetService.updateWorksheetsStatus();
     return this.worksheetService.getActiveWorksheets(body);
   }
 

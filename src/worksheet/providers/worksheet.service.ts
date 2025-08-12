@@ -33,6 +33,7 @@ import { PatchHarvestDto } from '../dto/patch-harvest.dto';
 import { HarvestUpdateProvider } from './harvest/update-harvest.provider';
 import { PatchTransitDto } from '../dto/patch-transit.dto';
 import { TransitUpdateProvider } from './transit/update-transit.provider';
+import { WorksheetTasksProvider } from './worksheet-tasks.provider';
 
 @Injectable()
 export class WorksheetService {
@@ -54,6 +55,7 @@ export class WorksheetService {
     private readonly worksheetReportsProvider: WorksheetReportsProvider,
     private readonly harvestUpdateProvider: HarvestUpdateProvider,
     private readonly transitUpdateProvider: TransitUpdateProvider,
+    private readonly worksheetTasksProvider: WorksheetTasksProvider,
   ) {}
 
   public async getWorksheets(
@@ -315,5 +317,9 @@ export class WorksheetService {
 
   public async getCurrentInputUnitsReport() {
     return await this.worksheetReportsProvider.getCurrentInputUnitsReport();
+  }
+
+  public async updateWorksheetsStatus() {
+    return await this.worksheetTasksProvider.updateWorksheetStatus();
   }
 }

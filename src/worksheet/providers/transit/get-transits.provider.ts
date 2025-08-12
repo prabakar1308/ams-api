@@ -159,7 +159,7 @@ export class GetTransitsProvider {
     getTransitsReportDto: GetReportQueryDto,
   ): Promise<
     {
-      unitSector: { name: string; location: string };
+      unitSector: { id: number; name: string; location: string };
       totalTransitCount: string;
       millions: number;
       frozenCups: number;
@@ -209,6 +209,7 @@ export class GetTransitsProvider {
         if (!acc[sectorKey]) {
           acc[sectorKey] = {
             unitSector: {
+              id: unitSector.id,
               name: unitSector.name,
               location: unitSector.location || '',
             },
@@ -255,6 +256,7 @@ export class GetTransitsProvider {
             ? `${transit.count} ${getUnitValue(transit.unit)}`
             : 'NA',
           unitSector: {
+            id: unitSector.id,
             name: unitSector.name,
             location: unitSector.location,
           },
@@ -279,7 +281,7 @@ export class GetTransitsProvider {
         {} as Record<
           string,
           {
-            unitSector: { name: string; location: string };
+            unitSector: { id: number; name: string; location: string };
             totalTransitCount: number;
             millions: number;
             frozenCups: number;
