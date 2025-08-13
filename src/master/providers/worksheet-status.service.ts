@@ -19,7 +19,9 @@ export class WorksheetStatusService {
   }
 
   public async getWorksheetStatus() {
-    return await this.worksheetStatusRepository.find();
+    return await this.worksheetStatusRepository.find({
+      order: { id: 'ASC' },
+    });
   }
 
   public async getWorksheetStatusById(id: number) {

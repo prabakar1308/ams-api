@@ -4,6 +4,7 @@ import { ConfigService } from '@nestjs/config';
 import { TankService } from 'src/master/providers/tank.service';
 import { TankWiseStatus } from '../interfaces/tank-wise-status';
 import { worksheetStatus } from '../enums/worksheet-status.enum';
+import { WorksheetStatusService } from 'src/master/providers/worksheet-status.service';
 
 @Injectable()
 export class GetTankWiseStatusProvider {
@@ -11,6 +12,7 @@ export class GetTankWiseStatusProvider {
     private readonly tankService: TankService,
     private readonly worksheetService: WorksheetService,
     private readonly configService: ConfigService,
+    private readonly worksheetStatusService: WorksheetStatusService,
   ) {}
 
   private groupAndSum(arr: TankWiseStatus[]) {
@@ -64,7 +66,20 @@ export class GetTankWiseStatusProvider {
         });
       }
     }
-    return this.groupAndSum(tankStatuses);
+    const result = this.groupAndSum(tankStatuses);
+
+    const worksheetStatuses =
+      await this.worksheetStatusService.getWorksheetStatus();
+    return worksheetStatuses
+      .filter((ws) => ws.id !== (worksheetStatus.COMPLETE as typeof ws.id))
+      .map((status) => {
+        const tankWiseStatus = result.find((item) => item.id === status.id);
+        return {
+          id: status.id,
+          name: status.value,
+          value: tankWiseStatus ? tankWiseStatus.value : 0,
+        };
+      });
   }
 
   public async getUsersByTankWise(tankTypeId: number) {
