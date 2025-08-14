@@ -57,6 +57,7 @@ export class GetTransitsProvider {
           harvestId: harvest ? harvest.id : 0,
           generatedAt,
           createdBy: userName,
+          createdById: createdBy,
           staffInCharge,
           harvestCount: harvest
             ? `${harvest.count} ${getUnitValue(harvest.unit)}`

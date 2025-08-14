@@ -51,6 +51,27 @@ INSERT INTO master."user"
 ("createdBy", "updatedBy", id, "userCode", "firstName", "lastName", "password", email, "mobileNumber", "role", designation, "dateOfBirth", address, "dateOfJoining", remarks, "createdAt", "updatedAt", "unitSectorId")
 VALUES(0, 0, nextval('master.user_id_seq'::regclass), 'GMH-AMS-1', 'AMS', 'Admin', '$2b$10$bcjIyTjwrH9AkCdJnpH3HuegIz2K5HWdLfzzXGxjF5KqPj6HnmbwW', 'test', '950000', 'super_admin', 'Manager', '1998-09-18 23:04:02.666', 'test', '2016-09-18 23:04:02.666', '', now(), now(), 1);
 
+
+
+
+---- Worksheet Unit -----
+
+INSERT INTO master.worksheet_unit
+("createdBy", "updatedBy", id, value, brand, specs, "createdAt", "updatedAt")
+VALUES(1, 1, nextval('master.worksheet_unit_id_seq'::regclass), 'Millions', '', '', '2025-05-17 23:08:19.979', '2025-05-17 23:08:19.979');
+INSERT INTO master.worksheet_unit
+("createdBy", "updatedBy", id, value, brand, specs, "createdAt", "updatedAt")
+VALUES(1, 1, nextval('master.worksheet_unit_id_seq'::regclass), 'Frozen Cups', NULL, NULL, '2025-05-18 13:03:25.357', '2025-05-18 13:03:25.357');
+INSERT INTO master.worksheet_unit
+("createdBy", "updatedBy", id, value, brand, specs, "createdAt", "updatedAt")
+VALUES(1, 1, nextval('master.worksheet_unit_id_seq'::regclass), 'Tins', 'Inve', NULL, '2025-05-18 13:06:30.932', '2025-05-18 13:06:30.932');
+INSERT INTO master.worksheet_unit
+("createdBy", "updatedBy", id, value, brand, specs, "createdAt", "updatedAt")
+VALUES(1, 1, nextval('master.worksheet_unit_id_seq'::regclass), 'Tins', 'Sha', NULL, '2025-05-18 13:06:30.932', '2025-05-18 13:06:30.932');
+INSERT INTO master.worksheet_unit
+("createdBy", "updatedBy", id, value, brand, specs, "createdAt", "updatedAt")
+VALUES(1, 1, nextval('master.worksheet_unit_id_seq'::regclass), 'Bags', 'Arsal', '5 kgs', '2025-05-18 07:31:58.480', '2025-05-18 07:31:58.480');
+
 ----Unit-----
 INSERT INTO master.unit
 ("createdBy", "updatedBy", id, value, description, "createdAt", "updatedAt")
@@ -70,25 +91,6 @@ VALUES(1, 1, nextval('master.unit_id_seq'::regclass), 'Millions', '', now(), now
 INSERT INTO master.unit
 ("createdBy", "updatedBy", id, value, description, "createdAt", "updatedAt")
 VALUES(1, 1, nextval('master.unit_id_seq'::regclass), 'Frozen Cups', '', now(), now());
-
-
----- Worksheet Unit -----
-
-INSERT INTO master.worksheet_unit
-("createdBy", "updatedBy", id, value, brand, specs, "createdAt", "updatedAt")
-VALUES(1, 1, nextval('master.unit_id_seq'::regclass), 'Millions', '', '', '2025-05-17 23:08:19.979', '2025-05-17 23:08:19.979');
-INSERT INTO master.worksheet_unit
-("createdBy", "updatedBy", id, value, brand, specs, "createdAt", "updatedAt")
-VALUES(1, 1, nextval('master.unit_id_seq'::regclass), 'Frozen Cups', NULL, NULL, '2025-05-18 13:03:25.357', '2025-05-18 13:03:25.357');
-INSERT INTO master.worksheet_unit
-("createdBy", "updatedBy", id, value, brand, specs, "createdAt", "updatedAt")
-VALUES(1, 1, nextval('master.unit_id_seq'::regclass), 'Tins', 'Inve', NULL, '2025-05-18 13:06:30.932', '2025-05-18 13:06:30.932');
-INSERT INTO master.worksheet_unit
-("createdBy", "updatedBy", id, value, brand, specs, "createdAt", "updatedAt")
-VALUES(1, 1, nextval('master.unit_id_seq'::regclass), 'Tins', 'Sha', NULL, '2025-05-18 13:06:30.932', '2025-05-18 13:06:30.932');
-INSERT INTO master.worksheet_unit
-("createdBy", "updatedBy", id, value, brand, specs, "createdAt", "updatedAt")
-VALUES(1, 1, nextval('master.unit_id_seq'::regclass), 'Bags', 'Arsal', '5 kgs', '2025-05-18 07:31:58.480', '2025-05-18 07:31:58.480');
 
 ---Tank Types ---
 
