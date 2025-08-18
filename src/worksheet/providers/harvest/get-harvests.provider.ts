@@ -76,7 +76,9 @@ export class GetHarvestsProvider {
           relations: ['tankType', 'harvestType'],
         });
 
-        const { tankType, harvestType, tankNumber, id } = worksheet || {};
+        const { tankType, harvestType, tankNumber, id, inputCount, inputUnit } =
+          worksheet || {};
+        const inputValue = `${inputCount} ${getUnitValue(inputUnit)}`;
         return {
           ...harvest,
           unit: { id: harvest.unit.id, value: getUnitValue(harvest.unit) },
@@ -93,6 +95,7 @@ export class GetHarvestsProvider {
             harvestType: harvestType
               ? { id: harvestType.id, value: harvestType.value }
               : undefined,
+            inputSource: inputCount ? inputValue : '',
           },
         };
       }),
@@ -139,6 +142,7 @@ export class GetHarvestsProvider {
         relations: ['tankType', 'harvestType'],
       });
       if (worksheet) {
+        const inputValue = `${worksheet.inputCount} ${getUnitValue(worksheet.inputUnit)}`;
         worksheetDetails = {
           tankNumber: worksheet.tankNumber,
           tankType: worksheet.tankType
@@ -150,6 +154,7 @@ export class GetHarvestsProvider {
                 value: worksheet.harvestType.value,
               }
             : undefined,
+          inputSource: worksheet.inputCount ? inputValue : '',
         };
       }
     }

@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { Between, In, Not, Repository } from 'typeorm';
+import { Between, In, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 
 import { Worksheet } from '../entities/worksheet.entity';
@@ -125,13 +125,11 @@ export class WorksheetReportsProvider {
   }
 
   public async getCurrentInputUnitsReport() {
-    const worksheetCompletedStatusId = +this.configService.get(
-      'WORKSHEET_COMPLETED_STATUS',
-    );
+    // Fetch all worksheets that are in culture and ready for harvest
 
     const worksheets = await this.worksheetRespository.find({
       where: {
-        status: { id: Not(worksheetCompletedStatusId) },
+        status: { id: In([2, 3]) },
       },
       relations: ['inputUnit', 'tankType'],
     });

@@ -64,6 +64,7 @@ export class WorksheetTransitManyProvider {
           unit: unit || undefined,
           harvest,
           unitSector: unitSector || undefined,
+          generatedAt: createTransits.generatedAt || new Date(),
         });
         const transitResponse = await queryRunner.manager.save(newTransit);
         transitCount += transit.count;

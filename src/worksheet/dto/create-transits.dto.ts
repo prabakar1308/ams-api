@@ -1,4 +1,11 @@
-import { IsArray, IsNotEmpty, IsInt, ValidateNested } from 'class-validator';
+import {
+  IsArray,
+  IsNotEmpty,
+  IsInt,
+  ValidateNested,
+  IsDate,
+  IsOptional,
+} from 'class-validator';
 import { Type } from 'class-transformer';
 import { ApiProperty } from '@nestjs/swagger';
 import { CreateTransitDto } from './create-transit.dto';
@@ -11,6 +18,10 @@ export class CreateTransitsDto {
   })
   @IsInt()
   harvestId: number;
+
+  @IsDate()
+  @IsOptional()
+  generatedAt: Date;
 
   @ApiProperty({
     type: 'array',
