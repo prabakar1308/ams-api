@@ -19,5 +19,6 @@ export interface TransitResponse {
   };
   count?: number;
   countInStock?: number;
+  unitId?: number;
   unitName?: string;
 }

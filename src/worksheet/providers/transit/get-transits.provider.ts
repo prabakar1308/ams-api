@@ -65,6 +65,7 @@ export class GetTransitsProvider {
           transitCount: count ? `${count} ${getUnitValue(unit)}` : 'NA',
           count,
           countInStock: harvest ? harvest.countInStock : 0,
+          unitId: unit ? unit.id : undefined,
           unitName: getUnitValue(unit),
           unitSector: {
             id: unitSector.id,

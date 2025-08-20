@@ -120,6 +120,7 @@ export class WorksheetUpdateProvider {
         // Fetch the worksheet by ID
         const worksheet = await manager.findOne(Worksheet, {
           where: { id: worksheetDto.id },
+          relations: ['restocks'],
         });
 
         const currentValue = JSON.stringify(worksheetDto);
@@ -141,7 +142,7 @@ export class WorksheetUpdateProvider {
 
         let restocks: Restock[] = [];
 
-        if (worksheetDto.restocks && worksheetDto.restocks.length) {
+        if (worksheet.restocks && worksheet.restocks.length) {
           // Load all existing restocks for this worksheet
           const existingRestocks: Restock[] = await manager
             .createQueryBuilder()
@@ -161,11 +162,13 @@ export class WorksheetUpdateProvider {
             .relation(Worksheet, 'restocks')
             .of(worksheet.id)
             .remove(existingRestocks);
+        }
 
+        if (worksheetDto.restocks && worksheetDto.restocks.length) {
           // Find and add the new restocks, and update their status to 'U'
           restocks =
             await this.worksheetDependentsProvider.findMultipleRestocks(
-              worksheetDto.restocks,
+              worksheetDto.restocks || [],
             );
           for (const restock of restocks) {
             restock.status = 'U';

@@ -63,6 +63,7 @@ export class RestockService {
         statusList.length > 1
           ? statusList.map((s) => ({ status: s }))
           : { status: statusList[0] },
+      order: { createdAt: 'DESC' },
     });
 
     // Use Promise.all to resolve all asynchronous operations

@@ -1,6 +1,12 @@
 // import { PartialType } from '@nestjs/mapped-types';
 import { ApiProperty, PartialType } from '@nestjs/swagger';
-import { IsBoolean, IsInt, IsNotEmpty, IsOptional } from 'class-validator';
+import {
+  IsBoolean,
+  IsDate,
+  IsInt,
+  IsNotEmpty,
+  IsOptional,
+} from 'class-validator';
 import { CreateTransitDto } from './create-transit.dto';
 
 export class PatchTransitDto extends PartialType(CreateTransitDto) {
@@ -18,4 +24,8 @@ export class PatchTransitDto extends PartialType(CreateTransitDto) {
   @IsBoolean()
   @IsOptional()
   isDelete?: boolean;
+
+  @IsDate()
+  @IsOptional()
+  generatedAt: Date;
 }
