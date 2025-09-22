@@ -1,6 +1,12 @@
 // import { PartialType } from '@nestjs/mapped-types';
 import { ApiProperty, PartialType } from '@nestjs/swagger';
-import { IsInt, IsNotEmpty, ValidateNested } from 'class-validator';
+import {
+  IsDate,
+  IsInt,
+  IsNotEmpty,
+  IsOptional,
+  ValidateNested,
+} from 'class-validator';
 import { CreateWorksheetDto } from './create-worksheet.dto';
 import { GetWorksheetsDto } from './get-worksheets.dto';
 import { Type } from 'class-transformer';
@@ -15,6 +21,10 @@ export class PatchWorksheetDto extends PartialType(CreateWorksheetDto) {
 
   @IsInt()
   statusId?: number;
+
+  @IsDate()
+  @IsOptional()
+  harvestedAt?: Date;
 
   @IsInt()
   userId?: number;

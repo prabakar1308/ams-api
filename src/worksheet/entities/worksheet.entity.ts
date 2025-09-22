@@ -95,6 +95,13 @@ export class Worksheet extends BaseEntity {
   })
   generatedAt: Date;
 
+  @Column({
+    type: 'timestamp',
+    nullable: true,
+    default: () => 'CURRENT_TIMESTAMP',
+  })
+  harvestedAt: Date;
+
   @CreateDateColumn()
   createdAt: Date;
 

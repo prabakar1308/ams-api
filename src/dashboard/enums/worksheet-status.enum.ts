@@ -4,4 +4,5 @@ export enum worksheetStatus {
   READY_FOR_HARVEST = 3,
   COMPLETE = 4,
   OPEN = 5,
+  WASHING = 6,
 }

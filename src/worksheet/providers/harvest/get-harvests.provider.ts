@@ -66,7 +66,7 @@ export class GetHarvestsProvider {
       // }
       const aDate = a.generatedAt ? new Date(a.generatedAt).getTime() : 0;
       const bDate = b.generatedAt ? new Date(b.generatedAt).getTime() : 0;
-      return bDate - aDate; // latest first
+      return aDate - bDate; // latest last
     });
 
     return await Promise.all(

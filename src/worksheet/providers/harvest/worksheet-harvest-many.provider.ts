@@ -141,6 +141,7 @@ export class WorksheetHarvestManyProvider {
         worksheets.push({
           id: harvest.worksheetId,
           statusId: harvest.statusId,
+          harvestedAt: harvest.generatedAt,
         });
 
         results.push(response);

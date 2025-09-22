@@ -183,6 +183,9 @@ export class WorksheetUpdateProvider {
         if (worksheetDto.harvestTime) {
           worksheet.harvestTime = worksheetDto.harvestTime;
         }
+        if (worksheetDto.harvestHours) {
+          worksheet.harvestHours = worksheetDto.harvestHours;
+        }
         if (worksheetDto.ph !== undefined) {
           worksheet.ph = worksheetDto.ph;
         }
