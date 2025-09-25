@@ -2,13 +2,13 @@ import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
 
 export class CreateTransitDto {
-  @ApiProperty({
-    description: 'The restock of the corresponding harvest id',
-    example: 1,
-  })
-  @IsNumber()
-  @IsNotEmpty()
-  harvestId: number;
+  // @ApiProperty({
+  //   description: 'The restock of the corresponding harvest id',
+  //   example: 1,
+  // })
+  // @IsNumber()
+  // @IsNotEmpty()
+  // harvestId: number;
 
   @ApiProperty({
     description: 'Unit sector id of this live transit',

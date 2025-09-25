@@ -80,7 +80,7 @@ export class WorksheetUpdateManyProvider {
           if (
             Number(currentWorksheet.status.id) ===
               Number(worksheetStatus.READY_FOR_STOCKING) &&
-            Number(worksheet.statusId) === Number(worksheetStatus.IN_STOCKING)
+            Number(worksheet.statusId) === Number(worksheetStatus.IN_CULTURE)
           ) {
             const generatedDate = generatedAt
               ? new Date(generatedAt)

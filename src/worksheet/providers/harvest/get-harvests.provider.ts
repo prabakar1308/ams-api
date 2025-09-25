@@ -44,32 +44,41 @@ export class GetHarvestsProvider {
     return totalCountInStock;
   }
 
-  public async getActiveHarvests(getHarvestsDto: GetHarvestsDto) {
-    const harvests = await this.harvestRepository.find({
+  public async getActiveHarvests(
+    getHarvestsDto: GetHarvestsDto,
+  ): Promise<{ data: any[]; totalRecords: number }> {
+    const { unitId, statusIds, page = 1, limit = 10 } = getHarvestsDto;
+
+    // Calculate pagination parameters
+    const skip = (page - 1) * limit;
+    const take = limit;
+
+    // Fetch harvests with pagination
+    const [harvests, totalRecords] = await this.harvestRepository.findAndCount({
       where: {
-        unit: { id: getHarvestsDto.unitId },
+        unit: { id: unitId },
         status: In(
-          getHarvestsDto.statusIds || [
+          statusIds || [
             workSheetTableStatus.ACTIVE,
             workSheetTableStatus.PARTIALLY_TRANSIT,
           ],
         ),
       },
+      skip,
+      take,
+      order: {
+        generatedAt: 'DESC', // Sort by generatedAt in descending order
+      },
     });
 
     // Sort by tankType value (or id if value is not available)
-    harvests.sort((a, b) => {
-      // const aType = a.worksheet?.tankType?.value || '';
-      // const bType = b.worksheet?.tankType?.value || '';
-      // if (aType !== bType) {
-      //   return aType.localeCompare(bType);
-      // }
-      const aDate = a.generatedAt ? new Date(a.generatedAt).getTime() : 0;
-      const bDate = b.generatedAt ? new Date(b.generatedAt).getTime() : 0;
-      return aDate - bDate; // latest last
-    });
+    // harvests.sort((a, b) => {
+    //   const aDate = a.generatedAt ? new Date(a.generatedAt).getTime() : 0;
+    //   const bDate = b.generatedAt ? new Date(b.generatedAt).getTime() : 0;
+    //   return bDate - aDate; // latest first
+    // });
 
-    return await Promise.all(
+    const data = await Promise.all(
       harvests.map(async (harvest) => {
         const worksheet = await this.worksheetRepository.findOne({
           where: { id: harvest.worksheet.id },
@@ -100,6 +109,8 @@ export class GetHarvestsProvider {
         };
       }),
     );
+
+    return { data, totalRecords };
   }
 
   public async getHarvestById(harvestId: number) {

@@ -13,6 +13,7 @@ import { WorksheetDependentsProvider } from './providers/worksheet-dependents.pr
 import { Worksheet } from './entities/worksheet.entity';
 import { Harvest } from './entities/harvest.entity';
 import { Restock } from './entities/restock.entity';
+import { MonitoringCount } from './entities/monitoring-count.entity';
 import { WorksheetHistory } from './entities/worksheet-history.entity';
 import { WorksheetUpdateManyProvider } from './providers/worksheet-update-many.provider';
 import { WorksheetHarvestManyProvider } from './providers/harvest/worksheet-harvest-many.provider';
@@ -55,6 +56,7 @@ import { TransitUpdateProvider } from './providers/transit/update-transit.provid
       Restock,
       WorksheetHistory,
       Transit,
+      MonitoringCount,
     ]),
     UsersModule,
     PaginationModule,

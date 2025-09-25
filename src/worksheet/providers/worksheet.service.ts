@@ -34,6 +34,7 @@ import { HarvestUpdateProvider } from './harvest/update-harvest.provider';
 import { PatchTransitDto } from '../dto/patch-transit.dto';
 import { TransitUpdateProvider } from './transit/update-transit.provider';
 import { WorksheetTasksProvider } from './worksheet-tasks.provider';
+import { MonitoringCount } from '../entities/monitoring-count.entity';
 
 @Injectable()
 export class WorksheetService {
@@ -42,6 +43,8 @@ export class WorksheetService {
     private readonly worksheetRespository: Repository<Worksheet>,
     @InjectRepository(WorksheetHistory)
     private readonly worksheetHistoryRespository: Repository<WorksheetHistory>,
+    @InjectRepository(MonitoringCount)
+    private readonly monitoringCountRespository: Repository<MonitoringCount>,
     private readonly worksheetCreatManyProvider: WorksheetCreateManyProvider,
     private readonly worksheetUpdateManyProvider: WorksheetUpdateManyProvider,
     private readonly worksheetCreatProvider: WorksheetCreateProvider,
@@ -139,6 +142,7 @@ export class WorksheetService {
         tankTypeId: worksheet.tankType.id,
         generatedAt: worksheet.generatedAt,
         restocks: worksheet.restocks.map((restock) => restock.id),
+        statusId: worksheet.status.id,
       };
     }
     return null;
@@ -277,11 +281,11 @@ export class WorksheetService {
     );
   }
 
-  public async getTransitsByHarvestId(harvestId: number) {
-    return await this.getTransitsProvider.getCurrentTransitsByHarvestId(
-      harvestId,
-    );
-  }
+  // public async getTransitsByHarvestId(harvestId: number) {
+  //   return await this.getTransitsProvider.getCurrentTransitsByHarvestId(
+  //     harvestId,
+  //   );
+  // }
 
   public async getTransitCountTotal(getTransitsReportDto: GetReportQueryDto) {
     return await this.getTransitsProvider.getTransitsTotalCount(
@@ -321,5 +325,9 @@ export class WorksheetService {
 
   public async updateWorksheetsStatus() {
     return await this.worksheetTasksProvider.updateWorksheetStatus();
+  }
+
+  public async getMonitoringCount() {
+    return await this.monitoringCountRespository.findOneBy({ id: 1 });
   }
 }

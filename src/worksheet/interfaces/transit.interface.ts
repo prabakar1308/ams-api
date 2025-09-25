@@ -5,7 +5,7 @@ export interface TransitResponse {
   generatedAt: Date;
   createdBy: string;
   createdById?: number;
-  harvestCount: string;
+  harvestCount?: string;
   transitCount: string;
   staffInCharge?: string;
   unitSector: {

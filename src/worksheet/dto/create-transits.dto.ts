@@ -11,13 +11,17 @@ import { ApiProperty } from '@nestjs/swagger';
 import { CreateTransitDto } from './create-transit.dto';
 
 export class CreateTransitsDto {
-  @ApiProperty({
-    type: 'integer',
-    description: 'The ID of the harvest',
-    example: 4,
-  })
+  // @ApiProperty({
+  //   type: 'integer',
+  //   description: 'The ID of the harvest',
+  //   example: 4,
+  // })
+  // @IsInt()
+  // harvestId: number;
+
   @IsInt()
-  harvestId: number;
+  @IsOptional()
+  unitId?: number;
 
   @IsDate()
   @IsOptional()

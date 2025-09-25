@@ -8,6 +8,7 @@ import { UsersService } from 'src/users/providers/users.service';
 import { WorksheetUnitService } from 'src/master/providers/worksheet-unit.service';
 import { WorksheetUnit } from 'src/worksheet/enums/worksheet-units.enum';
 import { RestockService } from '../restock/restock.service';
+import { MonitoringCount } from 'src/worksheet/entities/monitoring-count.entity';
 
 @Injectable()
 export class HarvestUpdateProvider {
@@ -28,6 +29,8 @@ export class HarvestUpdateProvider {
     await queryRunner.startTransaction();
 
     try {
+      let totalHarvest = 0;
+      let unitId = WorksheetUnit.MILLIONS;
       const harvest = await queryRunner.manager.findOne(Harvest, {
         where: { id: patchHarvestDto.id },
       });
@@ -92,6 +95,7 @@ export class HarvestUpdateProvider {
 
       // Update fields
       if (patchHarvestDto.count !== undefined) {
+        totalHarvest = patchHarvestDto.count - (harvest.count || 0);
         harvest.count = patchHarvestDto.count;
       }
       if (patchHarvestDto.countInStock !== undefined) {
@@ -111,6 +115,7 @@ export class HarvestUpdateProvider {
       }
 
       if (patchHarvestDto.unitId !== undefined) {
+        unitId = patchHarvestDto.unitId;
         const unit = await this.unitService.getWorksheetUnitById(
           patchHarvestDto.unitId,
         );
@@ -121,7 +126,25 @@ export class HarvestUpdateProvider {
         harvest.generatedAt = patchHarvestDto.generatedAt;
       }
 
+      harvest.remarks = patchHarvestDto.remarks || '';
+
       const updatedHarvest = await queryRunner.manager.save(harvest);
+
+      // update millionsHarvested or frozenCupsHarvested in monitoringCount table
+      const monitoringCount = await queryRunner.manager.findOne(
+        MonitoringCount,
+        { where: { id: 1 } },
+      );
+
+      if (monitoringCount) {
+        if (unitId === WorksheetUnit.MILLIONS) {
+          monitoringCount.millionsHarvested += totalHarvest;
+        } else if (unitId === WorksheetUnit.FROZEN_CUPS) {
+          monitoringCount.frozenCupsHarvested += totalHarvest;
+        }
+        await queryRunner.manager.save(MonitoringCount, monitoringCount);
+      }
+
       await queryRunner.commitTransaction();
       return updatedHarvest;
     } catch (error) {
