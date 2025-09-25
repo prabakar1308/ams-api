@@ -100,17 +100,20 @@ export class GetWorksheetsProvider {
         harvestTime,
         harvestHours,
         generatedAt,
+        harvestedAt,
         ph,
         salnity,
         temperature,
       } = worksheet || {};
 
-      const dateInput =
-        status &&
-        status.id &&
-        Number(status.id) === Number(worksheetStatus.READY_FOR_STOCKING)
-          ? generatedAt
-          : harvestTime;
+      let dateInput = harvestTime;
+
+      if (status && status.id) {
+        if (Number(status.id) === Number(worksheetStatus.READY_FOR_STOCKING))
+          dateInput = generatedAt;
+        else if (Number(status.id) === Number(worksheetStatus.WASHING))
+          dateInput = harvestedAt;
+      }
 
       const parameters: WorksheetParameters[] = [];
       const inputValue = `${inputCount} ${getUnitValue(inputUnit)}`;
@@ -175,7 +178,7 @@ export class GetWorksheetsProvider {
     const worksheets = await this.worksheetRespository.find({
       where: {
         tankType: { id: tankTypeId },
-        status: { id: worksheetStatus.IN_STOCKING },
+        status: { id: worksheetStatus.IN_CULTURE },
       },
       // relations: ['inputUnit'], // Include inputUnit relation to access unit details
     });

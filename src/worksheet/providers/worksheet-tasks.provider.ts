@@ -6,8 +6,10 @@ import {
 } from '@nestjs/common';
 import { Cron, CronExpression } from '@nestjs/schedule';
 import { InjectRepository } from '@nestjs/typeorm';
+import { ConfigService } from '@nestjs/config';
+import { DataSource, In, MoreThanOrEqual, Repository } from 'typeorm';
+
 import { Worksheet } from '../entities/worksheet.entity';
-import { DataSource, In, Repository } from 'typeorm';
 import { worksheetStatus } from 'src/dashboard/enums/worksheet-status.enum';
 import { worksheetHistory } from '../enums/worksheet-history-actions.enum';
 import { PatchWorksheetsDto } from '../dto/patch-worksheets.dto';
@@ -15,17 +17,18 @@ import { WorksheetHistory } from '../entities/worksheet-history.entity';
 import { PatchWorksheetDto } from '../dto/patch-worksheet.dto';
 import { workSheetTableStatus } from '../enums/worksheet-table-status.enum';
 import { Harvest } from '../entities/harvest.entity';
-import { ConfigService } from '@nestjs/config';
-// import { WorksheetStatus } from 'src/master/entities/worksheet-status.entity';
+import { MonitoringCount } from '../entities/monitoring-count.entity';
+import { Transit } from '../entities/transit.entity';
+import { WorksheetUnit } from '../enums/worksheet-units.enum';
 
 @Injectable()
 export class WorksheetTasksProvider {
   private readonly logger = new Logger(WorksheetTasksProvider.name);
   constructor(
     @InjectRepository(Worksheet)
-    private readonly worksheetRespository: Repository<Worksheet>,
-    @InjectRepository(Harvest)
-    private readonly harvestRepository: Repository<Harvest>,
+    private readonly worksheetRepository: Repository<Worksheet>,
+    @InjectRepository(Transit)
+    private readonly transitRepository: Repository<Transit>,
     private readonly datasource: DataSource,
     private readonly configService: ConfigService,
     // private readonly worksheetUpdateManyProvider: WorksheetUpdateManyProvider,
@@ -37,11 +40,11 @@ export class WorksheetTasksProvider {
     const currentTime = new Date();
 
     try {
-      // Logic 1: Update worksheets with IN_STOCKING status to READY_FOR_HARVEST
-      const worksheetsInStocking = await this.worksheetRespository
+      // Logic 1: Update worksheets with IN_CULTURE status to READY_FOR_HARVEST
+      const worksheetsInStocking = await this.worksheetRepository
         .createQueryBuilder('worksheet')
         .where('worksheet.status = :status', {
-          status: worksheetStatus.IN_STOCKING,
+          status: worksheetStatus.IN_CULTURE,
         })
         .andWhere('worksheet.harvestTime < :currentTime', {
           currentTime,
@@ -74,7 +77,7 @@ export class WorksheetTasksProvider {
       const timeThreshold = new Date(
         currentTime.getTime() - washingHours * 60 * 60 * 1000,
       ); // 10 hours ago
-      const worksheetsInWashing = await this.worksheetRespository
+      const worksheetsInWashing = await this.worksheetRepository
         .createQueryBuilder('worksheet')
         .where('worksheet.status = :status', {
           status: worksheetStatus.WASHING,
@@ -88,7 +91,7 @@ export class WorksheetTasksProvider {
       for (const worksheet of worksheetsInWashing) {
         updatedWorksheetsInWashing.push({
           id: worksheet.id,
-          statusId: worksheetStatus.OPEN,
+          statusId: worksheetStatus.COMPLETE,
         });
       }
 
@@ -121,19 +124,27 @@ export class WorksheetTasksProvider {
       await queryRunner.connect();
       await queryRunner.startTransaction();
 
-      const unitId = 1; // Unit ID to filter
+      const unitId = WorksheetUnit.MILLIONS; // Unit ID to filter
       const statuses = [
         workSheetTableStatus.ACTIVE,
         workSheetTableStatus.PARTIALLY_TRANSIT,
       ];
 
+      const currentTime = new Date();
+      const twelveHoursAgo = new Date(
+        currentTime.getTime() - 12 * 60 * 60 * 1000,
+      ); // 12 hours ago
+
       // Fetch all active harvests
       const activeHarvests = await queryRunner.manager.find(Harvest, {
         where: {
           status: In(statuses),
+          generatedAt: MoreThanOrEqual(twelveHoursAgo),
           unit: { id: unitId },
         },
-        relations: ['unit'], // Ensure the unit relation is loaded
+        order: {
+          generatedAt: 'ASC', // Sort by latest first
+        },
       });
 
       if (!activeHarvests.length) {
@@ -142,18 +153,87 @@ export class WorksheetTasksProvider {
         return;
       }
 
+      let millionsCount = 0;
+      let frozenCupsCount = 0;
+
+      const transitsInLast12Hours =
+        await this.getTransitsCountGeneratedInLast12Hours();
+
+      console.log('transitsInLast12Hours', transitsInLast12Hours);
+
+      let countDown = 0;
+      let continueTransfer = transitsInLast12Hours === 0;
+
       // Update harvests
       for (const harvest of activeHarvests) {
-        harvest.count = parseInt((harvest.count / 5).toString(), 10);
-        harvest.countInStock = parseInt(
-          (harvest.countInStock / 5).toString(),
-          10,
-        );
-        harvest.unit.id = 2; // Change unit to Cold Storage (ID: 2)
-        harvest.status = workSheetTableStatus.COMPLETED; // Update status to DONE
+        console.log('Processing harvest ID:', harvest.id, harvest.count);
+        if (
+          countDown + harvest.count <= transitsInLast12Hours &&
+          !continueTransfer
+        ) {
+          countDown += harvest.count;
+          continue; // skip the harvests count that are already transited in the last 12 hours
+        } else if (!continueTransfer) {
+          if (countDown + harvest.count === transitsInLast12Hours) {
+            continueTransfer = true;
+          } else if (countDown + harvest.count > transitsInLast12Hours) {
+            const requiredTransit = transitsInLast12Hours - countDown;
+            const remainingCount = harvest.count - requiredTransit;
+            if (requiredTransit > 0) {
+              harvest.count = requiredTransit;
+              harvest.countInStock = harvest.count;
 
-        // Save the updated harvest
-        await queryRunner.manager.save(harvest);
+              // save current harvest with the requiredTransit count
+              await queryRunner.manager.save(harvest);
+              // create a new harvest with the remaining count in frozen cups
+              const newHarvest = queryRunner.manager.create(Harvest, {
+                ...harvest,
+                unit: { id: 2 }, // Change unit to Cold Storage (ID: 2)
+                id: undefined, // Ensure a new record is created
+                count: parseInt((remainingCount / 5).toString(), 10),
+                countInStock: parseInt((remainingCount / 5).toString(), 10),
+                status: workSheetTableStatus.ACTIVE,
+                transferStatus: 'P', // Mark as partially transferred
+              });
+              await queryRunner.manager.save(newHarvest);
+
+              millionsCount += remainingCount;
+              frozenCupsCount += parseInt((remainingCount / 5).toString(), 10);
+            }
+            continueTransfer = true;
+            continue;
+          }
+        }
+
+        if (continueTransfer) {
+          millionsCount += harvest.count;
+          frozenCupsCount += parseInt((harvest.count / 5).toString(), 10);
+          harvest.count = parseInt((harvest.count / 5).toString(), 10);
+          harvest.countInStock = parseInt(
+            (harvest.countInStock / 5).toString(),
+            10,
+          );
+          harvest.unit.id = 2; // Change unit to Cold Storage (ID: 2)
+          harvest.transferStatus = 'F'; // Mark as fully transferred
+
+          // Save the updated harvest
+          await queryRunner.manager.save(harvest);
+        }
+      }
+
+      // update millionsHarvested or frozenCupsHarvested in monitoringCount table
+      const monitoringCount = await queryRunner.manager.findOne(
+        MonitoringCount,
+        { where: { id: 1 } },
+      );
+
+      console.log('millionsCount', millionsCount);
+      console.log('frozenCupsCount', frozenCupsCount);
+
+      if (monitoringCount) {
+        monitoringCount.millionsHarvested -= millionsCount;
+        monitoringCount.frozenCupsHarvested += frozenCupsCount;
+        await queryRunner.manager.save(MonitoringCount, monitoringCount);
       }
 
       // Commit the transaction
@@ -258,5 +338,24 @@ export class WorksheetTasksProvider {
       await queryRunner.release();
     }
     return updatedWorksheets;
+  }
+
+  public async getTransitsCountGeneratedInLast12Hours(): Promise<number> {
+    const currentTime = new Date();
+    const twelveHoursAgo = new Date(
+      currentTime.getTime() - 12 * 60 * 60 * 1000,
+    ); // 12 hours ago
+
+    const transits = await this.transitRepository.find({
+      where: {
+        generatedAt: MoreThanOrEqual(twelveHoursAgo), // Filter by generatedAt >= 12 hours ago
+        unit: { id: WorksheetUnit.MILLIONS },
+      },
+      order: {
+        generatedAt: 'ASC', // Sort by latest first
+      },
+    });
+
+    return transits.reduce((sum, transit) => sum + (transit.count || 0), 0);
   }
 }

@@ -179,10 +179,10 @@ export class WorksheetController {
     return this.worksheetService.getTransits(body);
   }
 
-  @Get('get-transits-by-harvest-id/:id')
-  public getTransitsByHarvestById(@Param('id', ParseIntPipe) id: number) {
-    return this.worksheetService.getTransitsByHarvestId(id);
-  }
+  // @Get('get-transits-by-harvest-id/:id')
+  // public getTransitsByHarvestById(@Param('id', ParseIntPipe) id: number) {
+  //   return this.worksheetService.getTransitsByHarvestId(id);
+  // }
 
   @Post('get-transits-count')
   public getTransitsCount(@Body() body: GetReportQueryDto) {
@@ -217,5 +217,10 @@ export class WorksheetController {
   @Get('get-restocks-count')
   public getRestocksCount(@Query('status') status: string) {
     return this.restockService.getTotalCountOfActiveRestocks(status);
+  }
+
+  @Get('monitoring-count')
+  public getMonitoringCount() {
+    return this.worksheetService.getMonitoringCount();
   }
 }
