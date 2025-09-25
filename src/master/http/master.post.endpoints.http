@@ -21,3 +21,43 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhd
 DELETE http://localhost:3000/api/master/worksheet-unit
 ?id=5
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjUsInVzZXJDb2RlIjoiR01ILUFNUy0xNzExIiwiaWF0IjoxNzU0MDI3ODMwLCJleHAiOjE3NTkyODc0MzAsImF1ZCI6ImxvY2FsaG9zdDozMDAwIiwiaXNzIjoibG9jYWxob3N0OjMwMDAifQ.QGJa-d8BuWUH01hX8bND0-RmdBF1R64w_bWh31QGUpk
+
+POST http://localhost:3000/api/master/source-tracker-list
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsInVzZXJDb2RlIjoiR01ILUFNUy0yIiwiaWF0IjoxNzU4ODA0NzQwLCJleHAiOjE3NjQwNjQzNDAsImF1ZCI6ImxvY2FsaG9zdDozMDAwIiwiaXNzIjoibG9jYWxob3N0OjMwMDAifQ.1WXeBDO6Z5ZVq4lnN2I2k037Pf1fuPtEk3qJO1cmLvI
+
+{
+  "fromDate": "2025-08-26T17:27:26.245Z",
+  "toDate": "2025-09-25T17:27:26.246Z"
+}
+
+POST http://localhost:3000/api/master/source-tracker
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsInVzZXJDb2RlIjoiR01ILUFNUy0yIiwiaWF0IjoxNzU4ODA0NzQwLCJleHAiOjE3NjQwNjQzNDAsImF1ZCI6ImxvY2FsaG9zdDozMDAwIiwiaXNzIjoibG9jYWxob3N0OjMwMDAifQ.1WXeBDO6Z5ZVq4lnN2I2k037Pf1fuPtEk3qJO1cmLvI
+
+{
+  "sourceOrigin": "Source Tracker 5",
+  "count": 1200,
+  "generatedAt": "2025-09-18T10:00:00.000Z",
+  "createdBy": 1,
+  "updatedBy": 1,
+  "unitSource": 2
+}
+
+PATCH http://localhost:3000/api/master/source-tracker
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsInVzZXJDb2RlIjoiR01ILUFNUy0yIiwiaWF0IjoxNzU4ODA0NzQwLCJleHAiOjE3NjQwNjQzNDAsImF1ZCI6ImxvY2FsaG9zdDozMDAwIiwiaXNzIjoibG9jYWxob3N0OjMwMDAifQ.1WXeBDO6Z5ZVq4lnN2I2k037Pf1fuPtEk3qJO1cmLvI
+
+{
+  "id": 1,
+  "sourceOrigin": "Source Tracker 1",
+  "count": 1500,
+  "generatedAt": "2025-09-17T11:00:00.000Z",
+  "createdBy": 1,
+  "updatedBy": 2,
+  "unitSource": 3
+}
+
+DELETE http://localhost:3000/api/master/source-tracker
+?id=4
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsInVzZXJDb2RlIjoiR01ILUFNUy0yIiwiaWF0IjoxNzU4ODA0NzQwLCJleHAiOjE3NjQwNjQzNDAsImF1ZCI6ImxvY2FsaG9zdDozMDAwIiwiaXNzIjoibG9jYWxob3N0OjMwMDAifQ.1WXeBDO6Z5ZVq4lnN2I2k037Pf1fuPtEk3qJO1cmLvI

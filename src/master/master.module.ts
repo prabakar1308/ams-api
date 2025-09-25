@@ -21,6 +21,8 @@ import { UnitService } from './providers/unit.service';
 import { UnitSectorService } from './providers/unit-sector.service';
 import { WorksheetUnit } from './entities/worksheet-unit.entity';
 import { WorksheetUnitService } from './providers/worksheet-unit.service';
+import { SourceTrackerService } from './providers/source-tracker.service';
+import { SourceTracker } from './entities/source-tracker.entity';
 
 @Module({
   controllers: [MasterController],
@@ -35,6 +37,7 @@ import { WorksheetUnitService } from './providers/worksheet-unit.service';
     UnitService,
     UnitSectorService,
     WorksheetUnitService,
+    SourceTrackerService,
   ],
   imports: [
     TypeOrmModule.forFeature([
@@ -48,6 +51,7 @@ import { WorksheetUnitService } from './providers/worksheet-unit.service';
       UnitSector,
       Unit,
       WorksheetUnit,
+      SourceTracker,
     ]),
   ], // Add your entities here
   exports: [

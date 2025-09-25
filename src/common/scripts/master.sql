@@ -6,7 +6,21 @@ CREATE SCHEMA master AUTHORIZATION msadmin;
 CREATE SCHEMA worksheet AUTHORIZATION msadmin;
 
 ---CREATE TABLES --> It will be automatically done after building the ams-api code
+-- Create sequence for source_tracker id
+CREATE SEQUENCE IF NOT EXISTS master.source_tracker_id_seq;
 
+-- Create source_tracker table
+CREATE TABLE IF NOT EXISTS master.source_tracker (
+    id integer PRIMARY KEY DEFAULT nextval('master.source_tracker_id_seq'),
+    "sourceOrigin" varchar(255) NOT NULL,
+    "count" integer NOT NULL,
+    "unitSource" integer NOT null,
+    "generatedAt" timestamp DEFAULT now(),
+    "createdBy" integer NOT NULL,
+    "updatedBy" integer NOT NULL,
+    "createdAt" timestamp DEFAULT now(),
+    "updatedAt" timestamp DEFAULT now()
+);
 ---- Unit Sector ------
 INSERT INTO master.unit_sector
 ("createdBy", "updatedBy", id, "name", description, "location", "createdAt", "updatedAt")
@@ -159,3 +173,10 @@ INSERT INTO master.salnity
 (id, min, max, "defaultValue", "unitId", "createdAt", "updatedAt", "createdBy", "updatedBy", "step")
 VALUES(nextval('master.salnity_id_seq'::regclass), 25, 35, 28, 2, now(), now(), 1, 1, 1);
 
+-- Sample data for source_tracker
+INSERT INTO master.source_tracker
+("sourceOrigin", "count", "generatedAt", "createdBy", "updatedBy", "createdAt", "updatedAt")
+VALUES
+('Source Tracker 1', 1000, '2025-09-25 10:00:00', 1, 1, now(), now()),
+('Source Tracker 1', 500, '2025-09-24 09:30:00', 1, 1, now(), now()),
+('Source Tracker 1', 200, '2025-09-23 08:15:00', 1, 1, now(), now());
