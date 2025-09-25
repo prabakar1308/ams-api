@@ -19,6 +19,7 @@ import { workSheetTableStatus } from '../enums/worksheet-table-status.enum';
 import { Harvest } from '../entities/harvest.entity';
 import { MonitoringCount } from '../entities/monitoring-count.entity';
 import { Transit } from '../entities/transit.entity';
+import { WorksheetUnit } from '../enums/worksheet-units.enum';
 
 @Injectable()
 export class WorksheetTasksProvider {
@@ -110,8 +111,7 @@ export class WorksheetTasksProvider {
     }
   }
 
-  // @Cron('0 6,18 * * *') // Executes at 6:00 AM and 6:00 PM every day
-  @Cron(CronExpression.EVERY_10_MINUTES)
+  @Cron('0 6,18 * * *') // Executes at 6:00 AM and 6:00 PM every day
   async updateActiveHarvestsToColdStorage() {
     this.logger.log(
       'TASK SCHEDULER STARTED - Updating active harvests to DONE',
@@ -124,7 +124,7 @@ export class WorksheetTasksProvider {
       await queryRunner.connect();
       await queryRunner.startTransaction();
 
-      const unitId = 1; // Unit ID to filter
+      const unitId = WorksheetUnit.MILLIONS; // Unit ID to filter
       const statuses = [
         workSheetTableStatus.ACTIVE,
         workSheetTableStatus.PARTIALLY_TRANSIT,
@@ -349,7 +349,7 @@ export class WorksheetTasksProvider {
     const transits = await this.transitRepository.find({
       where: {
         generatedAt: MoreThanOrEqual(twelveHoursAgo), // Filter by generatedAt >= 12 hours ago
-        unit: { id: 1 },
+        unit: { id: WorksheetUnit.MILLIONS },
       },
       order: {
         generatedAt: 'ASC', // Sort by latest first
