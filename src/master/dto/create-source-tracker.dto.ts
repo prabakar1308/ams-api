@@ -5,7 +5,6 @@ import {
   IsOptional,
   IsString,
 } from 'class-validator';
-import { CreateDateColumn, UpdateDateColumn } from 'typeorm';
 
 export class CreateSourceTrackerDto {
   @IsString()
@@ -17,16 +16,8 @@ export class CreateSourceTrackerDto {
   count: number;
 
   @IsDate()
-  @IsNotEmpty()
-  generatedAt: Date; // Use Date if you want strict typing
-
-  @IsInt()
-  @IsNotEmpty()
-  createdBy: number;
-
-  @IsInt()
   @IsOptional()
-  updatedBy: number;
+  generatedAt?: Date;
 
   @IsInt()
   @IsNotEmpty()

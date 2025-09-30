@@ -62,6 +62,7 @@ import { SourceTracker } from './entities/source-tracker.entity';
     UnitSectorService,
     UnitService,
     WorksheetUnitService,
+    SourceTrackerService,
   ],
 })
 export class MasterModule {}

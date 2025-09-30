@@ -2,6 +2,7 @@ import { BaseEntity } from 'src/common/entities/base.entity';
 import {
   Column,
   CreateDateColumn,
+  DeleteDateColumn,
   Entity,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
@@ -27,13 +28,14 @@ export class SourceTracker extends BaseEntity {
 
   @Column({
     type: 'timestamp',
-    nullable: false,
+    nullable: true,
+    default: () => 'CURRENT_TIMESTAMP',
   })
   generatedAt: Date;
 
   @Column({
     type: 'int',
-    nullable: true,
+    nullable: false,
   })
   unitSource: number;
 
@@ -42,4 +44,7 @@ export class SourceTracker extends BaseEntity {
 
   @UpdateDateColumn()
   updatedAt: Date;
+
+  @DeleteDateColumn()
+  deletedAt: Date;
 }

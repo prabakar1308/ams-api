@@ -323,6 +323,10 @@ export class WorksheetService {
     return await this.worksheetReportsProvider.getCurrentInputUnitsReport();
   }
 
+  public async getAvailableInputUnitsReport() {
+    return await this.worksheetReportsProvider.getAvailableInputUnitsReport();
+  }
+
   public async updateWorksheetsStatus() {
     return await this.worksheetTasksProvider.updateWorksheetStatus();
   }

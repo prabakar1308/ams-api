@@ -137,6 +137,11 @@ export class WorksheetController {
     return this.worksheetService.getCurrentInputUnitsReport();
   }
 
+  @Get('get-available-worksheet-input-report')
+  public getAvailableInputUnitsReport() {
+    return this.worksheetService.getAvailableInputUnitsReport();
+  }
+
   @Post('get-harvests-count')
   public getHarvestsCount(@Body() body: GetHarvestsDto) {
     return this.worksheetService.getHarvestsCount(body);

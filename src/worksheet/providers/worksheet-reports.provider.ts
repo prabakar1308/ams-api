@@ -5,12 +5,14 @@ import { InjectRepository } from '@nestjs/typeorm';
 
 import { Worksheet } from '../entities/worksheet.entity';
 import { GetReportQueryDto } from '../dto/get-report-query.dto';
+import { SourceTrackerService } from 'src/master/providers/source-tracker.service';
 
 @Injectable()
 export class WorksheetReportsProvider {
   constructor(
     @InjectRepository(Worksheet)
     private readonly worksheetRespository: Repository<Worksheet>,
+    private readonly sourceTrackerService: SourceTrackerService,
     private readonly configService: ConfigService,
   ) {}
 
@@ -26,14 +28,11 @@ export class WorksheetReportsProvider {
     const end = new Date(endDate);
     end.setHours(23, 59, 59, 999);
 
-    const worksheetCompletedStatusId = +this.configService.get(
-      'WORKSHEET_COMPLETED_STATUS',
-    );
-
+    // get all worksheets that were harvested (4 - completed & 6- in washing) within the date range
     const worksheets = await this.worksheetRespository.find({
       where: {
         generatedAt: Between(start, end),
-        status: { id: In([worksheetCompletedStatusId]) },
+        status: { id: In([4, 6]) },
       },
       relations: ['inputUnit', 'tankType'],
     });
@@ -218,5 +217,58 @@ export class WorksheetReportsProvider {
       })),
       overall: Object.values(overall),
     };
+  }
+
+  public async getAvailableInputUnitsReport() {
+    const worksheets = await this.worksheetRespository.find({
+      where: {
+        status: { id: In([2, 3, 4, 6]) },
+      },
+      relations: ['inputUnit'],
+    });
+
+    const overallInputsAvailableCount =
+      await this.sourceTrackerService.getSourceTrackerDetails();
+
+    // Overall aggregation by inputUnit
+    const overall = worksheets.reduce(
+      (acc, ws) => {
+        const unitId = ws.inputUnit?.id;
+        if (!unitId) return acc;
+        if (!acc[unitId]) {
+          acc[unitId] = {
+            id: unitId,
+            name: ws.inputUnit.value,
+            brand: ws.inputUnit.brand || '',
+            spec: ws.inputUnit.specs || '',
+            count: 0,
+          };
+        }
+        acc[unitId].count += ws.inputCount || 0;
+        return acc;
+      },
+      {} as Record<
+        number,
+        {
+          id: number;
+          name: string;
+          brand: string;
+          spec: string;
+          count: number;
+        }
+      >,
+    );
+
+    const overallInputsUsedCount = Object.values(overall);
+
+    // Adjust counts based on source tracker data
+    const overallInputCount = overallInputsAvailableCount.map((available) => {
+      const used = overallInputsUsedCount.find(
+        (used) => used.id === available.unitSource,
+      );
+      return { ...used, count: available.totalCount - (used?.count || 0) };
+    });
+
+    return overallInputCount;
   }
 }

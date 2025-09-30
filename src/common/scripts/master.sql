@@ -6,21 +6,6 @@ CREATE SCHEMA master AUTHORIZATION msadmin;
 CREATE SCHEMA worksheet AUTHORIZATION msadmin;
 
 ---CREATE TABLES --> It will be automatically done after building the ams-api code
--- Create sequence for source_tracker id
-CREATE SEQUENCE IF NOT EXISTS master.source_tracker_id_seq;
-
--- Create source_tracker table
-CREATE TABLE IF NOT EXISTS master.source_tracker (
-    id integer PRIMARY KEY DEFAULT nextval('master.source_tracker_id_seq'),
-    "sourceOrigin" varchar(255) NOT NULL,
-    "count" integer NOT NULL,
-    "unitSource" integer NOT null,
-    "generatedAt" timestamp DEFAULT now(),
-    "createdBy" integer NOT NULL,
-    "updatedBy" integer NOT NULL,
-    "createdAt" timestamp DEFAULT now(),
-    "updatedAt" timestamp DEFAULT now()
-);
 ---- Unit Sector ------
 INSERT INTO master.unit_sector
 ("createdBy", "updatedBy", id, "name", description, "location", "createdAt", "updatedAt")

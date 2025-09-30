@@ -18,7 +18,19 @@ export class SourceTrackerService {
   }
 
   public async getSourceTrackerDetails() {
-    return this.sourceTrackerRepository.find();
+    const result = await this.sourceTrackerRepository
+      .createQueryBuilder('sourceTracker')
+      .select('sourceTracker.unitSource', 'unitSource')
+      .addSelect('SUM(sourceTracker.count)', 'totalCount')
+      .groupBy('sourceTracker.unitSource')
+      // .orderBy('totalCount', 'DESC') // Optional: Order by total count in descending order
+      .getRawMany<{ unitSource: number; totalCount: string }>();
+
+    const count = result.map((row) => ({
+      unitSource: row.unitSource,
+      totalCount: Number(row.totalCount),
+    }));
+    return count;
   }
   public async getSourceTrackerById(id: number) {
     return await this.sourceTrackerRepository.findOneBy({ id });
@@ -44,11 +56,38 @@ export class SourceTrackerService {
   public async getSourceTrackerList(
     fromDate: Date,
     toDate: Date,
-  ): Promise<SourceTracker[]> {
-    return await this.sourceTrackerRepository.find({
+  ): Promise<{
+    list: SourceTracker[];
+    count: { unitSource: number; totalCount: number }[];
+  }> {
+    const start = new Date(fromDate);
+    start.setHours(0, 0, 0, 0);
+    const end = new Date(toDate);
+    end.setHours(23, 59, 59, 999);
+    const list = await this.sourceTrackerRepository.find({
       where: {
-        generatedAt: Between(fromDate, toDate),
+        generatedAt: Between(start, end),
+      },
+      order: {
+        generatedAt: 'DESC',
       },
     });
+    const result = await this.sourceTrackerRepository
+      .createQueryBuilder('sourceTracker')
+      .select('sourceTracker.unitSource', 'unitSource')
+      .addSelect('SUM(sourceTracker.count)', 'totalCount')
+      .where('sourceTracker.generatedAt BETWEEN :start AND :end', {
+        start,
+        end,
+      })
+      .groupBy('sourceTracker.unitSource')
+      // .orderBy('totalCount', 'DESC') // Optional: Order by total count in descending order
+      .getRawMany<{ unitSource: number; totalCount: string }>();
+
+    const count = result.map((row) => ({
+      unitSource: row.unitSource,
+      totalCount: Number(row.totalCount),
+    }));
+    return { list, count };
   }
 }
