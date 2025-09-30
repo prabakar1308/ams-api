@@ -8,10 +8,12 @@ import { DataSource } from 'typeorm';
 import { Harvest } from '../../entities/harvest.entity';
 import { Transit } from '../../entities/transit.entity';
 import { CreateTransitsDto } from '../../dto/create-transits.dto';
-import { PatchHarvestDto } from '../../dto/patch-harvest.dto';
-import { workSheetTableStatus } from '../../enums/worksheet-table-status.enum';
+// import { PatchHarvestDto } from '../../dto/patch-harvest.dto';
+// import { workSheetTableStatus } from '../../enums/worksheet-table-status.enum';
 import { WorksheetUnitService } from 'src/master/providers/worksheet-unit.service';
 import { UnitSectorService } from 'src/master/providers/unit-sector.service';
+import { WorksheetUnit } from 'src/worksheet/enums/worksheet-units.enum';
+import { MonitoringCount } from 'src/worksheet/entities/monitoring-count.entity';
 
 @Injectable()
 export class WorksheetTransitManyProvider {
@@ -41,14 +43,15 @@ export class WorksheetTransitManyProvider {
 
     try {
       let transitCount = 0;
+      let unitId = WorksheetUnit.MILLIONS;
 
-      const harvest = await queryRunner.manager.findOneBy(Harvest, {
-        id: createTransits.harvestId,
-      });
+      // const harvest = await queryRunner.manager.findOneBy(Harvest, {
+      //   id: createTransits.harvestId,
+      // });
 
-      if (!harvest) {
-        throw new Error('Harvest not found');
-      }
+      // if (!harvest) {
+      //   throw new Error('Harvest not found');
+      // }
 
       for (const transit of createTransits.transits) {
         const unit = await this.unitService.getWorksheetUnitById(
@@ -62,37 +65,53 @@ export class WorksheetTransitManyProvider {
         const newTransit = queryRunner.manager.create(Transit, {
           ...transit,
           unit: unit || undefined,
-          harvest,
+          // harvest,
           unitSector: unitSector || undefined,
           generatedAt: createTransits.generatedAt || new Date(),
         });
         const transitResponse = await queryRunner.manager.save(newTransit);
         transitCount += transit.count;
+        unitId = transit.unitId;
 
         // Ensure the response matches the Transit type
         results.transit.push(transitResponse);
       }
 
       // update harvest status
-      const patchHarvest = new PatchHarvestDto();
-      patchHarvest.id = harvest.id;
-      if (harvest?.countInStock === transitCount) {
-        patchHarvest.countInStock = 0;
-        patchHarvest.status = workSheetTableStatus.COMPLETED;
-      } else if ((harvest?.countInStock ?? 0) > transitCount) {
-        patchHarvest.countInStock = (harvest?.countInStock ?? 0) - transitCount;
-        patchHarvest.status = workSheetTableStatus.PARTIALLY_TRANSIT;
+      // const patchHarvest = new PatchHarvestDto();
+      // patchHarvest.id = harvest.id;
+      // if (harvest?.countInStock === transitCount) {
+      //   patchHarvest.countInStock = 0;
+      //   patchHarvest.status = workSheetTableStatus.COMPLETED;
+      // } else if ((harvest?.countInStock ?? 0) > transitCount) {
+      //   patchHarvest.countInStock = (harvest?.countInStock ?? 0) - transitCount;
+      //   patchHarvest.status = workSheetTableStatus.PARTIALLY_TRANSIT;
+      // }
+
+      // const updatedHarvest = queryRunner.manager.create(Harvest, {
+      //   ...patchHarvest,
+      //   measuredBy: harvest.measuredBy,
+      //   unit: harvest.unit,
+      // });
+      // const updatedHarvestResponse =
+      //   await queryRunner.manager.save(updatedHarvest);
+
+      // results.updatedHarvest = updatedHarvestResponse;
+
+      // update millionsHarvested or frozenCupsHarvested in monitoringCount table
+      const monitoringCount = await queryRunner.manager.findOne(
+        MonitoringCount,
+        { where: { id: 1 } },
+      );
+
+      if (monitoringCount) {
+        if (unitId === WorksheetUnit.MILLIONS) {
+          monitoringCount.millionsTransited += transitCount;
+        } else if (unitId === WorksheetUnit.FROZEN_CUPS) {
+          monitoringCount.frozenCupsTransited += transitCount;
+        }
+        await queryRunner.manager.save(MonitoringCount, monitoringCount);
       }
-
-      const updatedHarvest = queryRunner.manager.create(Harvest, {
-        ...patchHarvest,
-        measuredBy: harvest.measuredBy,
-        unit: harvest.unit,
-      });
-      const updatedHarvestResponse =
-        await queryRunner.manager.save(updatedHarvest);
-
-      results.updatedHarvest = updatedHarvestResponse;
 
       // if sucessfull, commit
       await queryRunner.commitTransaction();

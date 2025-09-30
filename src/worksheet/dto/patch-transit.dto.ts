@@ -17,9 +17,9 @@ export class PatchTransitDto extends PartialType(CreateTransitDto) {
   @IsNotEmpty()
   id: number;
 
-  @IsInt()
-  @IsOptional()
-  countInStock?: number;
+  // @IsInt()
+  // @IsOptional()
+  // countInStock?: number;
 
   @IsBoolean()
   @IsOptional()

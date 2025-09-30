@@ -28,6 +28,9 @@ import { PatchUnitSectorDto } from './dto/patch-unit-sector.dto';
 import { WorksheetUnitService } from './providers/worksheet-unit.service';
 import { CreateWorksheetUnitDto } from './dto/create-worksheet-unit.dto';
 import { PatchWorksheetUnitDto } from './dto/patch-worksheet-unit.dto';
+import { SourceTrackerService } from './providers/source-tracker.service';
+import { CreateSourceTrackerDto } from './dto/create-source-tracker.dto';
+import { PatchSourceTrackerDto } from './dto/patch-source-tracker.dto';
 
 @Controller('master')
 export class MasterController {
@@ -42,6 +45,7 @@ export class MasterController {
     private readonly unitService: UnitService,
     private readonly unitSectorService: UnitSectorService,
     private readonly worksheetUnitService: WorksheetUnitService,
+    private readonly sourceTrackerService: SourceTrackerService,
   ) {}
 
   /** Harvest Type - GET, PATCH */
@@ -175,5 +179,32 @@ export class MasterController {
   @Delete('worksheet-unit')
   public softDeleteWorksheetUnit(@Query('id', ParseIntPipe) id: number) {
     return this.worksheetUnitService.deleteWorksheetUnit(id);
+  }
+
+  @Post('source-tracker-list')
+  public getSourceTrackerList(@Body() range: { fromDate: Date; toDate: Date }) {
+    return this.sourceTrackerService.getSourceTrackerList(
+      range.fromDate,
+      range.toDate,
+    );
+  }
+
+  @Post('source-tracker')
+  public createSourceTracker(
+    @Body() createSourceTracker: CreateSourceTrackerDto,
+  ) {
+    return this.sourceTrackerService.createSourceTracker(createSourceTracker);
+  }
+
+  @Patch('source-tracker')
+  public updateSourceTracker(
+    @Body() patchSourceTrackerDto: PatchSourceTrackerDto,
+  ) {
+    return this.sourceTrackerService.updateSourceTracker(patchSourceTrackerDto);
+  }
+
+  @Delete('source-tracker')
+  public softDeleteSourceTracker(@Query('id', ParseIntPipe) id: number) {
+    return this.sourceTrackerService.deleteSourceTracker(id);
   }
 }

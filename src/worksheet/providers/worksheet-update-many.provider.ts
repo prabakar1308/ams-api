@@ -60,6 +60,10 @@ export class WorksheetUpdateManyProvider {
         if (worksheet.generatedAt) {
           generatedAt = new Date(worksheet.generatedAt);
         }
+        let harvestedAt: Date = currentWorksheet.harvestedAt;
+        if (worksheet.harvestedAt) {
+          harvestedAt = new Date(worksheet.harvestedAt);
+        }
         let status: Worksheet['status'] = currentWorksheet.status;
         let harvestProps = {};
         if (worksheet.statusId) {
@@ -76,7 +80,7 @@ export class WorksheetUpdateManyProvider {
           if (
             Number(currentWorksheet.status.id) ===
               Number(worksheetStatus.READY_FOR_STOCKING) &&
-            Number(worksheet.statusId) === Number(worksheetStatus.IN_STOCKING)
+            Number(worksheet.statusId) === Number(worksheetStatus.IN_CULTURE)
           ) {
             const generatedDate = generatedAt
               ? new Date(generatedAt)
@@ -105,6 +109,7 @@ export class WorksheetUpdateManyProvider {
           user,
           status,
           generatedAt,
+          harvestedAt,
           ...harvestProps,
           // restocks,
         });

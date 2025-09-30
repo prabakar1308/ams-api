@@ -4,7 +4,6 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
-  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -18,7 +17,7 @@ export class Harvest extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @OneToOne(() => Worksheet, (worksheet) => worksheet.id, { eager: true })
+  @ManyToOne(() => Worksheet, (worksheet) => worksheet.id, { eager: true })
   @JoinColumn({ name: 'worksheetId' })
   worksheet: Worksheet;
 
@@ -29,6 +28,7 @@ export class Harvest extends BaseEntity {
   count: number;
 
   // same as count when it is created, will get updated based on the transit update
+  // version2: not used as the transit dependency is removed
   @Column({
     type: 'integer',
     nullable: true,
@@ -46,6 +46,12 @@ export class Harvest extends BaseEntity {
     nullable: false,
   })
   status: string;
+
+  @Column({
+    type: 'varchar',
+    nullable: true,
+  })
+  transferStatus: string;
 
   @Column({
     type: 'varchar',

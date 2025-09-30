@@ -8,6 +8,7 @@ import { WorksheetHistory } from '../entities/worksheet-history.entity';
 import { worksheetHistory } from '../enums/worksheet-history-actions.enum';
 import { PatchWorksheetDto } from '../dto/patch-worksheet.dto';
 import { Restock } from '../entities/restock.entity';
+import { worksheetStatus } from 'src/dashboard/enums/worksheet-status.enum';
 
 @Injectable()
 export class WorksheetUpdateProvider {
@@ -183,6 +184,12 @@ export class WorksheetUpdateProvider {
         if (worksheetDto.harvestTime) {
           worksheet.harvestTime = worksheetDto.harvestTime;
         }
+        if (worksheetDto.generatedAt) {
+          worksheet.generatedAt = worksheetDto.generatedAt;
+        }
+        if (worksheetDto.harvestHours) {
+          worksheet.harvestHours = worksheetDto.harvestHours;
+        }
         if (worksheetDto.ph !== undefined) {
           worksheet.ph = worksheetDto.ph;
         }
@@ -191,6 +198,42 @@ export class WorksheetUpdateProvider {
         }
         if (worksheetDto.temperature !== undefined) {
           worksheet.temperature = worksheetDto.temperature;
+        }
+
+        // update harvest time when updating the In Culture or Ready for Harvest items
+        if (
+          (Number(worksheetDto.statusId) ===
+            Number(worksheetStatus.IN_CULTURE) ||
+            Number(worksheetDto.statusId) ===
+              Number(worksheetStatus.READY_FOR_HARVEST)) &&
+          worksheetDto.harvestHours
+        ) {
+          const generatedDate = worksheetDto.generatedAt
+            ? new Date(worksheetDto.generatedAt)
+            : new Date(worksheet.generatedAt);
+          const harvestTime = new Date(
+            generatedDate.setHours(
+              generatedDate.getHours() + worksheetDto.harvestHours,
+            ),
+          );
+          worksheet.harvestTime = new Date(harvestTime);
+
+          // update the status to In Culture or Ready for Harvest based on the current time
+          worksheetDto.statusId = worksheetStatus.IN_CULTURE;
+          const currentTime = new Date();
+          if (
+            worksheet.harvestTime &&
+            new Date(worksheet.harvestTime).getTime() <= currentTime.getTime()
+          ) {
+            worksheetDto.statusId = worksheetStatus.READY_FOR_HARVEST;
+          }
+          const currentStatus =
+            await this.worksheetDependentsProvider.getWorksheetStatus(
+              worksheetDto,
+            );
+          if (currentStatus) {
+            worksheet.status = currentStatus;
+          }
         }
 
         // Save the updated worksheet

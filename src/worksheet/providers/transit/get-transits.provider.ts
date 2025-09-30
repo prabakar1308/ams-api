@@ -9,12 +9,15 @@ import { GetReportQueryDto } from 'src/worksheet/dto/get-report-query.dto';
 import { UsersService } from 'src/users/providers/users.service';
 import { TransitResponse } from 'src/worksheet/interfaces/transit.interface';
 import { WorksheetUnit } from 'src/worksheet/enums/worksheet-units.enum';
+import { Harvest } from 'src/worksheet/entities/harvest.entity';
 
 @Injectable()
 export class GetTransitsProvider {
   constructor(
     @InjectRepository(Transit)
     private readonly transitRepository: Repository<Transit>,
+    @InjectRepository(Harvest)
+    private readonly harvestRepository: Repository<Harvest>,
     private readonly userService: UsersService,
   ) {}
 
@@ -36,11 +39,21 @@ export class GetTransitsProvider {
       },
     });
 
+    // const harvests = await this.harvestRepository.find({
+    //   where: {
+    //     unit: { id: createTransits.unitId },
+    //     status: In([
+    //       workSheetTableStatus.ACTIVE,
+    //       workSheetTableStatus.PARTIALLY_TRANSIT,
+    //     ]),
+    //   },
+    // });
+
     // Transform the transits into the desired format
     return await Promise.all(
       transits.map(async (transit) => {
         const {
-          harvest,
+          // harvest,
           generatedAt,
           id,
           count,
@@ -54,17 +67,17 @@ export class GetTransitsProvider {
 
         return {
           id,
-          harvestId: harvest ? harvest.id : 0,
+          // harvestId: harvest ? harvest.id : 0,
           generatedAt,
           createdBy: userName,
           createdById: createdBy,
           staffInCharge,
-          harvestCount: harvest
-            ? `${harvest.count} ${getUnitValue(harvest.unit)}`
-            : 'NA',
+          // harvestCount: harvest
+          //   ? `${harvest.count} ${getUnitValue(harvest.unit)}`
+          //   : 'NA',
           transitCount: count ? `${count} ${getUnitValue(unit)}` : 'NA',
           count,
-          countInStock: harvest ? harvest.countInStock : 0,
+          // countInStock: harvest ? harvest.countInStock : 0,
           unitId: unit ? unit.id : undefined,
           unitName: getUnitValue(unit),
           unitSector: {
@@ -77,56 +90,56 @@ export class GetTransitsProvider {
     );
   }
 
-  public async getCurrentTransitsByHarvestId(
-    harvestId: number,
-  ): Promise<TransitResponse[]> {
-    const transits = await this.transitRepository.find({
-      where: {
-        harvest: { id: harvestId },
-      },
-      order: {
-        unitSector: { name: 'ASC' },
-        generatedAt: 'DESC',
-      },
-    });
+  // public async getCurrentTransitsByHarvestId(
+  //   harvestId: number,
+  // ): Promise<TransitResponse[]> {
+  //   const transits = await this.transitRepository.find({
+  //     where: {
+  //       harvest: { id: harvestId },
+  //     },
+  //     order: {
+  //       unitSector: { name: 'ASC' },
+  //       generatedAt: 'DESC',
+  //     },
+  //   });
 
-    return await Promise.all(
-      transits.map(async (transit) => {
-        const {
-          harvest,
-          generatedAt,
-          id,
-          count,
-          unit,
-          unitSector,
-          createdBy,
-          staffInCharge,
-        } = transit;
+  //   return await Promise.all(
+  //     transits.map(async (transit) => {
+  //       const {
+  //         harvest,
+  //         generatedAt,
+  //         id,
+  //         count,
+  //         unit,
+  //         unitSector,
+  //         createdBy,
+  //         staffInCharge,
+  //       } = transit;
 
-        const userName = await this.userService.getUserNameById(createdBy);
+  //       const userName = await this.userService.getUserNameById(createdBy);
 
-        return {
-          id,
-          harvestId: harvest ? harvest.id : 0,
-          generatedAt,
-          createdBy: userName,
-          staffInCharge,
-          harvestCount: harvest
-            ? `${harvest.count} ${getUnitValue(harvest.unit)}`
-            : 'NA',
-          transitCount: count ? `${count} ${getUnitValue(unit)}` : 'NA',
-          count,
-          countInStock: harvest ? harvest.countInStock : 0,
-          unitName: getUnitValue(unit),
-          unitSector: {
-            id: unitSector.id,
-            name: unitSector.name,
-            location: unitSector.location,
-          },
-        };
-      }),
-    );
-  }
+  //       return {
+  //         id,
+  //         harvestId: harvest ? harvest.id : 0,
+  //         generatedAt,
+  //         createdBy: userName,
+  //         staffInCharge,
+  //         harvestCount: harvest
+  //           ? `${harvest.count} ${getUnitValue(harvest.unit)}`
+  //           : 'NA',
+  //         transitCount: count ? `${count} ${getUnitValue(unit)}` : 'NA',
+  //         count,
+  //         countInStock: harvest ? harvest.countInStock : 0,
+  //         unitName: getUnitValue(unit),
+  //         unitSector: {
+  //           id: unitSector.id,
+  //           name: unitSector.name,
+  //           location: unitSector.location,
+  //         },
+  //       };
+  //     }),
+  //   );
+  // }
 
   // For Dashboard Count
   public async getTransitsTotalCount(
@@ -251,9 +264,9 @@ export class GetTransitsProvider {
           generatedAt: transit.generatedAt,
           createdBy: userName,
           staffInCharge: transit.staffInCharge,
-          harvestCount: transit.harvest
-            ? `${transit.harvest.count} ${getUnitValue(transit.harvest.unit)}`
-            : 'NA',
+          // harvestCount: transit.harvest
+          //   ? `${transit.harvest.count} ${getUnitValue(transit.harvest.unit)}`
+          //   : 'NA',
           transitCount: transit.count
             ? `${transit.count} ${getUnitValue(transit.unit)}`
             : 'NA',
@@ -262,16 +275,16 @@ export class GetTransitsProvider {
             name: unitSector.name,
             location: unitSector.location,
           },
-          worksheet: transit.harvest
-            ? {
-                tankType: transit.harvest.worksheet
-                  ? transit.harvest.worksheet.tankType.value
-                  : '',
-                tankNumber: transit.harvest.worksheet
-                  ? transit.harvest.worksheet.tankNumber
-                  : 0,
-              }
-            : undefined,
+          // worksheet: transit.harvest
+          //   ? {
+          //       tankType: transit.harvest.worksheet
+          //         ? transit.harvest.worksheet.tankType.value
+          //         : '',
+          //       tankNumber: transit.harvest.worksheet
+          //         ? transit.harvest.worksheet.tankNumber
+          //         : 0,
+          //     }
+          //   : undefined,
         });
 
         // Increment the count for the respective shift
