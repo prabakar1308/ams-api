@@ -54,6 +54,12 @@ export class Harvest extends BaseEntity {
   transferStatus: string;
 
   @Column({
+    type: 'integer',
+    nullable: true,
+  })
+  transferId?: number;
+
+  @Column({
     type: 'varchar',
     length: 500,
     nullable: true,

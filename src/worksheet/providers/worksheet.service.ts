@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Repository } from 'typeorm';
+import { IsNull, Not, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 
 import { CreateWorksheetDto } from '../dto/create-worksheet.dto';
@@ -35,6 +35,7 @@ import { PatchTransitDto } from '../dto/patch-transit.dto';
 import { TransitUpdateProvider } from './transit/update-transit.provider';
 import { WorksheetTasksProvider } from './worksheet-tasks.provider';
 import { MonitoringCount } from '../entities/monitoring-count.entity';
+import { AutoConversion } from '../entities/auto-conversion.entity';
 
 @Injectable()
 export class WorksheetService {
@@ -45,6 +46,8 @@ export class WorksheetService {
     private readonly worksheetHistoryRespository: Repository<WorksheetHistory>,
     @InjectRepository(MonitoringCount)
     private readonly monitoringCountRespository: Repository<MonitoringCount>,
+    @InjectRepository(AutoConversion)
+    private readonly autoConversionRespository: Repository<AutoConversion>,
     private readonly worksheetCreatManyProvider: WorksheetCreateManyProvider,
     private readonly worksheetUpdateManyProvider: WorksheetUpdateManyProvider,
     private readonly worksheetCreatProvider: WorksheetCreateProvider,
@@ -333,5 +336,23 @@ export class WorksheetService {
 
   public async getMonitoringCount() {
     return await this.monitoringCountRespository.findOneBy({ id: 1 });
+  }
+
+  public async updateMillionsAutoConversion() {
+    return await this.worksheetTasksProvider.updateActiveHarvestsToColdStorage();
+  }
+
+  public async revertLatestAutoConversion() {
+    return await this.worksheetTasksProvider.revertLatestAutoConversion();
+  }
+
+  public async getAutoConversionLogs() {
+    return await this.autoConversionRespository.find({
+      where: {
+        id: Not(IsNull()),
+      },
+      order: { createdAt: 'DESC' },
+      take: 10,
+    });
   }
 }

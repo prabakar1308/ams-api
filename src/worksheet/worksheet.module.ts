@@ -28,6 +28,7 @@ import { WorksheetReportsProvider } from './providers/worksheet-reports.provider
 import { WorksheetUpdateProvider } from './providers/worksheet-update.provider';
 import { HarvestUpdateProvider } from './providers/harvest/update-harvest.provider';
 import { TransitUpdateProvider } from './providers/transit/update-transit.provider';
+import { AutoConversion } from './entities/auto-conversion.entity';
 
 @Module({
   controllers: [WorksheetController],
@@ -57,6 +58,7 @@ import { TransitUpdateProvider } from './providers/transit/update-transit.provid
       WorksheetHistory,
       Transit,
       MonitoringCount,
+      AutoConversion,
     ]),
     UsersModule,
     PaginationModule,
