@@ -47,8 +47,8 @@ VALUES(1, 1, nextval('master.unit_sector_id_seq'::regclass), 'Unit 9 Bio Farm', 
 ---- userName: GMH-AMS-1
 ---- password: welcome123
 INSERT INTO master."user"
-("createdBy", "updatedBy", id, "userCode", "firstName", "lastName", "password", email, "mobileNumber", "role", designation, "dateOfBirth", address, "dateOfJoining", remarks, "createdAt", "updatedAt", "unitSectorId")
-VALUES(0, 0, nextval('master.user_id_seq'::regclass), 'GMH-AMS-1', 'AMS', 'Admin', '$2b$10$bcjIyTjwrH9AkCdJnpH3HuegIz2K5HWdLfzzXGxjF5KqPj6HnmbwW', 'test', '950000', 'super_admin', 'Manager', '1998-09-18 23:04:02.666', 'test', '2016-09-18 23:04:02.666', '', now(), now(), 1);
+("createdBy", "updatedBy", id, "userCode", "firstName", "lastName", "password", email, "mobileNumber", "role", designation, "dateOfBirth", address, "dateOfJoining", remarks, "createdAt", "updatedAt")
+VALUES(0, 0, nextval('master.user_id_seq'::regclass), 'GMH-AMS-1', 'AMS', 'Admin', '$2b$10$bcjIyTjwrH9AkCdJnpH3HuegIz2K5HWdLfzzXGxjF5KqPj6HnmbwW', 'test', '950000', 'super_admin', 'Manager', '1998-09-18 23:04:02.666', 'test', '2016-09-18 23:04:02.666', '', now(), now());
 
 
 
@@ -135,6 +135,10 @@ VALUES(nextval('master.worksheet_status_id_seq'::regclass), 'Completed', 'comple
 INSERT INTO master.worksheet_status
 (id, value, "shortName", description, "createdAt", "updatedAt", "createdBy", "updatedBy")
 VALUES(nextval('master.worksheet_status_id_seq'::regclass), 'Empty', 'empty', 'Indicates the tank is free', now(), now(), 1, 1);
+INSERT INTO master.worksheet_status
+(id, value, "shortName", description, "createdAt", "updatedAt", "createdBy", "updatedBy")
+VALUES(nextval('master.worksheet_status_id_seq'::regclass), 'Washing', 'wm', 'Indicates the tank is in washing status', now(), now(), 1, 1);
+
 
 
 ---- Temperature -----
@@ -160,8 +164,8 @@ VALUES(nextval('master.salnity_id_seq'::regclass), 25, 35, 28, 2, now(), now(), 
 
 -- Sample data for source_tracker
 INSERT INTO master.source_tracker
-("sourceOrigin", "count", "generatedAt", "createdBy", "updatedBy", "createdAt", "updatedAt")
+("sourceOrigin", "count", "generatedAt", "createdBy", "updatedBy", "createdAt", "updatedAt", "unitSource")
 VALUES
-('Source Tracker 1', 1000, '2025-09-25 10:00:00', 1, 1, now(), now()),
-('Source Tracker 1', 500, '2025-09-24 09:30:00', 1, 1, now(), now()),
-('Source Tracker 1', 200, '2025-09-23 08:15:00', 1, 1, now(), now());
+('Source Tracker 1', 1000, '2025-09-25 10:00:00', 1, 1, now(), now(), 3),
+('Source Tracker 1', 500, '2025-09-24 09:30:00', 1, 1, now(), now(), 3),
+('Source Tracker 1', 200, '2025-09-23 08:15:00', 1, 1, now(), now(), 4);

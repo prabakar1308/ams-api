@@ -228,4 +228,19 @@ export class WorksheetController {
   public getMonitoringCount() {
     return this.worksheetService.getMonitoringCount();
   }
+
+  @Post('move-pending-millions-to-cold-storage')
+  public updateMillionsAutoConversion() {
+    return this.worksheetService.updateMillionsAutoConversion();
+  }
+
+  @Post('revert-latest-auto-conversion')
+  public revertLatestAutoConversion() {
+    return this.worksheetService.revertLatestAutoConversion();
+  }
+
+  @Get('get-auto-conversion-logs')
+  public getLatestAutoConversion() {
+    return this.worksheetService.getAutoConversionLogs();
+  }
 }
