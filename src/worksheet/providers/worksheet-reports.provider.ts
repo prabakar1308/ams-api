@@ -6,6 +6,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Worksheet } from '../entities/worksheet.entity';
 import { GetReportQueryDto } from '../dto/get-report-query.dto';
 import { SourceTrackerService } from 'src/master/providers/source-tracker.service';
+import { WorksheetUnitService } from 'src/master/providers/worksheet-unit.service';
 
 @Injectable()
 export class WorksheetReportsProvider {
@@ -14,6 +15,7 @@ export class WorksheetReportsProvider {
     private readonly worksheetRespository: Repository<Worksheet>,
     private readonly sourceTrackerService: SourceTrackerService,
     private readonly configService: ConfigService,
+    private readonly unitService: WorksheetUnitService,
   ) {}
 
   public async getInputUnitsReport(getTransitsReportDto: GetReportQueryDto) {
@@ -262,12 +264,29 @@ export class WorksheetReportsProvider {
     const overallInputsUsedCount = Object.values(overall);
 
     // Adjust counts based on source tracker data
-    const overallInputCount = overallInputsAvailableCount.map((available) => {
-      const used = overallInputsUsedCount.find(
-        (used) => used.id === available.unitSource,
-      );
-      return { ...used, count: available.totalCount - (used?.count || 0) };
-    });
+    const overallInputCount = await Promise.all(
+      overallInputsAvailableCount.map(async (available) => {
+        const used = overallInputsUsedCount.find(
+          (used) => used.id === available.unitSource,
+        );
+
+        // If used is not found, fetch worksheet unit details from the service
+        if (!used) {
+          const unitDetails = await this.unitService.getWorksheetUnitById(
+            available.unitSource,
+          );
+          return {
+            id: available.unitSource,
+            name: unitDetails?.value || '',
+            brand: unitDetails?.brand || '',
+            spec: unitDetails?.specs || '',
+            count: available.totalCount,
+          };
+        }
+
+        return { ...used, count: available.totalCount - (used?.count || 0) };
+      }),
+    );
 
     return overallInputCount;
   }
