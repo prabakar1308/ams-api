@@ -1,11 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { Repository } from 'typeorm';
+import { IsNull, Not, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 
 import { CreateWorksheetDto } from '../dto/create-worksheet.dto';
-// import { CreateHarvestDto } from '../dto/create-harvest.dto';
-// import { CreateRestockDto } from '../dto/create-restock.dto';
-import { PatchWorksheetDto } from '../dto/patch-worksheet.dto';
 import { PatchWorksheetsDto } from '../dto/patch-worksheets.dto';
 import { GetWorksheetsDto } from '../dto/get-worksheets.dto';
 import { GetWorksheetHistoryDto } from '../dto/get-worksheet-history.dto';
@@ -13,7 +10,6 @@ import { CreateTransitsDto } from '../dto/create-transits.dto';
 import { CreateHarvestsDto } from '../dto/create-harvests.dto';
 
 import { Worksheet } from '../entities/worksheet.entity';
-import { Harvest } from '../entities/harvest.entity';
 import { WorksheetHistory } from '../entities/worksheet-history.entity';
 
 import { GetWorksheetsProvider } from './get-worksheets.provider';
@@ -25,12 +21,21 @@ import { WorksheetTransitManyProvider } from './transit/worksheet-transit-many.p
 
 import { PaginationProvider } from 'src/common/pagination/providers/pagination.provider';
 import { Paginated } from 'src/common/pagination/interfaces/paginated.interface';
-import { WorksheetStatusService } from 'src/master/providers/worksheet-status.service';
 import { GetHarvestsDto } from '../dto/get-harvests.dto';
 import { GetHarvestsProvider } from './harvest/get-harvests.provider';
 import { GetReportQueryDto } from '../dto/get-report-query.dto';
 import { GetTransitsProvider } from './transit/get-transits.provider';
 import { WorksheetReportsProvider } from './worksheet-reports.provider';
+import { WorksheetUpdateProvider } from './worksheet-update.provider';
+import { PatchWorksheetDto } from '../dto/patch-worksheet.dto';
+import { UpdateWorksheet } from '../interfaces/update-worksheet.interface';
+import { PatchHarvestDto } from '../dto/patch-harvest.dto';
+import { HarvestUpdateProvider } from './harvest/update-harvest.provider';
+import { PatchTransitDto } from '../dto/patch-transit.dto';
+import { TransitUpdateProvider } from './transit/update-transit.provider';
+import { WorksheetTasksProvider } from './worksheet-tasks.provider';
+import { MonitoringCount } from '../entities/monitoring-count.entity';
+import { AutoConversion } from '../entities/auto-conversion.entity';
 
 @Injectable()
 export class WorksheetService {
@@ -39,19 +44,24 @@ export class WorksheetService {
     private readonly worksheetRespository: Repository<Worksheet>,
     @InjectRepository(WorksheetHistory)
     private readonly worksheetHistoryRespository: Repository<WorksheetHistory>,
-    @InjectRepository(Harvest)
-    private readonly harvestRespository: Repository<Harvest>,
+    @InjectRepository(MonitoringCount)
+    private readonly monitoringCountRespository: Repository<MonitoringCount>,
+    @InjectRepository(AutoConversion)
+    private readonly autoConversionRespository: Repository<AutoConversion>,
     private readonly worksheetCreatManyProvider: WorksheetCreateManyProvider,
     private readonly worksheetUpdateManyProvider: WorksheetUpdateManyProvider,
     private readonly worksheetCreatProvider: WorksheetCreateProvider,
     private readonly paginationProvider: PaginationProvider,
-    private readonly worksheetStatusService: WorksheetStatusService,
+    private readonly worksheetUpdateProvider: WorksheetUpdateProvider,
     private readonly worksheetHarvestManyProvider: WorksheetHarvestManyProvider,
     private readonly worksheetTransitManyProvider: WorksheetTransitManyProvider,
     private readonly getWorksheetsProvider: GetWorksheetsProvider,
     private readonly getHarvestsProvider: GetHarvestsProvider,
     private readonly getTransitsProvider: GetTransitsProvider,
     private readonly worksheetReportsProvider: WorksheetReportsProvider,
+    private readonly harvestUpdateProvider: HarvestUpdateProvider,
+    private readonly transitUpdateProvider: TransitUpdateProvider,
+    private readonly worksheetTasksProvider: WorksheetTasksProvider,
   ) {}
 
   public async getWorksheets(
@@ -112,6 +122,35 @@ export class WorksheetService {
     // });
   }
 
+  public async getCurrentWorksheet(
+    id: number,
+  ): Promise<UpdateWorksheet | null> {
+    const worksheet = await this.worksheetRespository.findOne({
+      where: { id },
+      relations: ['restocks'],
+    });
+
+    if (worksheet) {
+      return {
+        id: worksheet?.id,
+        harvestHours: worksheet.harvestHours,
+        harvestTypeId: worksheet.harvestType.id,
+        inputCount: worksheet.inputCount,
+        inputUnitId: worksheet.inputUnit.id,
+        ph: worksheet.ph,
+        salnity: worksheet.salnity,
+        temperature: worksheet.temperature,
+        userId: worksheet.user.id,
+        tankNumber: worksheet.tankNumber,
+        tankTypeId: worksheet.tankType.id,
+        generatedAt: worksheet.generatedAt,
+        restocks: worksheet.restocks.map((restock) => restock.id),
+        statusId: worksheet.status.id,
+      };
+    }
+    return null;
+  }
+
   public async getWorksheetById(id: number): Promise<Worksheet | null> {
     return await this.worksheetRespository.findOneBy({ id });
   }
@@ -129,32 +168,39 @@ export class WorksheetService {
     });
   }
 
+  // public async updateWorksheet(patchWorksheetDto: PatchWorksheetDto) {
+  //   const worksheet = await this.worksheetRespository.findOneBy({
+  //     id: patchWorksheetDto.id,
+  //   });
+  //   if (!worksheet) {
+  //     throw new Error('Worksheet not found');
+  //   }
+
+  //   let status: Worksheet['status'] = worksheet.status;
+  //   if (patchWorksheetDto.statusId) {
+  //     // check if statusId is valid
+  //     const fetchedStatus =
+  //       await this.worksheetStatusService.getWorksheetStatusById(
+  //         patchWorksheetDto.statusId,
+  //       );
+
+  //     if (!fetchedStatus) {
+  //       throw new Error('Worksheet Status not found');
+  //     }
+
+  //     status = fetchedStatus;
+  //   }
+
+  //   worksheet.status = status;
+
+  //   return await this.worksheetRespository.save(worksheet);
+  // }
+
   public async updateWorksheet(patchWorksheetDto: PatchWorksheetDto) {
-    const worksheet = await this.worksheetRespository.findOneBy({
-      id: patchWorksheetDto.id,
-    });
-    if (!worksheet) {
-      throw new Error('Worksheet not found');
-    }
-
-    let status: Worksheet['status'] = worksheet.status;
-    if (patchWorksheetDto.statusId) {
-      // check if statusId is valid
-      const fetchedStatus =
-        await this.worksheetStatusService.getWorksheetStatusById(
-          patchWorksheetDto.statusId,
-        );
-
-      if (!fetchedStatus) {
-        throw new Error('Worksheet Status not found');
-      }
-
-      status = fetchedStatus;
-    }
-
-    worksheet.status = status;
-
-    return await this.worksheetRespository.save(worksheet);
+    await this.worksheetUpdateProvider.updateWorksheet(patchWorksheetDto);
+    return await this.getActiveWorksheets(
+      patchWorksheetDto.worksheetFilter ?? {},
+    );
   }
 
   public async updateWorksheets(patchWorksheetsDto: PatchWorksheetsDto) {
@@ -194,6 +240,14 @@ export class WorksheetService {
     return await this.getHarvestsProvider.getActiveHarvests(getHarvestsDto);
   }
 
+  public async getHarvestById(id: number) {
+    return await this.getHarvestsProvider.getHarvestById(id);
+  }
+
+  public async updateHarvest(patchHarvestDto: PatchHarvestDto) {
+    return await this.harvestUpdateProvider.updateHarvest(patchHarvestDto);
+  }
+
   // public async createHarvest(harvest: CreateHarvestDto) {
   //   let response = {};
   //   const newHarvest = this.harvestRespository.create(harvest);
@@ -230,6 +284,12 @@ export class WorksheetService {
     );
   }
 
+  // public async getTransitsByHarvestId(harvestId: number) {
+  //   return await this.getTransitsProvider.getCurrentTransitsByHarvestId(
+  //     harvestId,
+  //   );
+  // }
+
   public async getTransitCountTotal(getTransitsReportDto: GetReportQueryDto) {
     return await this.getTransitsProvider.getTransitsTotalCount(
       getTransitsReportDto,
@@ -250,6 +310,10 @@ export class WorksheetService {
     );
   }
 
+  public async updateTransit(PatchTransitDto: PatchTransitDto) {
+    return await this.transitUpdateProvider.updateTransit(PatchTransitDto);
+  }
+
   public async getWorksheetInputReport(
     getTransitsReportDto: GetReportQueryDto,
   ) {
@@ -260,5 +324,35 @@ export class WorksheetService {
 
   public async getCurrentInputUnitsReport() {
     return await this.worksheetReportsProvider.getCurrentInputUnitsReport();
+  }
+
+  public async getAvailableInputUnitsReport() {
+    return await this.worksheetReportsProvider.getAvailableInputUnitsReport();
+  }
+
+  public async updateWorksheetsStatus() {
+    return await this.worksheetTasksProvider.updateWorksheetStatus();
+  }
+
+  public async getMonitoringCount() {
+    return await this.monitoringCountRespository.findOneBy({ id: 1 });
+  }
+
+  public async updateMillionsAutoConversion() {
+    return await this.worksheetTasksProvider.updateActiveHarvestsToColdStorage();
+  }
+
+  public async revertLatestAutoConversion() {
+    return await this.worksheetTasksProvider.revertLatestAutoConversion();
+  }
+
+  public async getAutoConversionLogs() {
+    return await this.autoConversionRespository.find({
+      where: {
+        id: Not(IsNull()),
+      },
+      order: { createdAt: 'DESC' },
+      take: 10,
+    });
   }
 }

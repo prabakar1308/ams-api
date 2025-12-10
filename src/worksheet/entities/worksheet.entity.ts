@@ -88,6 +88,20 @@ export class Worksheet extends BaseEntity {
   @JoinTable()
   restocks: Restock[];
 
+  @Column({
+    type: 'timestamp',
+    nullable: true,
+    default: () => 'CURRENT_TIMESTAMP',
+  })
+  generatedAt: Date;
+
+  @Column({
+    type: 'timestamp',
+    nullable: true,
+    default: () => 'CURRENT_TIMESTAMP',
+  })
+  harvestedAt: Date;
+
   @CreateDateColumn()
   createdAt: Date;
 

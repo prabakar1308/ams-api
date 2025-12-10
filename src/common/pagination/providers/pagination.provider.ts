@@ -15,11 +15,23 @@ export class PaginationProvider {
   public async paginateQuery<T extends ObjectLiteral>(
     paginationQuery: PaginationQueryDto,
     repository: Repository<T>,
+    orderByColumn?: string,
   ): Promise<Paginated<T>> {
-    const results = await repository.find({
+    let findOptions = {
       skip: ((paginationQuery.page ?? 1) - 1) * (paginationQuery.limit ?? 10),
       take: paginationQuery.limit,
-    });
+      order: {},
+    };
+
+    // Add ordering if orderByColumn is provided
+    if (orderByColumn) {
+      findOptions = {
+        ...findOptions,
+        order: { [orderByColumn]: 'DESC' },
+      };
+    }
+
+    const results = await repository.find(findOptions);
 
     // create the request URLs
     const baseURL =

@@ -41,6 +41,13 @@ export class Restock extends BaseEntity {
   })
   status: string;
 
+  @Column({
+    type: 'timestamp',
+    nullable: true,
+    default: () => 'CURRENT_TIMESTAMP',
+  })
+  generatedAt: Date;
+
   @CreateDateColumn()
   createdAt: Date;
 

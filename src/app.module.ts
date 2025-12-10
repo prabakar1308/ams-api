@@ -49,7 +49,7 @@ const ENV = process.env.NODE_ENV;
         username: configService.get('database.userName'),
         password: configService.get('database.password'),
         database: configService.get('database.dbName'),
-        ssl: true,
+        // ssl: true,
         // entities: [__dirname + '/**/*.entity{.ts,.js}'],
         // entities: [User],
         autoLoadEntities: configService.get('database.autoLoadEntities'),

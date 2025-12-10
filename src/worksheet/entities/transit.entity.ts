@@ -8,7 +8,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { BaseEntity } from 'src/common/entities/base.entity';
-import { Harvest } from './harvest.entity';
+// import { Harvest } from './harvest.entity';
 import { UnitSector } from 'src/master/entities/unit-sector.entity';
 import { WorksheetUnit } from 'src/master/entities/worksheet-unit.entity';
 
@@ -17,9 +17,9 @@ export class Transit extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => Harvest, (harvest) => harvest.id, { eager: true })
-  @JoinColumn({ name: 'harvestId' })
-  harvest: Harvest;
+  // @ManyToOne(() => Harvest, (harvest) => harvest.id, { eager: true })
+  // @JoinColumn({ name: 'harvestId' })
+  // harvest: Harvest;
 
   @ManyToOne(() => UnitSector, (unitSector) => unitSector.id, { eager: true })
   @JoinColumn({ name: 'unitSectorId' })
@@ -41,6 +41,13 @@ export class Transit extends BaseEntity {
     nullable: true,
   })
   staffInCharge: string;
+
+  @Column({
+    type: 'timestamp',
+    nullable: true,
+    default: () => 'CURRENT_TIMESTAMP',
+  })
+  generatedAt: Date;
 
   @CreateDateColumn()
   createdAt: Date;

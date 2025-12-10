@@ -99,18 +99,21 @@ export class GetWorksheetsProvider {
         inputUnit,
         harvestTime,
         harvestHours,
-        createdAt,
+        generatedAt,
+        harvestedAt,
         ph,
         salnity,
         temperature,
       } = worksheet || {};
 
-      const dateInput =
-        status &&
-        status.id &&
-        Number(status.id) === Number(worksheetStatus.READY_FOR_STOCKING)
-          ? createdAt
-          : harvestTime;
+      let dateInput = harvestTime;
+
+      if (status && status.id) {
+        if (Number(status.id) === Number(worksheetStatus.READY_FOR_STOCKING))
+          dateInput = generatedAt;
+        else if (Number(status.id) === Number(worksheetStatus.WASHING))
+          dateInput = harvestedAt;
+      }
 
       const parameters: WorksheetParameters[] = [];
       const inputValue = `${inputCount} ${getUnitValue(inputUnit)}`;
@@ -142,6 +145,7 @@ export class GetWorksheetsProvider {
         inputSource: inputCount ? inputValue : '',
         harvestHours,
         timeDifference: getDateDifference(dateInput, status ? status.id : 0),
+        generatedAt,
         parameters,
       };
     });
@@ -170,11 +174,11 @@ export class GetWorksheetsProvider {
   ): Promise<
     { inputUnitId: number; inputUnitName: string; totalInputCount: number }[]
   > {
-    // Fetch worksheets with In Stocking status
+    // Fetch worksheets with In Culture status
     const worksheets = await this.worksheetRespository.find({
       where: {
         tankType: { id: tankTypeId },
-        status: { id: worksheetStatus.IN_STOCKING },
+        status: { id: worksheetStatus.IN_CULTURE },
       },
       // relations: ['inputUnit'], // Include inputUnit relation to access unit details
     });

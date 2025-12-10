@@ -3,14 +3,13 @@ import { MoreThanOrEqual, Repository, Between } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { toZonedTime } from 'date-fns-tz';
 
-import { Harvest } from 'src/worksheet/entities/harvest.entity';
-import { Worksheet } from 'src/worksheet/entities/worksheet.entity';
 import { Transit } from 'src/worksheet/entities/transit.entity';
 import { getUnitValue } from 'src/worksheet/utils';
 import { GetReportQueryDto } from 'src/worksheet/dto/get-report-query.dto';
 import { UsersService } from 'src/users/providers/users.service';
 import { TransitResponse } from 'src/worksheet/interfaces/transit.interface';
 import { WorksheetUnit } from 'src/worksheet/enums/worksheet-units.enum';
+import { Harvest } from 'src/worksheet/entities/harvest.entity';
 
 @Injectable()
 export class GetTransitsProvider {
@@ -19,8 +18,6 @@ export class GetTransitsProvider {
     private readonly transitRepository: Repository<Transit>,
     @InjectRepository(Harvest)
     private readonly harvestRepository: Repository<Harvest>,
-    @InjectRepository(Worksheet)
-    private readonly worksheetRepository: Repository<Worksheet>,
     private readonly userService: UsersService,
   ) {}
 
@@ -34,20 +31,30 @@ export class GetTransitsProvider {
 
     const transits = await this.transitRepository.find({
       where: {
-        createdAt: MoreThanOrEqual(dateThreshold),
+        generatedAt: MoreThanOrEqual(dateThreshold),
       },
       order: {
         unitSector: { name: 'ASC' },
-        createdAt: 'DESC', // Order by latest first
+        generatedAt: 'DESC', // Order by latest first
       },
     });
+
+    // const harvests = await this.harvestRepository.find({
+    //   where: {
+    //     unit: { id: createTransits.unitId },
+    //     status: In([
+    //       workSheetTableStatus.ACTIVE,
+    //       workSheetTableStatus.PARTIALLY_TRANSIT,
+    //     ]),
+    //   },
+    // });
 
     // Transform the transits into the desired format
     return await Promise.all(
       transits.map(async (transit) => {
         const {
-          harvest,
-          createdAt,
+          // harvest,
+          generatedAt,
           id,
           count,
           unit,
@@ -60,14 +67,21 @@ export class GetTransitsProvider {
 
         return {
           id,
-          createdAt,
+          // harvestId: harvest ? harvest.id : 0,
+          generatedAt,
           createdBy: userName,
+          createdById: createdBy,
           staffInCharge,
-          harvestCount: harvest
-            ? `${harvest.count} ${getUnitValue(harvest.unit)}`
-            : 'NA',
+          // harvestCount: harvest
+          //   ? `${harvest.count} ${getUnitValue(harvest.unit)}`
+          //   : 'NA',
           transitCount: count ? `${count} ${getUnitValue(unit)}` : 'NA',
+          count,
+          // countInStock: harvest ? harvest.countInStock : 0,
+          unitId: unit ? unit.id : undefined,
+          unitName: getUnitValue(unit),
           unitSector: {
+            id: unitSector.id,
             name: unitSector.name,
             location: unitSector.location,
           },
@@ -75,6 +89,57 @@ export class GetTransitsProvider {
       }),
     );
   }
+
+  // public async getCurrentTransitsByHarvestId(
+  //   harvestId: number,
+  // ): Promise<TransitResponse[]> {
+  //   const transits = await this.transitRepository.find({
+  //     where: {
+  //       harvest: { id: harvestId },
+  //     },
+  //     order: {
+  //       unitSector: { name: 'ASC' },
+  //       generatedAt: 'DESC',
+  //     },
+  //   });
+
+  //   return await Promise.all(
+  //     transits.map(async (transit) => {
+  //       const {
+  //         harvest,
+  //         generatedAt,
+  //         id,
+  //         count,
+  //         unit,
+  //         unitSector,
+  //         createdBy,
+  //         staffInCharge,
+  //       } = transit;
+
+  //       const userName = await this.userService.getUserNameById(createdBy);
+
+  //       return {
+  //         id,
+  //         harvestId: harvest ? harvest.id : 0,
+  //         generatedAt,
+  //         createdBy: userName,
+  //         staffInCharge,
+  //         harvestCount: harvest
+  //           ? `${harvest.count} ${getUnitValue(harvest.unit)}`
+  //           : 'NA',
+  //         transitCount: count ? `${count} ${getUnitValue(unit)}` : 'NA',
+  //         count,
+  //         countInStock: harvest ? harvest.countInStock : 0,
+  //         unitName: getUnitValue(unit),
+  //         unitSector: {
+  //           id: unitSector.id,
+  //           name: unitSector.name,
+  //           location: unitSector.location,
+  //         },
+  //       };
+  //     }),
+  //   );
+  // }
 
   // For Dashboard Count
   public async getTransitsTotalCount(
@@ -91,7 +156,7 @@ export class GetTransitsProvider {
     // Fetch transits and calculate the total count
     const transits = await this.transitRepository.find({
       where: {
-        createdAt: MoreThanOrEqual(dateThreshold),
+        generatedAt: MoreThanOrEqual(dateThreshold),
         ...(unitId ? { unit: { id: unitId } } : {}),
       },
     });
@@ -109,7 +174,7 @@ export class GetTransitsProvider {
     getTransitsReportDto: GetReportQueryDto,
   ): Promise<
     {
-      unitSector: { name: string; location: string };
+      unitSector: { id: number; name: string; location: string };
       totalTransitCount: string;
       millions: number;
       frozenCups: number;
@@ -136,11 +201,11 @@ export class GetTransitsProvider {
     // Fetch transits created within the date range
     const transits = await this.transitRepository.find({
       where: {
-        createdAt: Between(start, end),
+        generatedAt: Between(start, end),
         ...(unitId ? { unit: { id: unitId } } : {}),
       },
       order: {
-        createdAt: 'DESC',
+        generatedAt: 'DESC',
       },
     });
 
@@ -148,7 +213,7 @@ export class GetTransitsProvider {
     const groupedTransits = await transits.reduce(
       async (accPromise, transit) => {
         const acc = await accPromise;
-        const { unitSector, createdAt } = transit;
+        const { unitSector, generatedAt } = transit;
 
         if (!unitSector) {
           return acc; // Skip if unitSector is not defined
@@ -159,6 +224,7 @@ export class GetTransitsProvider {
         if (!acc[sectorKey]) {
           acc[sectorKey] = {
             unitSector: {
+              id: unitSector.id,
               name: unitSector.name,
               location: unitSector.location || '',
             },
@@ -183,10 +249,10 @@ export class GetTransitsProvider {
 
         // Determine if the transit belongs to the day shift or night shift
         const timeZone = 'Asia/Kolkata';
-        const localDate = toZonedTime(createdAt, timeZone);
+        const localDate = toZonedTime(generatedAt, timeZone);
         const hours = localDate.getHours();
         const shift = hours >= 6 && hours < 18 ? 'dayShift' : 'nightShift';
-        // const hours = createdAt.getHours();
+        // const hours = generatedAt.getHours();
         // const shift = hours >= 6 && hours < 18 ? 'dayShift' : 'nightShift';
 
         const userName = await this.userService.getUserNameById(
@@ -195,29 +261,30 @@ export class GetTransitsProvider {
 
         acc[sectorKey].shifts[shift].transits.push({
           id: transit.id,
-          createdAt: transit.createdAt,
+          generatedAt: transit.generatedAt,
           createdBy: userName,
           staffInCharge: transit.staffInCharge,
-          harvestCount: transit.harvest
-            ? `${transit.harvest.count} ${getUnitValue(transit.harvest.unit)}`
-            : 'NA',
+          // harvestCount: transit.harvest
+          //   ? `${transit.harvest.count} ${getUnitValue(transit.harvest.unit)}`
+          //   : 'NA',
           transitCount: transit.count
             ? `${transit.count} ${getUnitValue(transit.unit)}`
             : 'NA',
           unitSector: {
+            id: unitSector.id,
             name: unitSector.name,
             location: unitSector.location,
           },
-          worksheet: transit.harvest
-            ? {
-                tankType: transit.harvest.worksheet
-                  ? transit.harvest.worksheet.tankType.value
-                  : '',
-                tankNumber: transit.harvest.worksheet
-                  ? transit.harvest.worksheet.tankNumber
-                  : 0,
-              }
-            : undefined,
+          // worksheet: transit.harvest
+          //   ? {
+          //       tankType: transit.harvest.worksheet
+          //         ? transit.harvest.worksheet.tankType.value
+          //         : '',
+          //       tankNumber: transit.harvest.worksheet
+          //         ? transit.harvest.worksheet.tankNumber
+          //         : 0,
+          //     }
+          //   : undefined,
         });
 
         // Increment the count for the respective shift
@@ -229,7 +296,7 @@ export class GetTransitsProvider {
         {} as Record<
           string,
           {
-            unitSector: { name: string; location: string };
+            unitSector: { id: number; name: string; location: string };
             totalTransitCount: number;
             millions: number;
             frozenCups: number;

@@ -26,3 +26,12 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjUsInVzZXJJZ
     "firstName": "AMS",
     "lastName": "Admin"
 }
+
+PATCH http://localhost:3000/api/users/reset-password
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjQsInVzZXJDb2RlIjoiR01ILUFNUy0xNjExIiwiaWF0IjoxNzU0NjYwMDkyLCJleHAiOjE3NTk5MTk2OTIsImF1ZCI6ImxvY2FsaG9zdDozMDAwIiwiaXNzIjoibG9jYWxob3N0OjMwMDAifQ.SzLxeTYp_pC6bix3TtaFBJiGKUTfBzHOckTQyjWUCVU
+
+{
+    "userId": "GMH-AMS-1611",
+    "newPassword": "test_16111"
+}

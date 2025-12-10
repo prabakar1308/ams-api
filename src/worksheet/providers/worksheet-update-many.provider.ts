@@ -11,7 +11,6 @@ import { WorksheetHistory } from '../entities/worksheet-history.entity';
 import { PatchWorksheetsDto } from '../dto/patch-worksheets.dto';
 import { worksheetHistory } from '../enums/worksheet-history-actions.enum';
 import { worksheetStatus } from 'src/dashboard/enums/worksheet-status.enum';
-import { Restock } from '../entities/restock.entity';
 
 @Injectable()
 export class WorksheetUpdateManyProvider {
@@ -56,6 +55,15 @@ export class WorksheetUpdateManyProvider {
           }
           user = currentUser;
         }
+
+        let generatedAt: Date = currentWorksheet.generatedAt;
+        if (worksheet.generatedAt) {
+          generatedAt = new Date(worksheet.generatedAt);
+        }
+        let harvestedAt: Date = currentWorksheet.harvestedAt;
+        if (worksheet.harvestedAt) {
+          harvestedAt = new Date(worksheet.harvestedAt);
+        }
         let status: Worksheet['status'] = currentWorksheet.status;
         let harvestProps = {};
         if (worksheet.statusId) {
@@ -68,15 +76,18 @@ export class WorksheetUpdateManyProvider {
           }
           status = currentStatus;
 
-          // update harvest time when movng from ready for stocking to in stocking
+          // update harvest time when movng from ready for stocking to In Culture
           if (
             Number(currentWorksheet.status.id) ===
               Number(worksheetStatus.READY_FOR_STOCKING) &&
-            Number(worksheet.statusId) === Number(worksheetStatus.IN_STOCKING)
+            Number(worksheet.statusId) === Number(worksheetStatus.IN_CULTURE)
           ) {
+            const generatedDate = generatedAt
+              ? new Date(generatedAt)
+              : new Date();
             const harvestTime = new Date(
-              new Date().setHours(
-                new Date().getHours() + currentWorksheet.harvestHours,
+              generatedDate.setHours(
+                generatedDate.getHours() + currentWorksheet.harvestHours,
               ),
             );
             harvestProps = {
@@ -85,20 +96,22 @@ export class WorksheetUpdateManyProvider {
           }
         }
 
-        let restocks: Restock[] = [];
-        if (worksheet.restocks && worksheet.restocks.length) {
-          restocks =
-            await this.worksheetDependentsProvider.findMultipleRestocks(
-              worksheet.restocks,
-            );
-        }
+        // let restocks: Restock[] = [];
+        // if (worksheet.restocks && worksheet.restocks.length) {
+        //   restocks =
+        //     await this.worksheetDependentsProvider.findMultipleRestocks(
+        //       worksheet.restocks,
+        //     );
+        // }
 
         const updatedWorksheet = queryRunner.manager.create(Worksheet, {
           ...currentWorksheet,
           user,
           status,
+          generatedAt,
+          harvestedAt,
           ...harvestProps,
-          restocks,
+          // restocks,
         });
         const result = await queryRunner.manager.save(updatedWorksheet);
         updatedWorksheets.push(result);

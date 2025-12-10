@@ -22,6 +22,8 @@ import { CreateTransitsDto } from './dto/create-transits.dto';
 import { RestockService } from './providers/restock/restock.service';
 import { GetHarvestsDto } from './dto/get-harvests.dto';
 import { GetReportQueryDto } from './dto/get-report-query.dto';
+import { PatchHarvestDto } from './dto/patch-harvest.dto';
+import { PatchTransitDto } from './dto/patch-transit.dto';
 
 @Controller('worksheet')
 export class WorksheetController {
@@ -40,7 +42,8 @@ export class WorksheetController {
   }
 
   @Post('get-active-worksheets')
-  public getActiveWorksheet(@Body() body: GetWorksheetsDto) {
+  public async getActiveWorksheet(@Body() body: GetWorksheetsDto) {
+    await this.worksheetService.updateWorksheetsStatus();
     return this.worksheetService.getActiveWorksheets(body);
   }
 
@@ -51,7 +54,7 @@ export class WorksheetController {
 
   @Get('get-worksheet/:id')
   public getWorksheet(@Param('id', ParseIntPipe) id: number) {
-    return this.worksheetService.getWorksheetById(id);
+    return this.worksheetService.getCurrentWorksheet(id);
   }
 
   @Get('get-worksheet-history')
@@ -92,7 +95,7 @@ export class WorksheetController {
   @ApiOperation({
     summary: 'Updates a worksheet',
   })
-  @Patch('update-worksheet')
+  @Patch('update-worksheet-params')
   public updateWorksheet(@Body() patchWorksheetDto: PatchWorksheetDto) {
     return this.worksheetService.updateWorksheet(patchWorksheetDto);
   }
@@ -134,6 +137,11 @@ export class WorksheetController {
     return this.worksheetService.getCurrentInputUnitsReport();
   }
 
+  @Get('get-available-worksheet-input-report')
+  public getAvailableInputUnitsReport() {
+    return this.worksheetService.getAvailableInputUnitsReport();
+  }
+
   @Post('get-harvests-count')
   public getHarvestsCount(@Body() body: GetHarvestsDto) {
     return this.worksheetService.getHarvestsCount(body);
@@ -142,6 +150,16 @@ export class WorksheetController {
   @Post('get-harvests')
   public getHarvests(@Body() body: GetHarvestsDto) {
     return this.worksheetService.getHarvests(body);
+  }
+
+  @Get('get-harvest/:id')
+  public getHarvest(@Param('id', ParseIntPipe) id: number) {
+    return this.worksheetService.getHarvestById(id);
+  }
+
+  @Post('update-harvest')
+  public updateHarvest(@Body() body: PatchHarvestDto) {
+    return this.worksheetService.updateHarvest(body);
   }
 
   /** Create Harvest */
@@ -166,6 +184,11 @@ export class WorksheetController {
     return this.worksheetService.getTransits(body);
   }
 
+  // @Get('get-transits-by-harvest-id/:id')
+  // public getTransitsByHarvestById(@Param('id', ParseIntPipe) id: number) {
+  //   return this.worksheetService.getTransitsByHarvestId(id);
+  // }
+
   @Post('get-transits-count')
   public getTransitsCount(@Body() body: GetReportQueryDto) {
     return this.worksheetService.getTransitCountTotal(body);
@@ -184,6 +207,11 @@ export class WorksheetController {
     return this.worksheetService.createMultipleTransits(createTransitsDto);
   }
 
+  @Post('update-transit')
+  public updateTransit(@Body() body: PatchTransitDto) {
+    return this.worksheetService.updateTransit(body);
+  }
+
   // Restock
   @Get('get-restocks')
   public getRestocks(@Query('status') status: string) {
@@ -194,5 +222,25 @@ export class WorksheetController {
   @Get('get-restocks-count')
   public getRestocksCount(@Query('status') status: string) {
     return this.restockService.getTotalCountOfActiveRestocks(status);
+  }
+
+  @Get('monitoring-count')
+  public getMonitoringCount() {
+    return this.worksheetService.getMonitoringCount();
+  }
+
+  @Post('move-pending-millions-to-cold-storage')
+  public updateMillionsAutoConversion() {
+    return this.worksheetService.updateMillionsAutoConversion();
+  }
+
+  @Post('revert-latest-auto-conversion')
+  public revertLatestAutoConversion() {
+    return this.worksheetService.revertLatestAutoConversion();
+  }
+
+  @Get('get-auto-conversion-logs')
+  public getLatestAutoConversion() {
+    return this.worksheetService.getAutoConversionLogs();
   }
 }

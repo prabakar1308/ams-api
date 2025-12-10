@@ -1,6 +1,6 @@
 // import { PartialType } from '@nestjs/mapped-types';
 import { ApiProperty, PartialType } from '@nestjs/swagger';
-import { IsInt, IsNotEmpty, IsString } from 'class-validator';
+import { IsInt, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 import { CreateHarvestDto } from './create-harvest.dto';
 
 export class PatchHarvestDto extends PartialType(CreateHarvestDto) {
@@ -12,8 +12,10 @@ export class PatchHarvestDto extends PartialType(CreateHarvestDto) {
   id: number;
 
   @IsInt()
+  @IsOptional()
   countInStock?: number;
 
   @IsString()
+  @IsOptional()
   status?: string;
 }

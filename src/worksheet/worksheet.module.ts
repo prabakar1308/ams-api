@@ -13,6 +13,7 @@ import { WorksheetDependentsProvider } from './providers/worksheet-dependents.pr
 import { Worksheet } from './entities/worksheet.entity';
 import { Harvest } from './entities/harvest.entity';
 import { Restock } from './entities/restock.entity';
+import { MonitoringCount } from './entities/monitoring-count.entity';
 import { WorksheetHistory } from './entities/worksheet-history.entity';
 import { WorksheetUpdateManyProvider } from './providers/worksheet-update-many.provider';
 import { WorksheetHarvestManyProvider } from './providers/harvest/worksheet-harvest-many.provider';
@@ -24,6 +25,10 @@ import { RestockService } from './providers/restock/restock.service';
 import { GetHarvestsProvider } from './providers/harvest/get-harvests.provider';
 import { GetTransitsProvider } from './providers/transit/get-transits.provider';
 import { WorksheetReportsProvider } from './providers/worksheet-reports.provider';
+import { WorksheetUpdateProvider } from './providers/worksheet-update.provider';
+import { HarvestUpdateProvider } from './providers/harvest/update-harvest.provider';
+import { TransitUpdateProvider } from './providers/transit/update-transit.provider';
+import { AutoConversion } from './entities/auto-conversion.entity';
 
 @Module({
   controllers: [WorksheetController],
@@ -41,6 +46,9 @@ import { WorksheetReportsProvider } from './providers/worksheet-reports.provider
     GetHarvestsProvider,
     GetTransitsProvider,
     WorksheetReportsProvider,
+    WorksheetUpdateProvider,
+    HarvestUpdateProvider,
+    TransitUpdateProvider,
   ],
   imports: [
     TypeOrmModule.forFeature([
@@ -49,6 +57,8 @@ import { WorksheetReportsProvider } from './providers/worksheet-reports.provider
       Restock,
       WorksheetHistory,
       Transit,
+      MonitoringCount,
+      AutoConversion,
     ]),
     UsersModule,
     PaginationModule,

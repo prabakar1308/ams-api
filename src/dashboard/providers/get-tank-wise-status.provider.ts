@@ -4,6 +4,7 @@ import { ConfigService } from '@nestjs/config';
 import { TankService } from 'src/master/providers/tank.service';
 import { TankWiseStatus } from '../interfaces/tank-wise-status';
 import { worksheetStatus } from '../enums/worksheet-status.enum';
+import { WorksheetStatusService } from 'src/master/providers/worksheet-status.service';
 
 @Injectable()
 export class GetTankWiseStatusProvider {
@@ -11,6 +12,7 @@ export class GetTankWiseStatusProvider {
     private readonly tankService: TankService,
     private readonly worksheetService: WorksheetService,
     private readonly configService: ConfigService,
+    private readonly worksheetStatusService: WorksheetStatusService,
   ) {}
 
   private groupAndSum(arr: TankWiseStatus[]) {
@@ -59,12 +61,25 @@ export class GetTankWiseStatusProvider {
             : worksheetStatus.OPEN,
           name: filteredWorksheet.length
             ? filteredWorksheet[0].status.value
-            : 'Free/Open',
+            : 'Empty',
           value: 1,
         });
       }
     }
-    return this.groupAndSum(tankStatuses);
+    const result = this.groupAndSum(tankStatuses);
+
+    const worksheetStatuses =
+      await this.worksheetStatusService.getWorksheetStatus();
+    return worksheetStatuses
+      .filter((ws) => ws.id !== (worksheetStatus.COMPLETE as typeof ws.id))
+      .map((status) => {
+        const tankWiseStatus = result.find((item) => item.id === status.id);
+        return {
+          id: status.id,
+          name: status.value,
+          value: tankWiseStatus ? tankWiseStatus.value : 0,
+        };
+      });
   }
 
   public async getUsersByTankWise(tankTypeId: number) {
@@ -92,7 +107,7 @@ export class GetTankWiseStatusProvider {
           id: filteredWorksheet.length ? filteredWorksheet[0].user?.id : 0,
           name: filteredWorksheet.length
             ? `${filteredWorksheet[0].user?.firstName} ${filteredWorksheet[0].user?.lastName}`
-            : 'Free/Open',
+            : 'Empty',
           value: 1,
           description: `Tank ${index}`,
         });
@@ -100,5 +115,49 @@ export class GetTankWiseStatusProvider {
     }
 
     return this.groupAndSum(tankStatuses);
+  }
+
+  public async getTankListWithStatus(tankTypeId: number) {
+    const tankDetails = await this.tankService.getTankDetails();
+    const worksheetCompletedStatusId = +this.configService.get(
+      'WORKSHEET_COMPLETED_STATUS',
+    );
+    const worksheets =
+      await this.worksheetService.getActiveWorksheetsByTankType(tankTypeId);
+
+    const result: {
+      tankNumber: number;
+      statusId: number;
+      statusName: string;
+      statusShort?: string;
+    }[] = [];
+
+    if (tankDetails) {
+      const { min, max } = tankDetails;
+      for (let index = +min; index <= max; index++) {
+        const filteredWorksheet = worksheets.filter(
+          (sheet) =>
+            sheet.tankNumber === index &&
+            sheet.tankType?.id === tankTypeId &&
+            sheet.status.id !== worksheetCompletedStatusId,
+        );
+        const statusId = filteredWorksheet.length
+          ? filteredWorksheet[0].status.id
+          : worksheetStatus.OPEN;
+        const statusName = filteredWorksheet.length
+          ? filteredWorksheet[0].status.value
+          : 'Empty';
+        const statusShort = filteredWorksheet.length
+          ? filteredWorksheet[0].status.shortName
+          : 'empty';
+        result.push({
+          tankNumber: index,
+          statusId,
+          statusName,
+          statusShort,
+        });
+      }
+    }
+    return result;
   }
 }

@@ -8,31 +8,36 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
-@Entity({ schema: 'master', orderBy: { id: 'ASC' } })
-export class WorksheetUnit extends BaseEntity {
+@Entity({ schema: 'master', name: 'source_tracker' })
+export class SourceTracker extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
   @Column({
     type: 'varchar',
-    length: 50,
+    length: 255,
     nullable: false,
   })
-  value: string;
+  sourceOrigin: string;
 
   @Column({
-    type: 'varchar',
-    length: 50,
-    nullable: true,
+    type: 'int',
+    nullable: false,
   })
-  brand: string;
+  count: number;
 
   @Column({
-    type: 'varchar',
-    length: 256,
+    type: 'timestamp',
     nullable: true,
+    default: () => 'CURRENT_TIMESTAMP',
   })
-  specs?: string;
+  generatedAt: Date;
+
+  @Column({
+    type: 'int',
+    nullable: false,
+  })
+  unitSource: number;
 
   @CreateDateColumn()
   createdAt: Date;

@@ -28,13 +28,19 @@ export function getDateDifference(
         status: 'warning',
       };
       break;
-    case Number(worksheetStatus.IN_STOCKING):
+    case Number(worksheetStatus.IN_CULTURE):
       if (isPast)
         result = { text: `Harvest - ${timeText} overdue`, status: 'error' };
       else result = { text: `Harvest in ${timeText}`, status: 'success' };
       break;
     case Number(worksheetStatus.READY_FOR_HARVEST):
       result = { text: `Harvest - ${timeText} overdue`, status: 'error' };
+      break;
+    case Number(worksheetStatus.WASHING):
+      result = {
+        text: timeText ? `Started ${timeText} ago` : 'Started just now.',
+        status: 'idle',
+      };
       break;
     default:
       break;

@@ -18,6 +18,7 @@ export interface WorksheetTank {
     text: string;
     status: string;
   };
+  generatedAt?: Date;
   parameters?: WorksheetParameters[];
 }
 

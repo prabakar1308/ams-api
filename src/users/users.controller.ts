@@ -51,6 +51,13 @@ export class UsersController {
     return this.usersService.updateUser(patchUserDto);
   }
 
+  @Patch('reset-password')
+  public resetPassword(
+    @Body() details: { userId: string; newPassword: string },
+  ) {
+    return this.usersService.resetPassword(details.userId, details.newPassword);
+  }
+
   @ApiOperation({
     summary: 'Soft-Delete a worksheet',
   })
