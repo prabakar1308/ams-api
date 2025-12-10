@@ -143,7 +143,9 @@ export class WorksheetTasksProvider {
       ];
 
       const currentTime = new Date();
-      let previousTime = new Date(currentTime.getTime() - 24 * 60 * 60 * 1000); // 24 hours ago
+      let previousTime = new Date(
+        currentTime.getTime() - 30 * 24 * 60 * 60 * 1000,
+      ); // last 30 days
 
       // get latest entry from auto conversion table
       const autoConversion = await queryRunner.manager

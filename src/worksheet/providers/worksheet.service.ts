@@ -352,7 +352,7 @@ export class WorksheetService {
         id: Not(IsNull()),
       },
       order: { createdAt: 'DESC' },
-      take: 10,
+      take: 20,
     });
   }
 }
